@@ -9,3 +9,4 @@ v0.2.0-player ==================================================================
 - Added player movement controller.
 
 v0.3.0-overgrowth =================================================================================
+- Added overgrowth generation at map time.
