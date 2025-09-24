@@ -14,7 +14,14 @@ public class InputManager : MonoBehaviour
 
         if (Keyboard.current.wKey.isPressed) { inputValue.x++; }
         if (Keyboard.current.sKey.isPressed) { inputValue.x--; }
-        if (Keyboard.current.leftAltKey.isPressed) { inputValue.y--; }
+        if (Application.isEditor)
+        {
+            if (Keyboard.current.cKey.isPressed) { inputValue.y--; }
+        }
+        else
+        {
+            if (Keyboard.current.leftAltKey.isPressed) { inputValue.y--; }
+        }
         if (Keyboard.current.spaceKey.isPressed) { inputValue.y++; }
         if (Keyboard.current.aKey.isPressed) { inputValue.z--; }
         if (Keyboard.current.dKey.isPressed) { inputValue.z++; }

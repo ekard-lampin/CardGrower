@@ -211,6 +211,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapBaseWidth: 10
+  mapOvergrowthLocationVariation: 0.5
+  mapOvergrowthMaxHeight: 1
+  mapOvergrowthScaleVariation: 0.5
+  playerHeightMinimum: 3
   playerLooksSensitivity: 0.5
   playerMoveSpeed: 2
 --- !u!4 &642613269

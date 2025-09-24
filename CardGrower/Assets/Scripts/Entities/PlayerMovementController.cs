@@ -32,7 +32,7 @@ public class PlayerMovementController : MonoBehaviour
         Vector3 newPosition = transform.position + (transform.forward * movementInput.x + transform.up * movementInput.y + transform.right * movementInput.z) * GameManager.instance.GetPlayerMoveSpeed() * Time.deltaTime;
         // if (!IsNewPositionInBounds(newPosition)) { return; }
         newPosition.x = Mathf.Clamp(newPosition.x, ((float)GameManager.instance.GetMapBaseWidth()) / 2f * -1, ((float)GameManager.instance.GetMapBaseWidth()) / 2f);
-        newPosition.y = Mathf.Clamp(newPosition.y, 5, 10);
+        newPosition.y = Mathf.Clamp(newPosition.y, GameManager.instance.GetPlayerHeightMinimum(), 10);
         newPosition.z = Mathf.Clamp(newPosition.z, ((float)GameManager.instance.GetMapBaseWidth()) / 2f * -1, ((float)GameManager.instance.GetMapBaseWidth()) / 2f);
 
         transform.position = newPosition;

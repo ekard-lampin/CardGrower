@@ -48,6 +48,7 @@ public class MapManager : MonoBehaviour
                         Quaternion.identity
                     );
                     newWallObject.name = "Wall_(" + xIndex + ", " + zIndex + ")";
+                    PlacementWall newWall = newWallObject.AddComponent<PlacementWall>();
                     // Top left
                     if (xIndex == 0 && zIndex == 0)
                     {
@@ -68,7 +69,7 @@ public class MapManager : MonoBehaviour
                     {
                         newWallObject.transform.rotation = Quaternion.Euler(0, 180, 0);
                     }
-                    newTile.SetPlacement(newWallObject);
+                    newTile.SetPlacement(newWall);
                 }
                 else if ((xIndex == 0 || xIndex == GameManager.instance.GetMapBaseWidth() - 1) || (zIndex == 0 || zIndex == GameManager.instance.GetMapBaseWidth() - 1))
                 {
@@ -78,11 +79,35 @@ public class MapManager : MonoBehaviour
                         Quaternion.identity
                     );
                     newWallObject.name = "Wall_(" + xIndex + ", " + zIndex + ")";
+                    PlacementWall newWall = newWallObject.AddComponent<PlacementWall>();
                     if (zIndex == 0 || zIndex == GameManager.instance.GetMapBaseWidth() - 1)
                     {
                         newWallObject.transform.rotation = Quaternion.Euler(0, 90, 0);
                     }
-                    newTile.SetPlacement(newWallObject);
+                    newTile.SetPlacement(newWall);
+                }
+                else
+                {
+                    // Create an overgrowth object.
+                    GameObject newOvergrowthObject = Instantiate(
+                        Resources.Load<GameObject>("Prefabs/Map/OvergrowthPrefab"),
+                        new Vector3(xIndex + coordsOffset.x, 0, (zIndex * -1) + coordsOffset.y),
+                        Quaternion.identity
+                    );
+                    newOvergrowthObject.name = "Overgrowth_(" + xIndex + ", " + zIndex + ")";
+                    PlacementOvergrowth newOvergrowth = newOvergrowthObject.AddComponent<PlacementOvergrowth>();
+                    newTile.SetPlacement(newOvergrowth);
+
+                    float verticalScale = Random.Range(0.25f, GameManager.instance.GetMapOvergrowthMaxHeight());
+                    float horizontalScale = Random.Range(GameManager.instance.GetMapOvergrowthScaleVariation() * -1, GameManager.instance.GetMapOvergrowthScaleVariation());
+                    newOvergrowthObject.transform.localScale = new Vector3(1 + horizontalScale, verticalScale, 1 + horizontalScale);
+
+                    float variationX = Random.Range(GameManager.instance.GetMapOvergrowthLocationVariation() * -1, GameManager.instance.GetMapOvergrowthLocationVariation());
+                    float variationZ = Random.Range(GameManager.instance.GetMapOvergrowthLocationVariation() * -1, GameManager.instance.GetMapOvergrowthLocationVariation());
+                    newOvergrowthObject.transform.position = new Vector3(newOvergrowthObject.transform.position.x + variationX, newOvergrowthObject.transform.position.y, newOvergrowthObject.transform.position.z + variationZ);
+
+                    float rotationVariation = Random.Range(-360, 360);
+                    newOvergrowthObject.transform.rotation = Quaternion.Euler(0, rotationVariation, 0);
                 }
             }
         }

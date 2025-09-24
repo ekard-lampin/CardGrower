@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    GameObject placement = null;
-    public GameObject GetPlacement() { return placement; } public void SetPlacement(GameObject placement) { this.placement = placement; }
+    Placement placement = null;
+    public Placement GetPlacement() { return placement; } public void SetPlacement(Placement placement) { this.placement = placement; }
 
     // Start is called before the first frame update
     void Start()
