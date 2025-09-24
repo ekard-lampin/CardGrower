@@ -5,3 +5,5 @@ v0.1.0-world ===================================================================
 - Setup basic map and wall generator.
 
 v0.2.0-player =====================================================================================
+- Added input manager.
+- Added player movement controller.
