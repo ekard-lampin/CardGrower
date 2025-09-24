@@ -12,9 +12,21 @@ public class GameManager : MonoBehaviour
     private int mapBaseWidth;
     public int GetMapBaseWidth() { return mapBaseWidth; } public void SetMapBaseWidth(int mapBaseWidth) { this.mapBaseWidth = mapBaseWidth; }
 
+    [Header("Player Settings")]
+    [SerializeField]
+    private float playerLooksSensitivity;
+    public float GetPlayerLookSensitivity() { return playerLooksSensitivity; } public void SetPlayerLookSensitivity(float playerLooksSensitivity) { this.playerLooksSensitivity = playerLooksSensitivity; }
+
+    [SerializeField]
+    private float playerMoveSpeed;
+    public float GetPlayerMoveSpeed() { return playerMoveSpeed; } public void SetPlayerMoveSpeed(float playerMoveSpeed) { this.playerMoveSpeed = playerMoveSpeed; }
+
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
         MapManager.instance.CreateBaseMap();
     }
 
