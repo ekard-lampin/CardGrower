@@ -29,6 +29,11 @@ public class InputManager : MonoBehaviour
         return inputValue;
     }
 
+    public bool GetMouseLeftClickPress()
+    {
+        return Mouse.current.leftButton.wasPressedThisFrame;
+    }
+
     public Vector2 GetMouseMovementInput()
     {
         return Mouse.current.delta.ReadValue();

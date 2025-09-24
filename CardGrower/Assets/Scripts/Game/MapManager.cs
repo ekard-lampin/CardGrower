@@ -7,6 +7,21 @@ public class MapManager : MonoBehaviour
     public static MapManager instance;
     void Awake() { instance = this; }
 
+    private GameObject highlightObject;
+    public GameObject GetHighlightObject()
+    {
+        if (highlightObject == null)
+        {
+            highlightObject = Instantiate(
+                Resources.Load<GameObject>("Prefabs/Map/HighlightPrefab"),
+                Vector3.zero,
+                Quaternion.identity
+            );
+        }
+        return highlightObject;
+    }
+    public void DestroyHighlightObject() { if (highlightObject != null) { Destroy(highlightObject); } }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +53,7 @@ public class MapManager : MonoBehaviour
                 );
                 newTileObject.name = "Tile_(" + xIndex + ", " + zIndex + ")";
                 Tile newTile = newTileObject.AddComponent<Tile>();
+                newTile.SetTileCoords(new Vector2(xIndex, zIndex));
 
                 // Create wall tile if on an edge piece.
                 if ((xIndex == 0 || xIndex == GameManager.instance.GetMapBaseWidth() - 1) && (zIndex == 0 || zIndex == GameManager.instance.GetMapBaseWidth() - 1))
