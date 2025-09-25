@@ -17,3 +17,6 @@ v0.4.0-till ====================================================================
 - Added visual indicator to represent when the player is looking at a tile.
 
 v0.5.0-cards ======================================================================================
+- Added card data structs.
+- Added booster pack and shop logic.
+- Added card rarity and quality logic.
