@@ -46,6 +46,9 @@ public class ViewManager : MonoBehaviour
         GameObject seedBuyButtonObject = shopObject.transform.Find("SeedPackButtonObject").Find("Button").gameObject;
         seedBuyButtonObject.GetComponent<Button>().onClick.AddListener(ClickSeedBuyButton);
 
+        GameObject boosterPackButtonObject = shopObject.transform.Find("BoosterPackButtonObject").Find("Button").gameObject;
+        boosterPackButtonObject.GetComponent<Button>().onClick.AddListener(ClickBoosterBuyButton);
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
@@ -98,6 +101,39 @@ public class ViewManager : MonoBehaviour
         packScreenCloseButtonObject.GetComponent<Button>().onClick.AddListener(ClickPackCloseButton);
 
         Card[] packCards = GameManager.instance.GetCardsForPack(PackType.Seed);
+        float xPos = ((float)GameManager.instance.GetCardWidth() * ((float)packCards.Length - 1f) * -1f) - ((float)GameManager.instance.GetCardSpacing() * ((float)(packCards.Length - 1) / 2f));
+        for (int cardIndex = 0; cardIndex < packCards.Length; cardIndex++)
+        {
+            GameObject newCardObject = Instantiate(
+                Resources.Load<GameObject>("Prefabs/Views/CardPrefab"),
+                packScreenObject.transform
+            );
+            newCardObject.transform.localPosition = new Vector3(xPos, 0, 0);
+
+            newCardObject.name = "Card_" + cardIndex;
+
+            CardComponent newCard = newCardObject.AddComponent<CardComponent>();
+            newCard.SetCard(packCards[cardIndex]);
+
+            xPos += ((GameManager.instance.GetCardWidth() * 2) + GameManager.instance.GetCardSpacing());
+        }
+
+        SetOpenView(packScreenObject);
+    }
+
+    public void ClickBoosterBuyButton()
+    {
+        GameManager.instance.SetPlayerViewState(PlayerViewState.OpenPack);
+
+        GameObject packScreenObject = Instantiate(
+            Resources.Load<GameObject>("Prefabs/Views/PackOpenPrefab"),
+            GameObject.FindGameObjectWithTag("Canvas").transform
+        );
+
+        GameObject packScreenCloseButtonObject = packScreenObject.transform.Find("CloseButtonObject").Find("Button").gameObject;
+        packScreenCloseButtonObject.GetComponent<Button>().onClick.AddListener(ClickPackCloseButton);
+
+        Card[] packCards = GameManager.instance.GetCardsForPack(PackType.Booster);
         float xPos = ((float)GameManager.instance.GetCardWidth() * ((float)packCards.Length - 1f) * -1f) - ((float)GameManager.instance.GetCardSpacing() * ((float)(packCards.Length - 1) / 2f));
         for (int cardIndex = 0; cardIndex < packCards.Length; cardIndex++)
         {

@@ -5,9 +5,14 @@ using UnityEngine;
 public class Card
 {
     [SerializeField]
-    private string cardId;
-    public string GetCardId() { return cardId; }
-    public void SetCardId(string cardId) { this.cardId = cardId; }
+    private CardId cardId;
+    public CardId GetCardId() { return cardId; }
+    public void SetCardId(CardId cardId) { this.cardId = cardId; }
+
+    [SerializeField]
+    private CardType cardType;
+    public CardType GetCardType() { return cardType; }
+    public void SetCardType(CardType cardType) { this.cardType = cardType; }
 
     [SerializeField]
     private Texture cardTexture;

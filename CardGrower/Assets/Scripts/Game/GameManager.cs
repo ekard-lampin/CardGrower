@@ -19,6 +19,11 @@ public class GameManager : MonoBehaviour
     public void SetSeedCards(Card[] seedCards) { this.seedCards = seedCards; }
 
     [SerializeField]
+    private Card[] boosterCards;
+    public Card[] GetBoosterCards() { return boosterCards; }
+    public void SetBoosterCards(Card[] boosterCards) { this.boosterCards = boosterCards; }
+
+    [SerializeField]
     private int cardsPerToolPack;
     public int GetCardsPerToolPack() { return cardsPerToolPack; }
     public void SetCardsPerToolPack(int cardsPerPack) { this.cardsPerToolPack = cardsPerPack; }
@@ -27,6 +32,11 @@ public class GameManager : MonoBehaviour
     private int cardsPerSeedPack;
     public int GetCardsPerSeedPack() { return cardsPerSeedPack; }
     public void SetCardsPerSeedPack(int cardsPerSeedPack) { this.cardsPerSeedPack = cardsPerSeedPack; }
+
+    [SerializeField]
+    private int cardsPerBoosterPack;
+    public int GetCardsPerBoosterPack() { return cardsPerBoosterPack; }
+    public void SetCardsPerBoosterPack(int cardsPerBoosterPack) { this.cardsPerBoosterPack = cardsPerBoosterPack; }
 
     [SerializeField]
     private int cardWidth;
@@ -103,6 +113,11 @@ public class GameManager : MonoBehaviour
             packCards = GetSeedCards();
             totalCards = GetCardsPerSeedPack();
         }
+        if (PackType.Booster.Equals(packType))
+        {
+            packCards = GetBoosterCards();
+            totalCards = GetCardsPerBoosterPack();
+        }
 
         Card[] returnCards = new Card[totalCards];
 
@@ -122,23 +137,23 @@ public class GameManager : MonoBehaviour
 
         for (int cardIndex = 0; cardIndex < returnCards.Length; cardIndex++)
         {
-            int rarity = Random.Range(0, 1000001);
-            if (rarity < 800000) // Common
+            int rarity = Random.Range(0, 101);
+            if (rarity < 80) // Common
             {
                 int rarityIndex = Random.Range(0, commonCards.Count);
                 returnCards[cardIndex] = commonCards[rarityIndex].CopyCard();
             }
-            else if (rarity < 900000) // Uncommon
+            else if (rarity < 90) // Uncommon
             {
                 int rarityIndex = Random.Range(0, uncommonCards.Count);
                 returnCards[cardIndex] = uncommonCards[rarityIndex].CopyCard();
             }
-            else if (rarity < 998000) // Rare
+            else if (rarity < 97) // Rare
             {
                 int rarityIndex = Random.Range(0, rareCards.Count);
                 returnCards[cardIndex] = rareCards[rarityIndex].CopyCard();
             }
-            else if (rarity < 999500) // Legendary
+            else if (rarity < 99) // Legendary
             {
                 int rarityIndex = Random.Range(0, legendaryCards.Count);
                 returnCards[cardIndex] = legendaryCards[rarityIndex].CopyCard();
@@ -152,35 +167,4 @@ public class GameManager : MonoBehaviour
 
         return returnCards;
     }
-}
-
-public enum PlayerViewState
-{
-    Game,
-    Shop,
-    OpenPack
-}
-
-public enum PackType
-{
-    Tool,
-    Seed
-}
-
-public enum Rarity
-{
-    Common,
-    Uncommon,
-    Rare,
-    Legendary,
-    Mythical
-}
-
-public enum Quality
-{
-    Bad,
-    Normal,
-    Good,
-    Better,
-    Best
 }

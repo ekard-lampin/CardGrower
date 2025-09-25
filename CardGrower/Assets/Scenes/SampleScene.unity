@@ -373,59 +373,101 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolCards:
-  - cardId: hoe_common
+  - cardId: 0
+    cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 0
     cardQuality: 1
-  - cardId: hoe_uncommon
+  - cardId: 0
+    cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 1
     cardQuality: 1
-  - cardId: hoe_rare
+  - cardId: 0
+    cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 2
     cardQuality: 1
-  - cardId: hoe_legendary
+  - cardId: 0
+    cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 3
     cardQuality: 1
-  - cardId: hoe_mythical
+  - cardId: 0
+    cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 4
     cardQuality: 1
   seedCards:
-  - cardId: lettuce_common
+  - cardId: 1
+    cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 0
     cardQuality: 1
-  - cardId: lettuce_uncommon
+  - cardId: 1
+    cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 1
     cardQuality: 1
-  - cardId: lettuce_rare
+  - cardId: 1
+    cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 2
     cardQuality: 1
-  - cardId: lettuce_legendary
+  - cardId: 1
+    cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 3
     cardQuality: 1
-  - cardId: lettuce_mythical
+  - cardId: 1
+    cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 4
     cardQuality: 1
+  boosterCards:
+  - cardId: 2
+    cardType: 2
+    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
+    cardDescription: A watering can that boosts growth.
+    cardRarity: 0
+    cardQuality: 1
+  - cardId: 2
+    cardType: 2
+    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
+    cardDescription: A watering can that boosts growth.
+    cardRarity: 1
+    cardQuality: 1
+  - cardId: 2
+    cardType: 2
+    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
+    cardDescription: A watering can that boosts growth.
+    cardRarity: 2
+    cardQuality: 1
+  - cardId: 2
+    cardType: 2
+    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
+    cardDescription: A watering can that boosts growth.
+    cardRarity: 3
+    cardQuality: 1
+  - cardId: 2
+    cardType: 2
+    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
+    cardDescription: A watering can that boosts growth.
+    cardRarity: 4
+    cardQuality: 1
   cardsPerToolPack: 3
   cardsPerSeedPack: 5
+  cardsPerBoosterPack: 4
   cardWidth: 64
   cardSpacing: 10
   mapBaseWidth: 10

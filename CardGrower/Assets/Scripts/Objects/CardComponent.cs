@@ -19,6 +19,11 @@ public class CardComponent : MonoBehaviour
 
         GameObject imageQualityObject = transform.Find("Image_Quality").gameObject;
         imageQualityObject.GetComponent<RawImage>().texture = Resources.Load<Texture>("Textures/quality_" + card.GetCardQuality().ToString().ToLower());
+        // Remove the quality indicator from non-crop cards.
+        if (!CardType.Crop.Equals(GetCard().GetCardType()))
+        {
+            imageQualityObject.SetActive(false);
+        }
 
         GameObject imageRarityObject = transform.Find("Image_Rarity").gameObject;
         imageRarityObject.GetComponent<RawImage>().texture = Resources.Load<Texture>("Textures/rarity_" + card.GetCardRarity().ToString().ToLower());
