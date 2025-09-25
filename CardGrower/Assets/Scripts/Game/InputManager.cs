@@ -38,4 +38,6 @@ public class InputManager : MonoBehaviour
     {
         return Mouse.current.delta.ReadValue();
     }
+
+    public bool GetTabPress() { return Keyboard.current.tabKey.wasPressedThisFrame; }
 }

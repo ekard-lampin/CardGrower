@@ -29,6 +29,8 @@ public class PlayerMovementController : MonoBehaviour
 
     private void HandlePlayerInput()
     {
+        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+
         Vector3 newPosition = transform.position + (transform.forward * movementInput.x + transform.up * movementInput.y + transform.right * movementInput.z) * GameManager.instance.GetPlayerMoveSpeed() * Time.deltaTime;
         // if (!IsNewPositionInBounds(newPosition)) { return; }
         newPosition.x = Mathf.Clamp(newPosition.x, ((float)GameManager.instance.GetMapBaseWidth()) / 2f * -1, ((float)GameManager.instance.GetMapBaseWidth()) / 2f);
@@ -40,6 +42,8 @@ public class PlayerMovementController : MonoBehaviour
 
     private void HandlePlayerMouseMovement()
     {
+        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+
         Vector2 mouseMovement = InputManager.instance.GetMouseMovementInput();
         mouseMovement.y *= -1;
         playerRotation += (mouseMovement * GameManager.instance.GetPlayerLookSensitivity());
@@ -47,20 +51,6 @@ public class PlayerMovementController : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, playerRotation.x, 0);
         cameraParent.transform.localRotation = Quaternion.Euler(playerRotation.y, 0, 0);
-    }
-
-    private bool IsNewPositionInBounds(Vector3 newPosition)
-    {
-        bool isInBounds = true;
-
-        // Debug.Log(newPosition.x < ((float)GameManager.instance.GetMapBaseWidth()) / 2f * -1);
-        if (newPosition.x < ((float)GameManager.instance.GetMapBaseWidth()) / 2f * -1) { isInBounds = false; }
-        if (newPosition.x > ((float)GameManager.instance.GetMapBaseWidth()) / 2f) { isInBounds = false; }
-        if (newPosition.z < ((float)GameManager.instance.GetMapBaseWidth()) / 2f * -1) { isInBounds = false; }
-        if (newPosition.z > ((float)GameManager.instance.GetMapBaseWidth()) / 2f) { isInBounds = false; }
-
-        // Debug.Log(isInBounds);
-        return isInBounds;
     }
 
     private void ReadPlayerInput()

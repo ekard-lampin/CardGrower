@@ -11,37 +11,52 @@ public class PlayerInteractionController : MonoBehaviour
 
     void Update()
     {
+        ProcessPlayerTabInput();
+
         ProcessPlayerViewSelection();
         ProcessPlayerClick();
     }
 
     private void ProcessPlayerViewSelection()
     {
-        if (Physics.Raycast(transform.position, Camera.main.transform.forward * 100, out RaycastHit hit))
+        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()))
         {
-            GameObject hitObject = hit.collider.gameObject;
-
-            // If the hit object has a tile, do tile stuff.
-            if (hitObject.GetComponent<Tile>() != null)
+            if (Physics.Raycast(transform.position, Camera.main.transform.forward * 100, out RaycastHit hit))
             {
-                GameObject highlightObject = MapManager.instance.GetHighlightObject();
-                highlightObject.transform.position = hitObject.transform.position;
+                GameObject hitObject = hit.collider.gameObject;
 
-                highlightedTile = hitObject.GetComponent<Tile>();
+                // If the hit object has a tile, do tile stuff.
+                if (hitObject.GetComponent<Tile>() != null)
+                {
+                    GameObject highlightObject = MapManager.instance.GetHighlightObject();
+                    highlightObject.transform.position = hitObject.transform.position;
+
+                    highlightedTile = hitObject.GetComponent<Tile>();
+                }
             }
-        }
-        else
-        {
-            highlightedTile = null;
-            MapManager.instance.DestroyHighlightObject();
+            else
+            {
+                highlightedTile = null;
+                MapManager.instance.DestroyHighlightObject();
+            }
         }
     }
 
     private void ProcessPlayerClick()
     {
-        if (!InputManager.instance.GetMouseLeftClickPress()) { return; }
-        if (highlightedTile == null) { return; }
+        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()))
+        {
+            if (!InputManager.instance.GetMouseLeftClickPress()) { return; }
+            if (highlightedTile == null) { return; }
 
-        highlightedTile.TillTile();
+            highlightedTile.TillTile();
+        }
+    }
+
+    private void ProcessPlayerTabInput()
+    {
+        if (!InputManager.instance.GetTabPress()) { return; }
+
+        ViewManager.instance.ToggleShopView();
     }
 }
