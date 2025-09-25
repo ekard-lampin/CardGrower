@@ -20,3 +20,5 @@ v0.5.0-cards ===================================================================
 - Added card data structs.
 - Added booster pack and shop logic.
 - Added card rarity and quality logic.
+
+v0.6.0-deck =======================================================================================
