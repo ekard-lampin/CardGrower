@@ -27,5 +27,15 @@ public class CardComponent : MonoBehaviour
 
         GameObject imageRarityObject = transform.Find("Image_Rarity").gameObject;
         imageRarityObject.GetComponent<RawImage>().texture = Resources.Load<Texture>("Textures/rarity_" + card.GetCardRarity().ToString().ToLower());
+
+        GameObject hitboxObject = transform.Find("Hitbox").gameObject;
+        hitboxObject.GetComponent<CardClickController>().SetCardComponent(this);
+    }
+
+    public void Click()
+    {
+        Debug.Log("Clicked " + gameObject.name);
+
+        ViewManager.instance.DisplayCardInfo(GetCard());
     }
 }

@@ -2,5 +2,6 @@ public enum PlayerViewState
 {
     Game,
     Shop,
-    OpenPack
+    OpenPack,
+    Deck
 }

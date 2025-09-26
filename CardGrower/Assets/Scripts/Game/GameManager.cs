@@ -44,9 +44,22 @@ public class GameManager : MonoBehaviour
     public void SetCardWidth(int cardWidth) { this.cardWidth = cardWidth; }
 
     [SerializeField]
+    private int cardHeight;
+    public int GetCardHeight() { return cardHeight; }
+
+    [SerializeField]
     private int cardSpacing;
     public int GetCardSpacing() { return cardSpacing; }
     public void SetCardSpacing(int cardSpacing) { this.cardSpacing = cardSpacing; }
+
+    [Header("Deck Settings")]
+    [SerializeField]
+    private int deckCardsPerRow;
+    public int GetDeckCardsPerRow() { return deckCardsPerRow; }
+
+    [SerializeField]
+    private int deckRowCount;
+    public int GetDeckRowCount() { return deckRowCount; }
 
     [Header("Map Settings")]
     [SerializeField]

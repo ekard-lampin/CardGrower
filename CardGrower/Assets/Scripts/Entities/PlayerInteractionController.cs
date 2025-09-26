@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class PlayerInteractionController : MonoBehaviour
+public class PlayerInteractionController : MonoBehaviour, IPointerDownHandler
 {
     private Tile highlightedTile;
 
@@ -11,10 +12,16 @@ public class PlayerInteractionController : MonoBehaviour
 
     void Update()
     {
-        ProcessPlayerTabInput();
+        ProcessPlayerShopInput();
+        ProcessPlayerDeckInput();
 
         ProcessPlayerViewSelection();
         ProcessPlayerClick();
+    }
+
+    private void ProcessDeckViewClick()
+    {
+        
     }
 
     private void ProcessPlayerViewSelection()
@@ -53,10 +60,23 @@ public class PlayerInteractionController : MonoBehaviour
         }
     }
 
-    private void ProcessPlayerTabInput()
+    private void ProcessPlayerDeckInput()
+    {
+        if (!InputManager.instance.GetFPress()) { return; }
+
+        ViewManager.instance.ToggleDeckView();
+    }
+
+    private void ProcessPlayerShopInput()
     {
         if (!InputManager.instance.GetTabPress()) { return; }
 
         ViewManager.instance.ToggleShopView();
+    }
+
+    public void OnPointerDown(PointerEventData pointerEventData)
+    {
+        Debug.Log(pointerEventData.selectedObject.name + " clicked.");
+        ProcessDeckViewClick();
     }
 }

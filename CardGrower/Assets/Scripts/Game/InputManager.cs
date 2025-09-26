@@ -8,6 +8,8 @@ public class InputManager : MonoBehaviour
     public static InputManager instance;
     void Awake() { instance = this; }
 
+    public bool GetFPress() { return Keyboard.current.fKey.wasPressedThisFrame; }
+
     public Vector3 GetMovementInput()
     {
         Vector3 inputValue = Vector3.zero;
