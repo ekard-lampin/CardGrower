@@ -51,12 +51,19 @@ public class PlayerInteractionController : MonoBehaviour, IPointerDownHandler
 
     private void ProcessPlayerClick()
     {
-        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()))
+        PlayerDeckManager playerDeckManager = GetComponent<PlayerDeckManager>();
+        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()) && playerDeckManager.GetSelectedCard() != null)
         {
             if (!InputManager.instance.GetMouseLeftClickPress()) { return; }
             if (highlightedTile == null) { return; }
 
-            highlightedTile.TillTile();
+            // Tilling
+            if (TileState.Overgrown.Equals(highlightedTile.GetTileState()) && CardId.Hoe.Equals(playerDeckManager.GetSelectedCard().GetCardId()))
+            {
+                highlightedTile.TillTile();
+                playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard());
+                ViewManager.instance.SetOpenView(null);
+            }
         }
     }
 

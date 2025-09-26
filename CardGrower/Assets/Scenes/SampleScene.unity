@@ -194,6 +194,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deck: []
+  selectedCard:
+    cardId: 0
+    cardType: 0
+    cardTexture: {fileID: 0}
+    cardDescription: 
+    cardRarity: 0
+    cardQuality: 0
 --- !u!1 &588349538
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,93 +394,93 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolCards:
-  - cardId: 0
+  - cardId: 1
     cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 0
     cardQuality: 1
-  - cardId: 0
+  - cardId: 1
     cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 1
     cardQuality: 1
-  - cardId: 0
+  - cardId: 1
     cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 2
     cardQuality: 1
-  - cardId: 0
+  - cardId: 1
     cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 3
     cardQuality: 1
-  - cardId: 0
+  - cardId: 1
     cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 4
     cardQuality: 1
   seedCards:
-  - cardId: 1
+  - cardId: 2
     cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 0
     cardQuality: 1
-  - cardId: 1
+  - cardId: 2
     cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 1
     cardQuality: 1
-  - cardId: 1
+  - cardId: 2
     cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 2
     cardQuality: 1
-  - cardId: 1
+  - cardId: 2
     cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 3
     cardQuality: 1
-  - cardId: 1
+  - cardId: 2
     cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 4
     cardQuality: 1
   boosterCards:
-  - cardId: 2
+  - cardId: 3
     cardType: 2
     cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
     cardDescription: A watering can that boosts growth.
     cardRarity: 0
     cardQuality: 1
-  - cardId: 2
+  - cardId: 3
     cardType: 2
     cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
     cardDescription: A watering can that boosts growth.
     cardRarity: 1
     cardQuality: 1
-  - cardId: 2
+  - cardId: 3
     cardType: 2
     cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
     cardDescription: A watering can that boosts growth.
     cardRarity: 2
     cardQuality: 1
-  - cardId: 2
+  - cardId: 3
     cardType: 2
     cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
     cardDescription: A watering can that boosts growth.
     cardRarity: 3
     cardQuality: 1
-  - cardId: 2
+  - cardId: 3
     cardType: 2
     cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
     cardDescription: A watering can that boosts growth.
@@ -533,6 +540,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cada06caa9af1e14ba13a07e2b26e3f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deckViewStartIndex: 0
+  displayCard:
+    cardId: 0
+    cardType: 0
+    cardTexture: {fileID: 0}
+    cardDescription: 
+    cardRarity: 0
+    cardQuality: 0
 --- !u!1 &693222412
 GameObject:
   m_ObjectHideFlags: 0

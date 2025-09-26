@@ -34,7 +34,7 @@ public class CardComponent : MonoBehaviour
 
     public void Click()
     {
-        Debug.Log("Clicked " + gameObject.name);
+        if (!PlayerViewState.Deck.Equals(GameManager.instance.GetPlayerViewState())) { return; }
 
         ViewManager.instance.DisplayCardInfo(GetCard());
     }

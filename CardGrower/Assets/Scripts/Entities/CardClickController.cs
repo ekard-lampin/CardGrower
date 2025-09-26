@@ -9,6 +9,8 @@ public class CardClickController : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData pointerEventData)
     {
+        if (cardComponent == null) { return; }
+
         cardComponent.Click();
     }
 }

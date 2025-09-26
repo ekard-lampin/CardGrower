@@ -13,10 +13,19 @@ public class ViewManager : MonoBehaviour
     {
         if (this.openView != null) { Destroy(this.openView); }
         this.openView = openView;
+
+        if (openView != null && !openView.name.ToLower().Contains("selected"))
+        {
+            displayCard = null;
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(null);
+        }
     }
 
     [SerializeField]
     private int deckViewStartIndex = 0;
+
+    [SerializeField]
+    private Card displayCard = null;
 
     public void ToggleDeckView()
     {
@@ -47,6 +56,7 @@ public class ViewManager : MonoBehaviour
         deckViewObject.name = "DeckViewObject";
 
         deckViewStartIndex = 0;
+        displayCard = null;
         RenderCards(deckViewStartIndex);
 
         // Set click actions for buttons.
@@ -56,6 +66,10 @@ public class ViewManager : MonoBehaviour
 
         GameObject nextButtonObject = deckBackgroundObject.transform.Find("ForwardButtonObject").Find("Button").gameObject;
         nextButtonObject.GetComponent<Button>().onClick.AddListener(NextDeckPage);
+
+        GameObject cardInfoBackgroundObject = deckViewObject.transform.Find("CardInfoBackground").gameObject;
+        GameObject selectButton = cardInfoBackgroundObject.transform.Find("SelectButtonObject").Find("Button").gameObject;
+        selectButton.GetComponent<Button>().onClick.AddListener(SelectCard);
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -78,6 +92,32 @@ public class ViewManager : MonoBehaviour
 
         deckViewStartIndex += (GameManager.instance.GetDeckCardsPerRow() * GameManager.instance.GetDeckRowCount());
         RenderCards(deckViewStartIndex);
+    }
+
+    private void SelectCard()
+    {
+        if (displayCard == null) { return; }
+
+        // Set the player back in game mode with no open view.
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        SetOpenView(null);
+
+        GameManager.instance.SetPlayerViewState(PlayerViewState.Game);
+
+        // Create a new selected card view.
+        GameObject selectedCardViewObject = Instantiate(
+            Resources.Load<GameObject>("Prefabs/Views/SelectedCardViewPrefab"),
+            GameObject.FindGameObjectWithTag("Canvas").transform
+        );
+
+        GameObject cardObject = selectedCardViewObject.transform.Find("CardObject").gameObject;
+        CardComponent cardComponent = cardObject.GetComponent<CardComponent>();
+        cardComponent.SetCard(displayCard);
+
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(displayCard);
+
+        SetOpenView(selectedCardViewObject);
     }
 
     private void RenderCards(int startIndex)
@@ -120,7 +160,7 @@ public class ViewManager : MonoBehaviour
 
                 newCardObject.name = "Card_" + cardIndex;
 
-                CardComponent newCard = newCardObject.AddComponent<CardComponent>();
+                CardComponent newCard = newCardObject.GetComponent<CardComponent>();
                 newCard.SetCard(playerDeck[cardIndex]);
             }
         }
@@ -191,7 +231,7 @@ public class ViewManager : MonoBehaviour
 
             newCardObject.name = "Card_" + cardIndex;
 
-            CardComponent newCard = newCardObject.AddComponent<CardComponent>();
+            CardComponent newCard = newCardObject.GetComponent<CardComponent>();
             newCard.SetCard(packCards[cardIndex]);
 
             xPos += ((GameManager.instance.GetCardWidth() * 2) + GameManager.instance.GetCardSpacing());
@@ -226,7 +266,7 @@ public class ViewManager : MonoBehaviour
 
             newCardObject.name = "Card_" + cardIndex;
 
-            CardComponent newCard = newCardObject.AddComponent<CardComponent>();
+            CardComponent newCard = newCardObject.GetComponent<CardComponent>();
             newCard.SetCard(packCards[cardIndex]);
 
             xPos += ((GameManager.instance.GetCardWidth() * 2) + GameManager.instance.GetCardSpacing());
@@ -261,7 +301,7 @@ public class ViewManager : MonoBehaviour
 
             newCardObject.name = "Card_" + cardIndex;
 
-            CardComponent newCard = newCardObject.AddComponent<CardComponent>();
+            CardComponent newCard = newCardObject.GetComponent<CardComponent>();
             newCard.SetCard(packCards[cardIndex]);
 
             xPos += ((GameManager.instance.GetCardWidth() * 2) + GameManager.instance.GetCardSpacing());
@@ -286,5 +326,7 @@ public class ViewManager : MonoBehaviour
 
         GameObject descriptionObject = GetOpenView().transform.Find("CardInfoBackground").Find("Text").gameObject;
         descriptionObject.GetComponent<Text>().text = card.GetCardDescription();
+
+        displayCard = card;
     }
 }

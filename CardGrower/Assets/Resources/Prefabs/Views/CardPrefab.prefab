@@ -166,6 +166,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1886052305668733381}
+  - component: {fileID: 92493591125223644}
   m_Layer: 5
   m_Name: CardPrefab
   m_TagString: Untagged
@@ -196,6 +197,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 64, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &92493591125223644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7235091034038394427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99af60614a8436e4cb55a60db00940b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  card:
+    cardId: 0
+    cardType: 0
+    cardTexture: {fileID: 0}
+    cardDescription: 
+    cardRarity: 0
+    cardQuality: 0
 --- !u!1 &7987903399474247991
 GameObject:
   m_ObjectHideFlags: 0
