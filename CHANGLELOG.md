@@ -26,3 +26,5 @@ v0.6.0-deck ====================================================================
 - Added player deck to store cards.
 
 v0.7.0-card-select-and-use ========================================================================
+- Added card selection logic.
+- Added basic card usage logic.
