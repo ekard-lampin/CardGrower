@@ -39,6 +39,7 @@ public class Card
         Card newCard = new Card();
 
         newCard.SetCardId(cardId);
+        newCard.SetCardType(cardType);
         newCard.SetCardTexture(cardTexture);
         newCard.SetCardDescription(cardDescription);
         newCard.SetCardRarity(cardRarity);

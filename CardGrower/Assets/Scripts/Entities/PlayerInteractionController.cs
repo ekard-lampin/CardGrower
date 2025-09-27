@@ -57,14 +57,38 @@ public class PlayerInteractionController : MonoBehaviour, IPointerDownHandler
             if (!InputManager.instance.GetMouseLeftClickPress()) { return; }
             if (highlightedTile == null) { return; }
 
-            // Tilling
-            if (TileState.Overgrown.Equals(highlightedTile.GetTileState()) && CardId.Hoe.Equals(playerDeckManager.GetSelectedCard().GetCardId()))
-            {
+            if (IsTilling(highlightedTile, playerDeckManager.GetSelectedCard().GetCardId()))
+            { // Tilling
                 highlightedTile.TillTile();
                 playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard());
                 ViewManager.instance.SetOpenView(null);
             }
+            else if (IsPlanting(highlightedTile.GetTileState(), playerDeckManager.GetSelectedCard().GetCardType()))
+            { // Planting
+                highlightedTile.PlantSeed(playerDeckManager.GetSelectedCard());
+                playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard());
+                ViewManager.instance.SetOpenView(null);
+            }
         }
+    }
+
+    private bool IsTilling(Tile tile, CardId cardId) {
+        bool isTilling = true;
+
+        if (tile.GetPlacement() is PlacementWall) { isTilling = false; }
+        if (!TileState.Overgrown.Equals(tile.GetTileState())) { isTilling = false; }
+        if (!CardId.Hoe.Equals(cardId)) { isTilling = false; }
+
+        return isTilling;
+    }
+
+    private bool IsPlanting(TileState tileState, CardType cardType) {
+        bool isPlanting = true;
+
+        if (!TileState.Farmland.Equals(tileState)) { isPlanting = false; }
+        if (!CardType.Seed.Equals(cardType)) { isPlanting = false; }
+
+        return isPlanting;
     }
 
     private void ProcessPlayerDeckInput()

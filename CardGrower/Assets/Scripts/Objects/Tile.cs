@@ -13,8 +13,10 @@ public class Tile : MonoBehaviour
     public Placement GetPlacement() { return placement; }
     public void SetPlacement(Placement placement) { this.placement = placement; }
 
+    [SerializeField]
     private TileState tileState = TileState.Overgrown;
-    public TileState GetTileState() { return tileState; } public void SetTileState(TileState tileState) { this.tileState = tileState; }
+    public TileState GetTileState() { return tileState; }
+    public void SetTileState(TileState tileState) { this.tileState = tileState; }
 
     public void TillTile()
     {
@@ -27,10 +29,21 @@ public class Tile : MonoBehaviour
         Destroy(placement.gameObject);
         placement = null;
     }
-}
 
-public enum TileState
-{
-    Overgrown,
-    Farmland
+    public void PlantSeed(Card card)
+    {
+        if (placement != null) { Destroy(placement.gameObject); }
+
+        GameObject newPlantObject = Instantiate(
+            Resources.Load<GameObject>("Prefabs/Map/PlantPrefab"),
+            transform.position,
+            Quaternion.identity
+        );
+        PlacementPlant newPlant = newPlantObject.AddComponent<PlacementPlant>();
+        newPlant.SetPlantedSeed(card);
+
+        placement = newPlant;
+
+        tileState = TileState.Planted;
+    }
 }
