@@ -30,3 +30,6 @@ v0.7.0-card-select-and-use =====================================================
 - Added basic card usage logic.
 
 v0.8.0-planting-and-growing =======================================================================
+- Added logic to plant seeds.
+- Added logic for plants to grow.
+- Added logic for plants to be harvested and added to the player's deck.
