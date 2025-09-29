@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerInteractionController : MonoBehaviour, IPointerDownHandler
+public class PlayerInteractionController : MonoBehaviour
 {
     private Tile highlightedTile;
 
@@ -17,11 +17,6 @@ public class PlayerInteractionController : MonoBehaviour, IPointerDownHandler
 
         ProcessPlayerViewSelection();
         ProcessPlayerClick();
-    }
-
-    private void ProcessDeckViewClick()
-    {
-        
     }
 
     private void ProcessPlayerViewSelection()
@@ -52,22 +47,31 @@ public class PlayerInteractionController : MonoBehaviour, IPointerDownHandler
     private void ProcessPlayerClick()
     {
         PlayerDeckManager playerDeckManager = GetComponent<PlayerDeckManager>();
-        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()) && playerDeckManager.GetSelectedCard() != null)
+        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()))
         {
             if (!InputManager.instance.GetMouseLeftClickPress()) { return; }
             if (highlightedTile == null) { return; }
 
-            if (IsTilling(highlightedTile, playerDeckManager.GetSelectedCard().GetCardId()))
+            if (playerDeckManager.GetSelectedCard() != null && IsTilling(highlightedTile, playerDeckManager.GetSelectedCard().GetCardId()))
             { // Tilling
+                Debug.Log("Tilling");
                 highlightedTile.TillTile();
                 playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard());
                 ViewManager.instance.SetOpenView(null);
             }
-            else if (IsPlanting(highlightedTile.GetTileState(), playerDeckManager.GetSelectedCard().GetCardType()))
+            else if (playerDeckManager.GetSelectedCard() != null && IsPlanting(highlightedTile.GetTileState(), playerDeckManager.GetSelectedCard().GetCardType()))
             { // Planting
+                Debug.Log("Planting");
                 highlightedTile.PlantSeed(playerDeckManager.GetSelectedCard());
                 playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard());
                 ViewManager.instance.SetOpenView(null);
+            }
+            else if (IsHarvesting(highlightedTile, playerDeckManager.GetSelectedCard()))
+            {// Harvesting
+                Debug.Log("Harvesting");
+                Card plantedSeed = ((PlacementPlant)highlightedTile.GetPlacement()).GetPlantedSeed();
+                highlightedTile.HarvestTile();
+                GenerateCrops(plantedSeed);
             }
         }
     }
@@ -91,6 +95,31 @@ public class PlayerInteractionController : MonoBehaviour, IPointerDownHandler
         return isPlanting;
     }
 
+    private bool IsHarvesting(Tile tile, Card selectedCard)
+    {
+        bool isHarvesting = true;
+
+        // Debug.Log("Tile is not planted: " + (!TileState.Planted.Equals(tile.GetTileState())));
+        if (!TileState.Planted.Equals(tile.GetTileState())) { isHarvesting = false; }
+        // Debug.Log("Tile does not have placement: " + (tile.GetPlacement() == null));
+        if (tile.GetPlacement() == null) { isHarvesting = false; }
+        // Debug.Log("Tile placement is not a plant: " + (isHarvesting && !(tile.GetPlacement() is PlacementPlant)));
+        if (isHarvesting && !(tile.GetPlacement() is PlacementPlant)) { isHarvesting = false; }
+        // Debug.Log("Tile placement has not finished growing: " + (isHarvesting && !((PlacementPlant)tile.GetPlacement()).IsFinishedGrowing()));
+        if (isHarvesting && !((PlacementPlant)tile.GetPlacement()).IsFinishedGrowing()) { isHarvesting = false; }
+        // Debug.Log("Player is holding card: " + (!selectedCard.GetCardId().Equals(CardId.None)));
+        if (!selectedCard.GetCardId().Equals(CardId.None)) { isHarvesting = false; }
+        // TODO: Implement tools that will improve yield or quality.
+
+        return isHarvesting;
+    }
+
+    private void GenerateCrops(Card seedCard)
+    {
+        Card[] newCropCards = GameManager.instance.GenerateCardsForSeed(seedCard);
+        foreach (Card newCropCard in newCropCards) { GetComponent<PlayerDeckManager>().AddCardToDeck(newCropCard); }
+    }
+
     private void ProcessPlayerDeckInput()
     {
         if (!InputManager.instance.GetFPress()) { return; }
@@ -103,11 +132,5 @@ public class PlayerInteractionController : MonoBehaviour, IPointerDownHandler
         if (!InputManager.instance.GetTabPress()) { return; }
 
         ViewManager.instance.ToggleShopView();
-    }
-
-    public void OnPointerDown(PointerEventData pointerEventData)
-    {
-        Debug.Log(pointerEventData.selectedObject.name + " clicked.");
-        ProcessDeckViewClick();
     }
 }

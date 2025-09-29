@@ -21,6 +21,7 @@ public class Tile : MonoBehaviour
     public void TillTile()
     {
         if (!TileState.Overgrown.Equals(tileState)) { return; }
+        if (placement == null) { return; }
         if (placement is PlacementWall) { return; }
 
         tileState = TileState.Farmland;
@@ -45,5 +46,16 @@ public class Tile : MonoBehaviour
         placement = newPlant;
 
         tileState = TileState.Planted;
+    }
+
+    public void HarvestTile()
+    {
+        if (placement == null) { return; }
+        if (!(placement is PlacementPlant)) { return; }
+
+        Destroy(placement.gameObject);
+        placement = null;
+
+        tileState = TileState.Farmland;
     }
 }

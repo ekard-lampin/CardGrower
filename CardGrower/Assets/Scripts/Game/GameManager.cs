@@ -24,6 +24,28 @@ public class GameManager : MonoBehaviour
     public void SetBoosterCards(Card[] boosterCards) { this.boosterCards = boosterCards; }
 
     [SerializeField]
+    private Card[] cropCards;
+    public Card[] GetCropCards() { return cropCards; }
+    public Card GetCropCardBySeedCardId(CardId cardId)
+    {
+        CardId targetCard = CardId.None;
+        switch (cardId)
+        {
+            case CardId.LettuceSeed:
+                targetCard = CardId.LettuceCrop;
+                break;
+            default:
+                break;
+        }
+
+        foreach (Card cropCard in cropCards)
+        {
+            if (cropCard.GetCardId().Equals(targetCard)) { return cropCard; }
+        }
+        return cropCards[0];
+    }
+
+    [SerializeField]
     private int cardsPerToolPack;
     public int GetCardsPerToolPack() { return cardsPerToolPack; }
     public void SetCardsPerToolPack(int cardsPerPack) { this.cardsPerToolPack = cardsPerPack; }
@@ -81,6 +103,15 @@ public class GameManager : MonoBehaviour
     private float mapOvergrowthScaleVariation;
     public float GetMapOvergrowthScaleVariation() { return mapOvergrowthScaleVariation; }
     public void SetMapOvergrowthScaleVariation(float mapOvergrowthScaleVariation) { this.mapOvergrowthScaleVariation = mapOvergrowthScaleVariation; }
+
+    [Header("Plant Settings")]
+    [SerializeField]
+    private float plantBaseGrowthChancePercentage;
+    public float GetPlantBaseGrowthChangePercentage() { return plantBaseGrowthChancePercentage; }
+
+    [SerializeField]
+    private float plantGrowthTickDuration;
+    public float GetPlantGrowthTickDuration() { return plantGrowthTickDuration; }
 
     [Header("Player Settings")]
     [SerializeField]
@@ -176,6 +207,63 @@ public class GameManager : MonoBehaviour
                 int rarityIndex = Random.Range(0, mythicalCards.Count);
                 returnCards[cardIndex] = mythicalCards[rarityIndex].CopyCard();
             }
+        }
+
+        return returnCards;
+    }
+
+    public Card[] GenerateCardsForSeed(Card seedCard)
+    {
+        int cropQuantity = 0;
+        switch (seedCard.GetCardRarity())
+        {
+            case Rarity.Common:
+                cropQuantity = 1;
+                break;
+            case Rarity.Uncommon:
+                cropQuantity = Random.Range(1, 3);
+                break;
+            case Rarity.Rare:
+                cropQuantity = Random.Range(1, 4);
+                break;
+            case Rarity.Legendary:
+                cropQuantity = Random.Range(1, 5);
+                break;
+            case Rarity.Mythical:
+                cropQuantity = Random.Range(1, 6);
+                break;
+            default:
+                break;
+        }
+
+        Card cropCard = GetCropCardBySeedCardId(seedCard.GetCardId());
+        Card[] returnCards = new Card[cropQuantity];
+        for (int cardIndex = 0; cardIndex < returnCards.Length; cardIndex++)
+        {
+            Card newCard = cropCard.CopyCard();
+            int qualityOdds = Random.Range(0, 100);
+            if (qualityOdds < 10)
+            { // Bad
+                newCard.SetCardQuality(Quality.Bad);
+            }
+            else if (qualityOdds < 80)
+            { // Normal
+                newCard.SetCardQuality(Quality.Normal);
+            }
+            else if (qualityOdds < 90)
+            { // Good
+                newCard.SetCardQuality(Quality.Good);
+            }
+            else if (qualityOdds < 95)
+            { // Better
+                newCard.SetCardQuality(Quality.Better);
+            }
+            else if (qualityOdds == 99)
+            { // Best
+                newCard.SetCardQuality(Quality.Best);
+            }
+
+            returnCards[cardIndex] = newCard;
         }
 
         return returnCards;

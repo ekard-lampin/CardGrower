@@ -486,6 +486,13 @@ MonoBehaviour:
     cardDescription: A watering can that boosts growth.
     cardRarity: 4
     cardQuality: 1
+  cropCards:
+  - cardId: 4
+    cardType: 3
+    cardTexture: {fileID: 2800000, guid: a7895fc63b1d50a4aab7a448b6646869, type: 3}
+    cardDescription: A crisp head of lettuce.
+    cardRarity: 0
+    cardQuality: 0
   cardsPerToolPack: 3
   cardsPerSeedPack: 5
   cardsPerBoosterPack: 4
@@ -498,6 +505,8 @@ MonoBehaviour:
   mapOvergrowthLocationVariation: 0.5
   mapOvergrowthMaxHeight: 1
   mapOvergrowthScaleVariation: 0.5
+  plantBaseGrowthChancePercentage: 100
+  plantGrowthTickDuration: 1
   playerHeightMinimum: 3
   playerLooksSensitivity: 0.5
   playerMoveSpeed: 2
