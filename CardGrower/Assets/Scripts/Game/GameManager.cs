@@ -74,6 +74,10 @@ public class GameManager : MonoBehaviour
     public int GetCardSpacing() { return cardSpacing; }
     public void SetCardSpacing(int cardSpacing) { this.cardSpacing = cardSpacing; }
 
+    [SerializeField]
+    private int cardSellCount;
+    public int GetCardSellCount() { return cardSellCount; }
+
     [Header("Deck Settings")]
     [SerializeField]
     private int deckCardsPerRow;

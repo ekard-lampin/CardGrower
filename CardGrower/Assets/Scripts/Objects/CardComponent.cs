@@ -29,12 +29,12 @@ public class CardComponent : MonoBehaviour
 
         GameObject hitboxObject = transform.Find("Hitbox").gameObject;
         hitboxObject.GetComponent<CardClickController>().SetCardComponent(this);
+        // Disable click if shop is open.
+        if (PlayerViewState.Shop.Equals(GameManager.instance.GetPlayerViewState())) { hitboxObject.SetActive(false); }
     }
 
     public void Click()
     {
-        if (!PlayerViewState.Deck.Equals(GameManager.instance.GetPlayerViewState())) { return; }
-
-        ViewManager.instance.DisplayCardInfo(GetCard());
+        if (PlayerViewState.Deck.Equals(GameManager.instance.GetPlayerViewState())) { ViewManager.instance.DisplayCardInfo(GetCard()); }
     }
 }

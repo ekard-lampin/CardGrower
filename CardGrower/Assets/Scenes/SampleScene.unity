@@ -499,6 +499,7 @@ MonoBehaviour:
   cardWidth: 64
   cardHeight: 90
   cardSpacing: 10
+  cardSellCount: 9
   deckCardsPerRow: 8
   deckRowCount: 4
   mapBaseWidth: 10

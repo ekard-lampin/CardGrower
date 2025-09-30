@@ -187,11 +187,13 @@ public class ViewManager : MonoBehaviour
     {
         GameManager.instance.SetPlayerViewState(PlayerViewState.Shop);
 
+        // Create shop object.
         GameObject shopObject = Instantiate(
             Resources.Load<GameObject>("Prefabs/Views/ShopViewPrefab"),
             GameObject.FindGameObjectWithTag("Canvas").transform
         );
 
+        // Initialize shop buttons.
         GameObject toolBuyButtonObject = shopObject.transform.Find("ToolPackButtonObject").Find("Button").gameObject;
         toolBuyButtonObject.GetComponent<Button>().onClick.AddListener(ClickToolBuyButton);
 
@@ -205,6 +207,55 @@ public class ViewManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
 
         SetOpenView(shopObject);
+
+        // Setup sell screen.
+        RenderSellCards(0);
+    }
+
+    private void RenderSellCards(int startingIndex)
+    {
+        PlayerDeckManager playerDeckManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>();
+        List<Card> playerDeck = playerDeckManager.GetDeck();
+        GameObject sellSectionObject = GetOpenView().transform.Find("SellSectionBackground").gameObject;
+
+        foreach (Transform child in sellSectionObject.transform)
+        {
+            if (child.gameObject.name.ToLower().Contains("card")) { Destroy(child.gameObject); }
+        }
+
+        int cardsToShow = GameManager.instance.GetCardSellCount();
+        float xAnchor = ((float)GameManager.instance.GetCardWidth() * ((float)cardsToShow - 1f) * -1f) - ((float)GameManager.instance.GetCardSpacing() * ((float)(cardsToShow - 1) / 2f));
+        for (int cardIndex = 0; cardIndex < cardsToShow; cardIndex++)
+        {
+            if ((cardIndex + startingIndex) >= playerDeckManager.GetDeck().Count) { continue; }
+
+            // Create card.
+            GameObject newCardObject = Instantiate(
+                Resources.Load<GameObject>("Prefabs/Views/CardPrefab"),
+                sellSectionObject.transform
+            );
+            newCardObject.transform.localPosition = new Vector3(
+                xAnchor + (((GameManager.instance.GetCardWidth() * 2) + GameManager.instance.GetCardSpacing()) * (cardIndex)),
+                0,
+                0
+            );
+
+            newCardObject.name = "Card_" + cardIndex;
+
+            CardComponent newCard = newCardObject.GetComponent<CardComponent>();
+            newCard.SetCard(playerDeck[cardIndex + startingIndex]);
+
+            // Create sell button.
+            GameObject sellButtonObject = Instantiate(
+                Resources.Load<GameObject>("Prefabs/Views/SellButtonPrefab"),
+                sellSectionObject.transform
+            );
+            sellButtonObject.transform.localPosition = new Vector3(
+                xAnchor + (((GameManager.instance.GetCardWidth() * 2) + GameManager.instance.GetCardSpacing()) * (cardIndex)),
+                0,
+                0
+            );
+        }
     }
 
     public void ClickToolBuyButton()
