@@ -35,3 +35,6 @@ v0.8.0-planting-and-growing ====================================================
 - Added logic for plants to be harvested and added to the player's deck.
 
 v0.9.0-selling ====================================================================================
+- Added logic to sell cards.
+- Added logic to keep track of player finances.
+- Added logic to gatekeep purchases beyond player finances.
