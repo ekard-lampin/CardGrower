@@ -61,6 +61,18 @@ public class GameManager : MonoBehaviour
     public void SetCardsPerBoosterPack(int cardsPerBoosterPack) { this.cardsPerBoosterPack = cardsPerBoosterPack; }
 
     [SerializeField]
+    private int cardsToolPackPrice;
+    public int GetToolPackPrice() { return cardsToolPackPrice; }
+
+    [SerializeField]
+    private int cardsSeedPackPrice;
+    public int GetSeedPackPrice() { return cardsSeedPackPrice; }
+
+    [SerializeField]
+    private int cardsBoosterPackPrice;
+    public int GetBoosterPackPrice() { return cardsBoosterPackPrice; }
+
+    [SerializeField]
     private int cardWidth;
     public int GetCardWidth() { return cardWidth; }
     public void SetCardWidth(int cardWidth) { this.cardWidth = cardWidth; }
@@ -271,5 +283,44 @@ public class GameManager : MonoBehaviour
         }
 
         return returnCards;
+    }
+
+    public void SellCard(Card card)
+    {
+        Debug.Log("Selling " + card.GetCardId());
+
+        // Add the sell value of the card to the player's balance.
+        int saleAmount = GetSaleAmount(card);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().AddMoney(saleAmount);
+
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().RemoveCardFromDeck(card);
+        ViewManager.instance.OpenShopView();
+    }
+
+    public int GetSaleAmount(Card card)
+    {
+        // Add the sell value of the card to the player's balance.
+        float multiplier = 0;
+        switch (card.GetCardQuality())
+        {
+            case Quality.Bad:
+                multiplier = 0.5f;
+                break;
+            case Quality.Normal:
+                multiplier = 1f;
+                break;
+            case Quality.Good:
+                multiplier = 1.5f;
+                break;
+            case Quality.Better:
+                multiplier = 2f;
+                break;
+            case Quality.Best:
+                multiplier = 3f;
+                break;
+            default:
+                break;
+        }
+        return Mathf.CeilToInt(card.GetCardValue() * multiplier);
     }
 }

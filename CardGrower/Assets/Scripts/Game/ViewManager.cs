@@ -19,6 +19,9 @@ public class ViewManager : MonoBehaviour
             displayCard = null;
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(null);
         }
+
+        if (openView != null && !openView.name.Equals("ShopViewPrefab")) { sellStartIndex = 0; }
+        if (sellStartIndex > 0 && sellStartIndex >= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().GetDeck().Count) { sellStartIndex -= GameManager.instance.GetCardSellCount(); }
     }
 
     [SerializeField]
@@ -26,6 +29,9 @@ public class ViewManager : MonoBehaviour
 
     [SerializeField]
     private Card displayCard = null;
+
+    [SerializeField]
+    private int sellStartIndex = 0;
 
     public void ToggleDeckView()
     {
@@ -183,7 +189,7 @@ public class ViewManager : MonoBehaviour
         }
     }
 
-    private void OpenShopView()
+    public void OpenShopView()
     {
         GameManager.instance.SetPlayerViewState(PlayerViewState.Shop);
 
@@ -192,16 +198,27 @@ public class ViewManager : MonoBehaviour
             Resources.Load<GameObject>("Prefabs/Views/ShopViewPrefab"),
             GameObject.FindGameObjectWithTag("Canvas").transform
         );
+        shopObject.name = "ShopViewPrefab";
+
+        // Setup balance display.
+        shopObject.transform.Find("PackBackground").Find("BalanceText").gameObject.GetComponent<Text>().text = "Balance: $" + GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().GetPlayerBalance();
 
         // Initialize shop buttons.
-        GameObject toolBuyButtonObject = shopObject.transform.Find("ToolPackButtonObject").Find("Button").gameObject;
+        PlayerMoneyManager playerMoneyManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>();
+        GameObject toolBuyButtonObject = shopObject.transform.Find("PackBackground").Find("ToolPackButtonObject").Find("Button").gameObject;
         toolBuyButtonObject.GetComponent<Button>().onClick.AddListener(ClickToolBuyButton);
+        toolBuyButtonObject.transform.Find("Text").gameObject.GetComponent<Text>().text = "Buy ($" + GameManager.instance.GetToolPackPrice() + ")";
+        if (playerMoneyManager.GetPlayerBalance() < GameManager.instance.GetToolPackPrice()) { toolBuyButtonObject.GetComponent<Button>().interactable = false; }
 
-        GameObject seedBuyButtonObject = shopObject.transform.Find("SeedPackButtonObject").Find("Button").gameObject;
+        GameObject seedBuyButtonObject = shopObject.transform.Find("PackBackground").Find("SeedPackButtonObject").Find("Button").gameObject;
         seedBuyButtonObject.GetComponent<Button>().onClick.AddListener(ClickSeedBuyButton);
+        seedBuyButtonObject.transform.Find("Text").gameObject.GetComponent<Text>().text = "Buy ($" + GameManager.instance.GetSeedPackPrice() + ")";
+        if (playerMoneyManager.GetPlayerBalance() < GameManager.instance.GetSeedPackPrice()) { seedBuyButtonObject.GetComponent<Button>().interactable = false; }
 
-        GameObject boosterPackButtonObject = shopObject.transform.Find("BoosterPackButtonObject").Find("Button").gameObject;
+        GameObject boosterPackButtonObject = shopObject.transform.Find("PackBackground").Find("BoosterPackButtonObject").Find("Button").gameObject;
         boosterPackButtonObject.GetComponent<Button>().onClick.AddListener(ClickBoosterBuyButton);
+        boosterPackButtonObject.transform.Find("Text").gameObject.GetComponent<Text>().text = "Buy ($" + GameManager.instance.GetBoosterPackPrice() + ")";
+        if (playerMoneyManager.GetPlayerBalance() < GameManager.instance.GetBoosterPackPrice()) { boosterPackButtonObject.GetComponent<Button>().interactable = false; }
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -209,7 +226,26 @@ public class ViewManager : MonoBehaviour
         SetOpenView(shopObject);
 
         // Setup sell screen.
-        RenderSellCards(0);
+        RenderSellCards(sellStartIndex);
+
+        GameObject sellSectionObject = GetOpenView().transform.Find("SellSectionBackground").gameObject;
+        Button previousButton = sellSectionObject.transform.Find("BackButtonObject").Find("Button").gameObject.GetComponent<Button>();
+        Button nextButton = sellSectionObject.transform.Find("ForwardButtonObject").Find("Button").gameObject.GetComponent<Button>();
+
+        previousButton.onClick.AddListener(() =>
+        {
+            if (sellStartIndex == 0) { return; }
+            Debug.Log("Rendering previous cards to sell.");
+            sellStartIndex -= GameManager.instance.GetCardSellCount();
+            RenderSellCards(sellStartIndex);
+        });
+        nextButton.onClick.AddListener(() =>
+        {
+            if ((sellStartIndex + GameManager.instance.GetCardSellCount()) >= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().GetDeck().Count) { return; }
+            Debug.Log("Rendering next cards to sell.");
+            sellStartIndex += GameManager.instance.GetCardSellCount();
+            RenderSellCards(sellStartIndex);
+        });
     }
 
     private void RenderSellCards(int startingIndex)
@@ -227,7 +263,7 @@ public class ViewManager : MonoBehaviour
         float xAnchor = ((float)GameManager.instance.GetCardWidth() * ((float)cardsToShow - 1f) * -1f) - ((float)GameManager.instance.GetCardSpacing() * ((float)(cardsToShow - 1) / 2f));
         for (int cardIndex = 0; cardIndex < cardsToShow; cardIndex++)
         {
-            if ((cardIndex + startingIndex) >= playerDeckManager.GetDeck().Count) { continue; }
+            if ((cardIndex + startingIndex) >= playerDeckManager.GetDeck().Count) { break; }
 
             // Create card.
             GameObject newCardObject = Instantiate(
@@ -255,11 +291,18 @@ public class ViewManager : MonoBehaviour
                 0,
                 0
             );
+            sellButtonObject.name = "CardSellButton";
+            sellButtonObject.GetComponent<CardSellButton>().SetCard(playerDeck[cardIndex + startingIndex]);
+
+            // Set sell text.
+            sellButtonObject.transform.Find("Button").Find("Text").gameObject.GetComponent<Text>().text = "Sell $" + GameManager.instance.GetSaleAmount(playerDeck[cardIndex + startingIndex]);
         }
     }
 
     public void ClickToolBuyButton()
     {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().DeductMoney(GameManager.instance.GetToolPackPrice());
+
         GameManager.instance.SetPlayerViewState(PlayerViewState.OpenPack);
 
         GameObject packScreenObject = Instantiate(
@@ -295,6 +338,8 @@ public class ViewManager : MonoBehaviour
 
     public void ClickSeedBuyButton()
     {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().DeductMoney(GameManager.instance.GetSeedPackPrice());
+
         GameManager.instance.SetPlayerViewState(PlayerViewState.OpenPack);
 
         GameObject packScreenObject = Instantiate(
@@ -330,6 +375,8 @@ public class ViewManager : MonoBehaviour
 
     public void ClickBoosterBuyButton()
     {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().DeductMoney(GameManager.instance.GetBoosterPackPrice());
+
         GameManager.instance.SetPlayerViewState(PlayerViewState.OpenPack);
 
         GameObject packScreenObject = Instantiate(

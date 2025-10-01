@@ -34,6 +34,11 @@ public class Card
     public Quality GetCardQuality() { return cardQuality; }
     public void SetCardQuality(Quality cardQuality) { this.cardQuality = cardQuality; }
 
+    [SerializeField]
+    private int cardValue;
+    public int GetCardValue() { return cardValue; }
+    public void SetCardValue(int cardValue) { this.cardValue = cardValue; }
+
     public Card CopyCard()
     {
         Card newCard = new Card();
@@ -44,6 +49,7 @@ public class Card
         newCard.SetCardDescription(cardDescription);
         newCard.SetCardRarity(cardRarity);
         newCard.SetCardQuality(cardQuality);
+        newCard.SetCardValue(cardValue);
 
         return newCard;
     }

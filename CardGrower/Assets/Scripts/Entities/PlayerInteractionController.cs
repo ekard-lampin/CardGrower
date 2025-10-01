@@ -108,7 +108,7 @@ public class PlayerInteractionController : MonoBehaviour
         // Debug.Log("Tile placement has not finished growing: " + (isHarvesting && !((PlacementPlant)tile.GetPlacement()).IsFinishedGrowing()));
         if (isHarvesting && !((PlacementPlant)tile.GetPlacement()).IsFinishedGrowing()) { isHarvesting = false; }
         // Debug.Log("Player is holding card: " + (!selectedCard.GetCardId().Equals(CardId.None)));
-        if (!selectedCard.GetCardId().Equals(CardId.None)) { isHarvesting = false; }
+        if (selectedCard == null || !selectedCard.GetCardId().Equals(CardId.None)) { isHarvesting = false; }
         // TODO: Implement tools that will improve yield or quality.
 
         return isHarvesting;

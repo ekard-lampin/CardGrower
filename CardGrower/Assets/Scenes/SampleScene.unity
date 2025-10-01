@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 201007795}
   - component: {fileID: 201007797}
   - component: {fileID: 201007798}
+  - component: {fileID: 201007799}
   m_Layer: 0
   m_Name: PlayerObject
   m_TagString: Player
@@ -201,6 +202,20 @@ MonoBehaviour:
     cardDescription: 
     cardRarity: 0
     cardQuality: 0
+    cardValue: 0
+--- !u!114 &201007799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201007794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67fa0092d999ba9449d4c42c20854104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerBalance: 30
 --- !u!1 &588349538
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,30 +415,35 @@ MonoBehaviour:
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 0
     cardQuality: 1
+    cardValue: 1
   - cardId: 1
     cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 1
     cardQuality: 1
+    cardValue: 1
   - cardId: 1
     cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 2
     cardQuality: 1
+    cardValue: 1
   - cardId: 1
     cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 3
     cardQuality: 1
+    cardValue: 1
   - cardId: 1
     cardType: 0
     cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 4
     cardQuality: 1
+    cardValue: 1
   seedCards:
   - cardId: 2
     cardType: 1
@@ -431,30 +451,35 @@ MonoBehaviour:
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 0
     cardQuality: 1
+    cardValue: 1
   - cardId: 2
     cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 1
     cardQuality: 1
+    cardValue: 1
   - cardId: 2
     cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 2
     cardQuality: 1
+    cardValue: 1
   - cardId: 2
     cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 3
     cardQuality: 1
+    cardValue: 1
   - cardId: 2
     cardType: 1
     cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
     cardDescription: Seeds to grow a crisp head of lettuce.
     cardRarity: 4
     cardQuality: 1
+    cardValue: 1
   boosterCards:
   - cardId: 3
     cardType: 2
@@ -462,30 +487,35 @@ MonoBehaviour:
     cardDescription: A watering can that boosts growth.
     cardRarity: 0
     cardQuality: 1
+    cardValue: 1
   - cardId: 3
     cardType: 2
     cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
     cardDescription: A watering can that boosts growth.
     cardRarity: 1
     cardQuality: 1
+    cardValue: 1
   - cardId: 3
     cardType: 2
     cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
     cardDescription: A watering can that boosts growth.
     cardRarity: 2
     cardQuality: 1
+    cardValue: 1
   - cardId: 3
     cardType: 2
     cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
     cardDescription: A watering can that boosts growth.
     cardRarity: 3
     cardQuality: 1
+    cardValue: 1
   - cardId: 3
     cardType: 2
     cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
     cardDescription: A watering can that boosts growth.
     cardRarity: 4
     cardQuality: 1
+    cardValue: 1
   cropCards:
   - cardId: 4
     cardType: 3
@@ -493,9 +523,13 @@ MonoBehaviour:
     cardDescription: A crisp head of lettuce.
     cardRarity: 0
     cardQuality: 0
+    cardValue: 3
   cardsPerToolPack: 3
   cardsPerSeedPack: 5
   cardsPerBoosterPack: 4
+  cardsToolPackPrice: 10
+  cardsSeedPackPrice: 20
+  cardsBoosterPackPrice: 30
   cardWidth: 64
   cardHeight: 90
   cardSpacing: 10
@@ -558,6 +592,8 @@ MonoBehaviour:
     cardDescription: 
     cardRarity: 0
     cardQuality: 0
+    cardValue: 0
+  sellStartIndex: 0
 --- !u!1 &693222412
 GameObject:
   m_ObjectHideFlags: 0
