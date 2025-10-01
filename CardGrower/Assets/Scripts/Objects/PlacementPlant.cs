@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,35 @@ public class PlacementPlant : Placement
 
     [SerializeField]
     private GameObject cropObject;
+
+    [SerializeField]
+    private List<Card> activeBoosters = new List<Card>();
+    public bool DoesPlantHaveBooster(Card booster)
+    {
+        foreach (Card activeBooster in activeBoosters)
+        {
+            if (activeBooster.GetCardId().Equals(booster.GetCardId())) { return true; }
+        }
+        return false;
+    }
+    public void AddBooster(Card booster) { activeBoosters.Add(booster); }
+    public bool IsBoosterActive(CardId cardId) {
+        foreach (Card activeBooster in activeBoosters)
+        {
+            if (activeBooster.GetCardId().Equals(cardId)) { return true; }
+        }
+        return false;
+    }
+    public void RemoveBooster(CardId cardId)
+    {
+        int boosterToRemove = -1;
+        for (int boosterIndex = 0; boosterIndex < activeBoosters.Count; boosterIndex++)
+        {
+            if (activeBoosters[boosterIndex].GetCardId().Equals(cardId)) { boosterToRemove = boosterIndex; }
+        }
+        if (boosterToRemove == -1) { return; }
+        activeBoosters.RemoveAt(boosterToRemove);
+    }
 
     private float tickTimer = 0;
 
@@ -34,28 +64,38 @@ public class PlacementPlant : Placement
     {
         if (growthStage == 4) { return; }
 
-        float roll = Random.Range(0, 100);
-        switch (plantedSeed.GetCardRarity())
+        // If booster is active, skip grow check and grow one stage.
+        if (IsBoosterActive(CardId.Fertilizer))
         {
-            case Rarity.Common:
-                // Do nothing
-                break;
-            case Rarity.Uncommon:
-                roll *= 0.9f;
-                break;
-            case Rarity.Rare:
-                roll *= 0.75f;
-                break;
-            case Rarity.Legendary:
-                roll *= 0.5f;
-                break;
-            case Rarity.Mythical:
-                roll *= 0.25f;
-                break;
-            default:
-                break;
+            RemoveBooster(CardId.Fertilizer);
         }
-        if (roll > GameManager.instance.GetPlantBaseGrowthChangePercentage()) { return; }
+        else
+        {
+            float roll = Random.Range(0, 100);
+            switch (plantedSeed.GetCardRarity())
+            {
+                case Rarity.Common:
+                    // Do nothing
+                    break;
+                case Rarity.Uncommon:
+                    roll *= 0.9f;
+                    break;
+                case Rarity.Rare:
+                    roll *= 0.75f;
+                    break;
+                case Rarity.Legendary:
+                    roll *= 0.5f;
+                    break;
+                case Rarity.Mythical:
+                    roll *= 0.25f;
+                    break;
+                default:
+                    break;
+            }
+            if (IsBoosterActive(CardId.WaterBucket) || IsBoosterActive(CardId.GrowthHormone)) { roll *= 1.5f; }
+            if (roll > GameManager.instance.GetPlantBaseGrowthChangePercentage()) { return; }
+            if (IsBoosterActive(CardId.WaterBucket)) { RemoveBooster(CardId.WaterBucket); }
+        }
 
         GameObject meshObject = transform.Find("Mesh").gameObject;
         SpriteRenderer spriteOne = meshObject.transform.Find("Sprite_0").gameObject.GetComponent<SpriteRenderer>();

@@ -34,6 +34,18 @@ public class GameManager : MonoBehaviour
             case CardId.LettuceSeed:
                 targetCard = CardId.LettuceCrop;
                 break;
+            case CardId.CarrotSeed:
+                targetCard = CardId.CarrotCrop;
+                break;
+            case CardId.CornSeed:
+                targetCard = CardId.CornCrop;
+                break;
+            case CardId.CucumberSeed:
+                targetCard = CardId.CucumberCrop;
+                break;
+            case CardId.PumpkinSeed:
+                targetCard = CardId.PumpkinCrop;
+                break;
             default:
                 break;
         }
@@ -99,6 +111,11 @@ public class GameManager : MonoBehaviour
     private int deckRowCount;
     public int GetDeckRowCount() { return deckRowCount; }
 
+    [Header("Game Settings")]
+    private bool isFirstToolBuy = true;
+    public bool IsFirstToolBuy() { return isFirstToolBuy; }
+    public void SetFirstToolBuy(bool isFirstToolBuy) { this.isFirstToolBuy = isFirstToolBuy; }
+
     [Header("Map Settings")]
     [SerializeField]
     private int mapBaseWidth;
@@ -150,6 +167,12 @@ public class GameManager : MonoBehaviour
     public PlayerViewState GetPlayerViewState() { return playerViewState; }
     public void SetPlayerViewState(PlayerViewState playerViewState) { this.playerViewState = playerViewState; }
 
+    [SerializeField]
+    private float playerPassiveMoneyTimerDuration;
+    public float GetPlayerPassiveMoneyTimerDuration() { return playerPassiveMoneyTimerDuration; }
+
+    private float playerPassiveMoneyTimer = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -157,6 +180,17 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         MapManager.instance.CreateBaseMap();
+    }
+
+    void Update()
+    {
+        playerPassiveMoneyTimer += Time.deltaTime;
+
+        if (playerPassiveMoneyTimer < GetPlayerPassiveMoneyTimerDuration()) { return; }
+
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().AddMoney(1);
+
+        playerPassiveMoneyTimer = 0;
     }
 
     public Card[] GetCardsForPack(PackType packType)
@@ -186,6 +220,7 @@ public class GameManager : MonoBehaviour
         List<Card> rareCards = new List<Card>();
         List<Card> legendaryCards = new List<Card>();
         List<Card> mythicalCards = new List<Card>();
+        Card hoeCard = new Card();
         foreach (Card packCard in packCards)
         {
             if (Rarity.Common.Equals(packCard.GetCardRarity())) { commonCards.Add(packCard); }
@@ -193,10 +228,19 @@ public class GameManager : MonoBehaviour
             if (Rarity.Rare.Equals(packCard.GetCardRarity())) { rareCards.Add(packCard); }
             if (Rarity.Legendary.Equals(packCard.GetCardRarity())) { legendaryCards.Add(packCard); }
             if (Rarity.Mythical.Equals(packCard.GetCardRarity())) { mythicalCards.Add(packCard); }
+
+            if (CardId.Hoe.Equals(packCard.GetCardId())) { hoeCard = packCard; }
         }
 
         for (int cardIndex = 0; cardIndex < returnCards.Length; cardIndex++)
         {
+            if (PackType.Tool.Equals(packType) && IsFirstToolBuy())
+            {
+                returnCards[cardIndex] = hoeCard.CopyCard();
+                SetFirstToolBuy(false);
+                continue;
+            }
+
             int rarity = Random.Range(0, 101);
             if (rarity < 80) // Common
             {
@@ -228,9 +272,10 @@ public class GameManager : MonoBehaviour
         return returnCards;
     }
 
-    public Card[] GenerateCardsForSeed(Card seedCard)
+    public Card[] GenerateCardsForSeed(PlacementPlant plant, Card[] selectedCard)
     {
         int cropQuantity = 0;
+        Card seedCard = plant.GetPlantedSeed();
         switch (seedCard.GetCardRarity())
         {
             case Rarity.Common:
@@ -252,27 +297,50 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        if (selectedCard.Length > 0 && CardType.Tool.Equals(selectedCard[0].GetCardType()) && !CardId.Hoe.Equals(selectedCard[0].GetCardId()))
+        {
+            if (CardId.Netting.Equals(selectedCard[0].GetCardId()) && Random.Range(0, 2) > 0) { cropQuantity++; }
+            if (CardId.Gloves.Equals(selectedCard[0].GetCardId()))
+            {
+                if (Random.Range(0, 2) > 0) { cropQuantity += 2; } else { cropQuantity++; }
+            }
+        }
+
         Card cropCard = GetCropCardBySeedCardId(seedCard.GetCardId());
         Card[] returnCards = new Card[cropQuantity];
         for (int cardIndex = 0; cardIndex < returnCards.Length; cardIndex++)
         {
             Card newCard = cropCard.CopyCard();
             int qualityOdds = Random.Range(0, 100);
+            bool beehiveTool = false;
+            bool fungusBooster = false;
+
+            // Check for used tools.
+            if (selectedCard.Length > 0 && CardType.Tool.Equals(selectedCard[0].GetCardType()) && !CardId.Hoe.Equals(selectedCard[0].GetCardId()))
+            {
+                if (CardId.Shears.Equals(selectedCard[0].GetCardId())) { qualityOdds += 15; }
+                if (CardId.Beehive.Equals(selectedCard[0].GetCardId()) && cardIndex == 0) { beehiveTool = true; }
+            }
+
+            // Check for boosters
+            if (plant.IsBoosterActive(CardId.Trellis)) { qualityOdds += 15; }
+            if (plant.IsBoosterActive(CardId.Fungus) && cardIndex == 0) { fungusBooster = true; }
+
             if (qualityOdds < 10)
             { // Bad
-                newCard.SetCardQuality(Quality.Bad);
+                newCard.SetCardQuality((!beehiveTool && !fungusBooster) ? Quality.Bad : Quality.Normal);
             }
             else if (qualityOdds < 80)
             { // Normal
-                newCard.SetCardQuality(Quality.Normal);
+                newCard.SetCardQuality((!beehiveTool && !fungusBooster) ? Quality.Normal : Quality.Good);
             }
             else if (qualityOdds < 90)
             { // Good
-                newCard.SetCardQuality(Quality.Good);
+                newCard.SetCardQuality((!beehiveTool && !fungusBooster) ? Quality.Good : Quality.Better);
             }
             else if (qualityOdds < 95)
             { // Better
-                newCard.SetCardQuality(Quality.Better);
+                newCard.SetCardQuality((!beehiveTool && !fungusBooster) ? Quality.Better : Quality.Best);
             }
             else if (qualityOdds == 99)
             { // Best
@@ -280,6 +348,13 @@ public class GameManager : MonoBehaviour
             }
 
             returnCards[cardIndex] = newCard;
+        }
+
+        if (selectedCard.Length > 0)
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().RemoveCardFromDeck(selectedCard[0]);
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(new Card[0]);
+            ViewManager.instance.SetOpenView(null);
         }
 
         return returnCards;

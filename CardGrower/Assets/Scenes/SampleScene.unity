@@ -195,14 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deck: []
-  selectedCard:
-    cardId: 0
-    cardType: 0
-    cardTexture: {fileID: 0}
-    cardDescription: 
-    cardRarity: 0
-    cardQuality: 0
-    cardValue: 0
+  selectedCard: []
 --- !u!114 &201007799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67fa0092d999ba9449d4c42c20854104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBalance: 30
+  playerBalance: 1000
 --- !u!1 &588349538
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,37 +402,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolCards:
-  - cardId: 1
+  - cardId: 15
     cardType: 0
-    cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
-    cardDescription: Tills a tile to turn it into farmland.
+    cardTexture: {fileID: 2800000, guid: 8e85a358c2d4e1e4fbe34f0a2283d2ef, type: 3}
+    cardDescription: Netting to keep pests and birds away. When used while harvesting,
+      the plant may provide more crops than usual.
     cardRarity: 0
     cardQuality: 1
     cardValue: 1
-  - cardId: 1
+  - cardId: 16
     cardType: 0
-    cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
-    cardDescription: Tills a tile to turn it into farmland.
+    cardTexture: {fileID: 2800000, guid: bb8b336b2c478914c9385af7b4571ce7, type: 3}
+    cardDescription: A pair of shears to trim away unhealthy portions of the plant.
+      When used while harvesting, the plant may provide higher quality crops.
     cardRarity: 1
     cardQuality: 1
     cardValue: 1
-  - cardId: 1
+  - cardId: 13
     cardType: 0
-    cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
-    cardDescription: Tills a tile to turn it into farmland.
+    cardTexture: {fileID: 2800000, guid: 14dcee9674f5ad142b0c96ad8da9edb9, type: 3}
+    cardDescription: A beehive that provides pollinators for the plant. When used
+      while harvesting, the plant will provide at least one higher quality crop.
     cardRarity: 2
     cardQuality: 1
     cardValue: 1
-  - cardId: 1
+  - cardId: 14
     cardType: 0
-    cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
-    cardDescription: Tills a tile to turn it into farmland.
+    cardTexture: {fileID: 2800000, guid: ba1043a3f608ea845a8ca71797b9e2c1, type: 3}
+    cardDescription: A pair of gloves that allow for better handling of the plants.
+      When used while harvesting, the plant will yield more crops.
     cardRarity: 3
     cardQuality: 1
     cardValue: 1
   - cardId: 1
     cardType: 0
-    cardTexture: {fileID: 2800000, guid: 6efb3774eced7244ea9c0aa93fd1852f, type: 3}
+    cardTexture: {fileID: 2800000, guid: 4f87ddb8403fd7c41bab6251028d142b, type: 3}
     cardDescription: Tills a tile to turn it into farmland.
     cardRarity: 4
     cardQuality: 1
@@ -447,83 +444,116 @@ MonoBehaviour:
   seedCards:
   - cardId: 2
     cardType: 1
-    cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
-    cardDescription: Seeds to grow a crisp head of lettuce.
+    cardTexture: {fileID: 2800000, guid: 0068760449f70464aa27ba5542b459fe, type: 3}
+    cardDescription: Seeds to grow crisp heads of lettuce.
     cardRarity: 0
     cardQuality: 1
     cardValue: 1
-  - cardId: 2
+  - cardId: 5
     cardType: 1
-    cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
-    cardDescription: Seeds to grow a crisp head of lettuce.
+    cardTexture: {fileID: 2800000, guid: 1d5f5bdd2791e804a953d80aad7ac999, type: 3}
+    cardDescription: Seeds to grow sweet orange carrots.
     cardRarity: 1
     cardQuality: 1
     cardValue: 1
-  - cardId: 2
+  - cardId: 6
     cardType: 1
-    cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
-    cardDescription: Seeds to grow a crisp head of lettuce.
+    cardTexture: {fileID: 2800000, guid: 48976ae97f7e2d84ebce97544eea7860, type: 3}
+    cardDescription: Seeds to grow big heads of sweet corn.
     cardRarity: 2
     cardQuality: 1
     cardValue: 1
-  - cardId: 2
+  - cardId: 7
     cardType: 1
-    cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
-    cardDescription: Seeds to grow a crisp head of lettuce.
+    cardTexture: {fileID: 2800000, guid: 6fffcf7a64aa18549afbe141cdd9f178, type: 3}
+    cardDescription: Seeds to grow refreshing green cucumbers.
     cardRarity: 3
     cardQuality: 1
     cardValue: 1
-  - cardId: 2
+  - cardId: 8
     cardType: 1
-    cardTexture: {fileID: 2800000, guid: 7db3b22503064b44fb0822b78c76a15a, type: 3}
-    cardDescription: Seeds to grow a crisp head of lettuce.
+    cardTexture: {fileID: 2800000, guid: 85b440c2ccfa2fd4288c53549cb3dbb1, type: 3}
+    cardDescription: Seeds to grow a future jack-o-lantern.
     cardRarity: 4
     cardQuality: 1
     cardValue: 1
   boosterCards:
   - cardId: 3
     cardType: 2
-    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
-    cardDescription: A watering can that boosts growth.
+    cardTexture: {fileID: 2800000, guid: dca3c0c6761e179459857cdd670e8005, type: 3}
+    cardDescription: A bucket of cold, refreshing water that speeds up growth to
+      the next stage.
     cardRarity: 0
     cardQuality: 1
     cardValue: 1
-  - cardId: 3
+  - cardId: 20
     cardType: 2
-    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
-    cardDescription: A watering can that boosts growth.
+    cardTexture: {fileID: 2800000, guid: 4338177fdbb207045a61cd0ac37855d7, type: 3}
+    cardDescription: A sturdy trellis for the plant to grow on. Resulting harvest
+      may yield higher quality crops.
     cardRarity: 1
     cardQuality: 1
     cardValue: 1
-  - cardId: 3
+  - cardId: 17
     cardType: 2
-    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
-    cardDescription: A watering can that boosts growth.
+    cardTexture: {fileID: 2800000, guid: 56979386f9c874a40953c7334d3e645e, type: 3}
+    cardDescription: A pile of rich fertilizer that will instantly boost the plant
+      to its next growth stage.
     cardRarity: 2
     cardQuality: 1
     cardValue: 1
-  - cardId: 3
+  - cardId: 18
     cardType: 2
-    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
-    cardDescription: A watering can that boosts growth.
+    cardTexture: {fileID: 2800000, guid: 310a00a7484d3754187a91cbe404d178, type: 3}
+    cardDescription: A packet of fungus spores to innoculate the soil with. The resulting
+      plant will have one guaranteed high quality crop.
     cardRarity: 3
     cardQuality: 1
     cardValue: 1
-  - cardId: 3
+  - cardId: 19
     cardType: 2
-    cardTexture: {fileID: 2800000, guid: d3aea3bfcb465054b95aa78276c5b0e8, type: 3}
-    cardDescription: A watering can that boosts growth.
+    cardTexture: {fileID: 2800000, guid: 88964cb26109d984386b26dd7e0294c9, type: 3}
+    cardDescription: A vial of potent growth hormone. When used on a plant it will
+      permanently grow faster.
     cardRarity: 4
     cardQuality: 1
     cardValue: 1
   cropCards:
   - cardId: 4
     cardType: 3
-    cardTexture: {fileID: 2800000, guid: a7895fc63b1d50a4aab7a448b6646869, type: 3}
+    cardTexture: {fileID: 2800000, guid: dfc05176bd99d8642a96dc95951ee58c, type: 3}
     cardDescription: A crisp head of lettuce.
     cardRarity: 0
     cardQuality: 0
     cardValue: 3
+  - cardId: 9
+    cardType: 3
+    cardTexture: {fileID: 2800000, guid: 8533bfd89b343a14a84e862ecc6e3b02, type: 3}
+    cardDescription: A sweet orange carrot
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 5
+  - cardId: 10
+    cardType: 3
+    cardTexture: {fileID: 2800000, guid: 64fc45d63b8024c4191521e289b51c6f, type: 3}
+    cardDescription: A large ear of sweet yellow corn.
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 7
+  - cardId: 11
+    cardType: 3
+    cardTexture: {fileID: 2800000, guid: da7160d6c6b734d488d46ebbfc19e7d6, type: 3}
+    cardDescription: A large, refreshing cucumber.
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 9
+  - cardId: 12
+    cardType: 3
+    cardTexture: {fileID: 2800000, guid: 71164cb7355fdad4683206cfb1e4ec8e, type: 3}
+    cardDescription: A large, solid pumpkin. It would make an amazing pie.
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 11
   cardsPerToolPack: 3
   cardsPerSeedPack: 5
   cardsPerBoosterPack: 4
@@ -540,12 +570,13 @@ MonoBehaviour:
   mapOvergrowthLocationVariation: 0.5
   mapOvergrowthMaxHeight: 1
   mapOvergrowthScaleVariation: 0.5
-  plantBaseGrowthChancePercentage: 100
+  plantBaseGrowthChancePercentage: 5
   plantGrowthTickDuration: 1
   playerHeightMinimum: 3
   playerLooksSensitivity: 0.5
   playerMoveSpeed: 2
   playerViewState: 0
+  playerPassiveMoneyTimerDuration: 60
 --- !u!4 &642613269
 Transform:
   m_ObjectHideFlags: 0

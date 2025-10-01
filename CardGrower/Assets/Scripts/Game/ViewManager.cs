@@ -17,7 +17,7 @@ public class ViewManager : MonoBehaviour
         if (openView != null && !openView.name.ToLower().Contains("selected"))
         {
             displayCard = null;
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(null);
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(new Card[0]);
         }
 
         if (openView != null && !openView.name.Equals("ShopViewPrefab")) { sellStartIndex = 0; }
@@ -121,7 +121,7 @@ public class ViewManager : MonoBehaviour
         CardComponent cardComponent = cardObject.GetComponent<CardComponent>();
         cardComponent.SetCard(displayCard);
 
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(displayCard);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(new Card[] { displayCard });
 
         SetOpenView(selectedCardViewObject);
     }

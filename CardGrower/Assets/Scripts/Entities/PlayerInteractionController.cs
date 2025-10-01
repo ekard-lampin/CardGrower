@@ -52,26 +52,29 @@ public class PlayerInteractionController : MonoBehaviour
             if (!InputManager.instance.GetMouseLeftClickPress()) { return; }
             if (highlightedTile == null) { return; }
 
-            if (playerDeckManager.GetSelectedCard() != null && IsTilling(highlightedTile, playerDeckManager.GetSelectedCard().GetCardId()))
+            if (playerDeckManager.GetSelectedCard().Length > 0 && IsTilling(highlightedTile, playerDeckManager.GetSelectedCard()[0].GetCardId()))
             { // Tilling
                 Debug.Log("Tilling");
                 highlightedTile.TillTile();
-                playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard());
+                playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard()[0]);
                 ViewManager.instance.SetOpenView(null);
             }
-            else if (playerDeckManager.GetSelectedCard() != null && IsPlanting(highlightedTile.GetTileState(), playerDeckManager.GetSelectedCard().GetCardType()))
+            else if (playerDeckManager.GetSelectedCard().Length > 0 && IsPlanting(highlightedTile.GetTileState(), playerDeckManager.GetSelectedCard()[0].GetCardType()))
             { // Planting
                 Debug.Log("Planting");
-                highlightedTile.PlantSeed(playerDeckManager.GetSelectedCard());
-                playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard());
+                highlightedTile.PlantSeed(playerDeckManager.GetSelectedCard()[0]);
+                playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard()[0]);
                 ViewManager.instance.SetOpenView(null);
             }
             else if (IsHarvesting(highlightedTile, playerDeckManager.GetSelectedCard()))
             {// Harvesting
                 Debug.Log("Harvesting");
-                Card plantedSeed = ((PlacementPlant)highlightedTile.GetPlacement()).GetPlantedSeed();
+                GenerateCrops(highlightedTile.GetPlacement() as PlacementPlant, playerDeckManager.GetSelectedCard());
                 highlightedTile.HarvestTile();
-                GenerateCrops(plantedSeed);
+            }
+            else if (IsBoosting(highlightedTile, playerDeckManager.GetSelectedCard()))
+            { // Boosting
+                BoostCrop(highlightedTile, playerDeckManager.GetSelectedCard());
             }
         }
     }
@@ -95,29 +98,59 @@ public class PlayerInteractionController : MonoBehaviour
         return isPlanting;
     }
 
-    private bool IsHarvesting(Tile tile, Card selectedCard)
+    private bool IsHarvesting(Tile tile, Card[] selectedCard)
     {
         bool isHarvesting = true;
 
-        // Debug.Log("Tile is not planted: " + (!TileState.Planted.Equals(tile.GetTileState())));
         if (!TileState.Planted.Equals(tile.GetTileState())) { isHarvesting = false; }
-        // Debug.Log("Tile does not have placement: " + (tile.GetPlacement() == null));
         if (tile.GetPlacement() == null) { isHarvesting = false; }
-        // Debug.Log("Tile placement is not a plant: " + (isHarvesting && !(tile.GetPlacement() is PlacementPlant)));
         if (isHarvesting && !(tile.GetPlacement() is PlacementPlant)) { isHarvesting = false; }
-        // Debug.Log("Tile placement has not finished growing: " + (isHarvesting && !((PlacementPlant)tile.GetPlacement()).IsFinishedGrowing()));
         if (isHarvesting && !((PlacementPlant)tile.GetPlacement()).IsFinishedGrowing()) { isHarvesting = false; }
-        // Debug.Log("Player is holding card: " + (!selectedCard.GetCardId().Equals(CardId.None)));
-        if (selectedCard == null || !selectedCard.GetCardId().Equals(CardId.None)) { isHarvesting = false; }
-        // TODO: Implement tools that will improve yield or quality.
+        if (selectedCard.Length > 0 && !CardType.Tool.Equals(selectedCard[0].GetCardType())) { isHarvesting = false; }
+        if (selectedCard.Length > 0 && CardId.Hoe.Equals(selectedCard[0].GetCardId())) { isHarvesting = false; }
 
         return isHarvesting;
     }
 
-    private void GenerateCrops(Card seedCard)
+    private bool IsBoosting(Tile tile, Card[] selectedCard)
     {
-        Card[] newCropCards = GameManager.instance.GenerateCardsForSeed(seedCard);
+        bool isBoosting = true;
+
+        if (!TileState.Planted.Equals(tile.GetTileState())) { isBoosting = false; }
+        if (tile.GetPlacement() == null) { isBoosting = false; }
+        if (isBoosting && !(tile.GetPlacement() is PlacementPlant)) { isBoosting = false; }
+        if (selectedCard.Length > 0 && !CardType.Booster.Equals(selectedCard[0].GetCardType())) { isBoosting = false; }
+
+        return isBoosting;
+    }
+
+    private void GenerateCrops(PlacementPlant plant, Card[] selectedCard)
+    {
+        Card[] newCropCards = GameManager.instance.GenerateCardsForSeed(plant, selectedCard);
         foreach (Card newCropCard in newCropCards) { GetComponent<PlayerDeckManager>().AddCardToDeck(newCropCard); }
+    }
+
+    private void BoostCrop(Tile tile, Card[] selectedCard)
+    {
+        PlacementPlant plant = tile.GetPlacement() as PlacementPlant;
+        if (plant.DoesPlantHaveBooster(selectedCard[0])) { return; }
+
+        // Check for any limitations.
+        switch (selectedCard[0].GetCardId())
+        {
+            case CardId.WaterBucket:
+            case CardId.Fertilizer:
+            case CardId.GrowthHormone:
+                if (plant.GetGrowthStage() == 4) { return; }
+                break;
+            default:
+                break;
+        }
+
+        plant.AddBooster(selectedCard[0]);
+        GetComponent<PlayerDeckManager>().RemoveCardFromDeck(selectedCard[0]);
+        GetComponent<PlayerDeckManager>().SetSelectedCard(new Card[0]);
+        ViewManager.instance.SetOpenView(null);
     }
 
     private void ProcessPlayerDeckInput()
