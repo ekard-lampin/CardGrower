@@ -38,3 +38,5 @@ v0.9.0-selling =================================================================
 - Added logic to sell cards.
 - Added logic to keep track of player finances.
 - Added logic to gatekeep purchases beyond player finances.
+
+v0.10.0-mvp-content ===============================================================================
