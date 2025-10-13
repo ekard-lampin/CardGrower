@@ -112,9 +112,27 @@ public class GameManager : MonoBehaviour
     public int GetDeckRowCount() { return deckRowCount; }
 
     [Header("Game Settings")]
-    private bool isFirstToolBuy = true;
-    public bool IsFirstToolBuy() { return isFirstToolBuy; }
-    public void SetFirstToolBuy(bool isFirstToolBuy) { this.isFirstToolBuy = isFirstToolBuy; }
+    private bool gameIsFirstToolBuy = true;
+    public bool IsFirstToolBuy() { return gameIsFirstToolBuy; }
+    public void SetFirstToolBuy(bool isFirstToolBuy) { this.gameIsFirstToolBuy = isFirstToolBuy; }
+
+    [SerializeField]
+    [Range(0, 1)]
+    private float gameMainVolume;
+    public float GetGameMainVolume() { return gameMainVolume; }
+    public void SetGameMainVolume(float gameMainVolume) { this.gameMainVolume = gameMainVolume; }
+
+    [SerializeField]
+    [Range(0, 1)]
+    private float gameMusicVolume;
+    public float GetGameMusicVolume() { return gameMusicVolume; }
+    public void SetGameMusicVolume(float gameMusicVolume) { this.gameMusicVolume = gameMusicVolume; }
+
+    [SerializeField]
+    [Range(0, 1)]
+    private float gameSfxVolume;
+    public float GetGameSfxVolume() { return gameSfxVolume; }
+    public void SetGameSfxVolume(float gameSfxVolume) { this.gameSfxVolume = gameSfxVolume; }
 
     [Header("Map Settings")]
     [SerializeField]
@@ -172,14 +190,14 @@ public class GameManager : MonoBehaviour
     private PlayerViewState previousPlayerViewState = PlayerViewState.Game;
     public PlayerViewState GetPreviousPlayerViewState() { return previousPlayerViewState; }
 
+    [SerializeField]
+    private float playerPassiveMoneyTimerDuration;
+    public float GetPlayerPassiveMoneyTimerDuration() { return playerPassiveMoneyTimerDuration; }
+
     [Header("Start Menu Settings")]
     [SerializeField]
     private Vector3 startMenuDisplayObjectLocation;
     public Vector3 GetStartMenuDisplayObjectLocation() { return startMenuDisplayObjectLocation; }
-
-    [SerializeField]
-    private float playerPassiveMoneyTimerDuration;
-    public float GetPlayerPassiveMoneyTimerDuration() { return playerPassiveMoneyTimerDuration; }
 
     private float playerPassiveMoneyTimer = 0;
 

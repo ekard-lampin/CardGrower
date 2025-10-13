@@ -157,6 +157,7 @@ public class PlayerInteractionController : MonoBehaviour
     private void ProcessPlayerDeckInput()
     {
         if (!InputManager.instance.GetFPress()) { return; }
+        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()) && !PlayerViewState.Deck.Equals(GameManager.instance.GetPlayerViewState())) { return; }
 
         ViewManager.instance.ToggleDeckView();
     }
@@ -164,6 +165,7 @@ public class PlayerInteractionController : MonoBehaviour
     private void ProcessPlayerShopInput()
     {
         if (!InputManager.instance.GetTabPress()) { return; }
+        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()) && !PlayerViewState.Shop.Equals(GameManager.instance.GetPlayerViewState())) { return; }
 
         ViewManager.instance.ToggleShopView();
     }
@@ -172,6 +174,11 @@ public class PlayerInteractionController : MonoBehaviour
     {
         if (!InputManager.instance.GetVPress()) { return; }
 
-        ViewManager.instance.OpenOptionsView();
+        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState())) { ViewManager.instance.OpenOptionsView(); }
+        else if (PlayerViewState.Options.Equals(GameManager.instance.GetPlayerViewState()))
+        {
+            GameManager.instance.SetPlayerViewState(PlayerViewState.Game);
+            ViewManager.instance.DestroyOpenView();
+        }
     }
 }

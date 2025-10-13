@@ -489,7 +489,7 @@ MonoBehaviour:
   playerHeightMinimum: 3
   playerLooksSensitivity: 0.5
   playerMoveSpeed: 2
-  playerViewState: 0
+  playerViewState: 4
   previousPlayerViewState: 0
   startMenuDisplayObjectLocation: {x: 0.75, y: 0, z: 2}
   playerPassiveMoneyTimerDuration: 60

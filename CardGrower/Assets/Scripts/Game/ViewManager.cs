@@ -485,6 +485,51 @@ public class ViewManager : MonoBehaviour
 
         GameManager.instance.SetPlayerViewState(PlayerViewState.Options);
 
+        // Look sensitivity.
+        Text lookSensitivityDisplayText = optionsObject.transform.Find("OptionsSection").Find("Background").Find("LookSensitivitySection").Find("Group").Find("DisplayText").gameObject.GetComponent<Text>();
+        Slider lookSensitivitySlider = optionsObject.transform.Find("OptionsSection").Find("Background").Find("LookSensitivitySection").Find("Group").Find("Slider").gameObject.GetComponent<Slider>();
+        lookSensitivitySlider.value = GameManager.instance.GetPlayerLookSensitivity() / 2f;
+        lookSensitivityDisplayText.text = Mathf.RoundToInt(lookSensitivitySlider.value * 100f).ToString();
+        lookSensitivitySlider.onValueChanged.AddListener(delegate
+        {
+            GameManager.instance.SetPlayerLookSensitivity(lookSensitivitySlider.value * 2f);
+            lookSensitivityDisplayText.text = Mathf.RoundToInt(lookSensitivitySlider.value * 100f).ToString();
+        });
+
+        // Main volume.
+        Text mainVolumeDisplayText = optionsObject.transform.Find("OptionsSection").Find("Background").Find("MainVolumeSection").Find("Group").Find("DisplayText").gameObject.GetComponent<Text>();
+        Slider mainVolumeSlider = optionsObject.transform.Find("OptionsSection").Find("Background").Find("MainVolumeSection").Find("Group").Find("Slider").gameObject.GetComponent<Slider>();
+        mainVolumeSlider.value = GameManager.instance.GetGameMainVolume();
+        mainVolumeDisplayText.text = Mathf.RoundToInt(mainVolumeSlider.value * 100f).ToString();
+        mainVolumeSlider.onValueChanged.AddListener(delegate
+        {
+            GameManager.instance.SetGameMainVolume(mainVolumeSlider.value);
+            mainVolumeDisplayText.text = Mathf.RoundToInt(mainVolumeSlider.value * 100f).ToString();
+        });
+
+        // Music volume.
+        Text musicVolumeDisplayText = optionsObject.transform.Find("OptionsSection").Find("Background").Find("MusicVolumeSection").Find("Group").Find("DisplayText").gameObject.GetComponent<Text>();
+        Slider musicVolumeSlider = optionsObject.transform.Find("OptionsSection").Find("Background").Find("MusicVolumeSection").Find("Group").Find("Slider").gameObject.GetComponent<Slider>();
+        musicVolumeSlider.value = GameManager.instance.GetGameMusicVolume();
+        musicVolumeDisplayText.text = Mathf.RoundToInt(musicVolumeSlider.value * 100f).ToString();
+        musicVolumeSlider.onValueChanged.AddListener(delegate
+        {
+            GameManager.instance.SetGameMusicVolume(musicVolumeSlider.value);
+            musicVolumeDisplayText.text = Mathf.RoundToInt(musicVolumeSlider.value * 100f).ToString();
+        });
+
+        // SFX volume.
+        Text sfxVolumeDisplayText = optionsObject.transform.Find("OptionsSection").Find("Background").Find("SFXVolumeSection").Find("Group").Find("DisplayText").gameObject.GetComponent<Text>();
+        Slider sfxVolumeSlider = optionsObject.transform.Find("OptionsSection").Find("Background").Find("SFXVolumeSection").Find("Group").Find("Slider").gameObject.GetComponent<Slider>();
+        sfxVolumeSlider.value = GameManager.instance.GetGameSfxVolume();
+        sfxVolumeDisplayText.text = Mathf.RoundToInt(sfxVolumeSlider.value * 100f).ToString();
+        sfxVolumeSlider.onValueChanged.AddListener(delegate
+        {
+            GameManager.instance.SetGameSfxVolume(sfxVolumeSlider.value);
+            sfxVolumeDisplayText.text = Mathf.RoundToInt(sfxVolumeSlider.value * 100f).ToString();
+        });
+
+        // Back button.
         optionsObject.transform.Find("OptionsSection").Find("Background").Find("ButtonSection").Find("Group").Find("BackButton").gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
             if (PlayerViewState.StartMenu.Equals(GameManager.instance.GetPreviousPlayerViewState()))
@@ -499,5 +544,7 @@ public class ViewManager : MonoBehaviour
                 DestroyOpenView();
             }
         });
+
+        // Quit button.
     }
 }
