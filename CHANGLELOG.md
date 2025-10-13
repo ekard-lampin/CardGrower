@@ -44,3 +44,7 @@ v0.10.0-menu ===================================================================
 - Added options menu.
 - Added slider control for basic options.
 - Added in booster and tool functionality from accidentally deleted v0.10.0-mvp branch.
+
+v0.11.0-tutorial ==================================================================================
+- TODO: Add tutorial at the beginning of the game.
+- TODO: Lock actions behind tutorial flags.

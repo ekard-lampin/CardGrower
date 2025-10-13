@@ -11,8 +11,9 @@
 - ~~Card select and use~~
 - ~~Planting and growing~~
 - ~~Selling~~
-- Menu
+- ~~Menu~~
 - Tutorial
+- Beginning cutscene
 - Audio
 
 ### Stretch
@@ -21,3 +22,4 @@
 - Structures
 - Map expansions
 - Decorations
+- Goal
