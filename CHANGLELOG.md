@@ -40,3 +40,7 @@ v0.9.0-selling =================================================================
 - Added logic to gatekeep purchases beyond player finances.
 
 v0.10.0-menu ======================================================================================
+- Added start menu.
+- Added options menu.
+- Added slider control for basic options.
+- Added in booster and tool functionality from accidentally deleted v0.10.0-mvp branch.
