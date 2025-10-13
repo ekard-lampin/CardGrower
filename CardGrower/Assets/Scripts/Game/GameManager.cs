@@ -153,6 +153,7 @@ public class GameManager : MonoBehaviour
     public void SetPlayerHeightMinimum(float playerHeightMinimum) { this.playerHeightMinimum = playerHeightMinimum; }
 
     [SerializeField]
+    [Range(0, 2)]
     private float playerLooksSensitivity;
     public float GetPlayerLookSensitivity() { return playerLooksSensitivity; }
     public void SetPlayerLookSensitivity(float playerLooksSensitivity) { this.playerLooksSensitivity = playerLooksSensitivity; }
@@ -165,7 +166,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PlayerViewState playerViewState = PlayerViewState.Game;
     public PlayerViewState GetPlayerViewState() { return playerViewState; }
-    public void SetPlayerViewState(PlayerViewState playerViewState) { this.playerViewState = playerViewState; }
+    public void SetPlayerViewState(PlayerViewState playerViewState) { previousPlayerViewState = this.playerViewState; this.playerViewState = playerViewState; }
+
+    [SerializeField]
+    private PlayerViewState previousPlayerViewState = PlayerViewState.Game;
+    public PlayerViewState GetPreviousPlayerViewState() { return previousPlayerViewState; }
+
+    [Header("Start Menu Settings")]
+    [SerializeField]
+    private Vector3 startMenuDisplayObjectLocation;
+    public Vector3 GetStartMenuDisplayObjectLocation() { return startMenuDisplayObjectLocation; }
 
     [SerializeField]
     private float playerPassiveMoneyTimerDuration;
@@ -179,7 +189,17 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        MapManager.instance.CreateBaseMap();
+        if (PlayerViewState.StartMenu.Equals(GetPlayerViewState()))
+        {
+            ViewManager.instance.OpenStartMenuView();
+            GameObject menuDisplayObject = Instantiate(
+                Resources.Load<GameObject>("Prefabs/Map/StartMenuDisplayPrefab"),
+                GetStartMenuDisplayObjectLocation(),
+                Quaternion.identity
+            );
+            menuDisplayObject.name = "StartMenuDisplayPrefab";
+        }
+        if (PlayerViewState.Game.Equals(GetPlayerViewState())) { MapManager.instance.CreateBaseMap(); }
     }
 
     void Update()
@@ -397,5 +417,16 @@ public class GameManager : MonoBehaviour
                 break;
         }
         return Mathf.CeilToInt(card.GetCardValue() * multiplier);
+    }
+
+    public void StartButtonClicked()
+    {
+        // Clean up start menu objects.
+        if (GameObject.FindGameObjectWithTag("StartMenuDisplay") != null) { Destroy(GameObject.FindGameObjectWithTag("StartMenuDisplay")); }
+        ViewManager.instance.DestroyOpenView();
+
+        // Call map generation.
+        SetPlayerViewState(PlayerViewState.Game);
+        MapManager.instance.CreateBaseMap();
     }
 }

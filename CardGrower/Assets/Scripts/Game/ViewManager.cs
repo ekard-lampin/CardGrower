@@ -17,11 +17,15 @@ public class ViewManager : MonoBehaviour
         if (openView != null && !openView.name.ToLower().Contains("selected"))
         {
             displayCard = null;
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(new Card[0]);
+            if (GameObject.FindGameObjectWithTag("Player") != null) { GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().SetSelectedCard(new Card[0]); }
         }
 
         if (openView != null && !openView.name.Equals("ShopViewPrefab")) { sellStartIndex = 0; }
         if (sellStartIndex > 0 && sellStartIndex >= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().GetDeck().Count) { sellStartIndex -= GameManager.instance.GetCardSellCount(); }
+    }
+    public void DestroyOpenView()
+    {
+        SetOpenView(null);
     }
 
     [SerializeField]
@@ -33,6 +37,29 @@ public class ViewManager : MonoBehaviour
     [SerializeField]
     private int sellStartIndex = 0;
 
+    void Update()
+    {
+        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()) && GameObject.FindGameObjectWithTag("Canvas").transform.Find("UI").gameObject.activeSelf)
+        {
+            GameObject.FindGameObjectWithTag("Canvas").transform.Find("UI").gameObject.SetActive(false);
+        }
+        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()) && !GameObject.FindGameObjectWithTag("Canvas").transform.Find("UI").gameObject.activeSelf)
+        {
+            GameObject.FindGameObjectWithTag("Canvas").transform.Find("UI").gameObject.SetActive(true);
+        }
+
+        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()))
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()))
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
     public void ToggleDeckView()
     {
         if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()))
@@ -42,9 +69,6 @@ public class ViewManager : MonoBehaviour
         else if (PlayerViewState.Deck.Equals(GameManager.instance.GetPlayerViewState()))
         {
             GameManager.instance.SetPlayerViewState(PlayerViewState.Game);
-
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
 
             SetOpenView(null);
         }
@@ -426,5 +450,54 @@ public class ViewManager : MonoBehaviour
         descriptionObject.GetComponent<Text>().text = card.GetCardDescription();
 
         displayCard = card;
+    }
+
+    public void OpenStartMenuView()
+    {
+        GameManager.instance.SetPlayerViewState(PlayerViewState.StartMenu);
+        GameObject menuObject = Instantiate(
+            Resources.Load<GameObject>("Prefabs/Views/StartMenuPrefab"),
+            GameObject.FindGameObjectWithTag("Canvas").transform
+        );
+        menuObject.name = "StartMenuPrefab";
+
+        menuObject.transform.Find("StartButtonObject").Find("Button").gameObject.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            GameManager.instance.StartButtonClicked();
+        });
+
+        menuObject.transform.Find("OptionsButtonObject").Find("Button").gameObject.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            OpenOptionsView();
+        });
+
+        SetOpenView(menuObject);
+    }
+
+    public void OpenOptionsView()
+    {
+        GameObject optionsObject = Instantiate(
+            Resources.Load<GameObject>("Prefabs/Views/OptionsPrefab"),
+            GameObject.FindGameObjectWithTag("Canvas").transform
+        );
+        optionsObject.name = "OptionsPrefab";
+        SetOpenView(optionsObject);
+
+        GameManager.instance.SetPlayerViewState(PlayerViewState.Options);
+
+        optionsObject.transform.Find("OptionsSection").Find("Background").Find("ButtonSection").Find("Group").Find("BackButton").gameObject.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            if (PlayerViewState.StartMenu.Equals(GameManager.instance.GetPreviousPlayerViewState()))
+            {
+                // Open start menu.
+                OpenStartMenuView();
+            }
+            if (PlayerViewState.Game.Equals(GameManager.instance.GetPreviousPlayerViewState()))
+            {
+                // Return to game.
+                GameManager.instance.SetPlayerViewState(PlayerViewState.Game);
+                DestroyOpenView();
+            }
+        });
     }
 }

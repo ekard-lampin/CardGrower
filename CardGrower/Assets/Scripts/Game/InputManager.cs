@@ -42,4 +42,6 @@ public class InputManager : MonoBehaviour
     }
 
     public bool GetTabPress() { return Keyboard.current.tabKey.wasPressedThisFrame; }
+
+    public bool GetVPress() { return Keyboard.current.vKey.wasPressedThisFrame; }
 }

@@ -14,6 +14,7 @@ public class PlayerInteractionController : MonoBehaviour
     {
         ProcessPlayerShopInput();
         ProcessPlayerDeckInput();
+        ProcessPlayerOptionsInput();
 
         ProcessPlayerViewSelection();
         ProcessPlayerClick();
@@ -165,5 +166,12 @@ public class PlayerInteractionController : MonoBehaviour
         if (!InputManager.instance.GetTabPress()) { return; }
 
         ViewManager.instance.ToggleShopView();
+    }
+
+    private void ProcessPlayerOptionsInput()
+    {
+        if (!InputManager.instance.GetVPress()) { return; }
+
+        ViewManager.instance.OpenOptionsView();
     }
 }

@@ -1,1 +1,23 @@
 # Card Grower
+
+## Roadmap
+### MVP
+- ~~World~~
+- ~~Player~~
+- ~~Overgrowth~~
+- ~~Tilling~~
+- ~~Cards~~
+- ~~Deck~~
+- ~~Card select and use~~
+- ~~Planting and growing~~
+- ~~Selling~~
+- Menu
+- Tutorial
+- Audio
+
+### Stretch
+- Save and load
+- Animals
+- Structures
+- Map expansions
+- Decorations

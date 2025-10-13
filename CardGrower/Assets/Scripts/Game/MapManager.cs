@@ -36,6 +36,19 @@ public class MapManager : MonoBehaviour
 
     public void CreateBaseMap()
     {
+        if (GameObject.FindGameObjectWithTag("Player") == null)
+        {
+            GameObject playerObject = Instantiate(
+                Resources.Load<GameObject>("Prefabs/PlayerPrefab"),
+                new Vector3(0, 10, 0),
+                Quaternion.identity
+            );
+            playerObject.name = "PlayerObject";
+            Camera.main.transform.SetParent(playerObject.transform.Find("CameraObject"));
+            Camera.main.transform.localPosition = Vector3.zero;
+            Camera.main.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        }
+        
         Vector2 coordsOffset = new Vector2(
             (float)GameManager.instance.GetMapBaseWidth() / 2f * -1f,
             (float)GameManager.instance.GetMapBaseWidth() / 2
