@@ -59,6 +59,7 @@ public class PlayerInteractionController : MonoBehaviour
                 highlightedTile.TillTile();
                 playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard()[0]);
                 ViewManager.instance.SetOpenView(null);
+                TutorialManager.instance.UpdateTrackedTillAction();
             }
             else if (playerDeckManager.GetSelectedCard().Length > 0 && IsPlanting(highlightedTile.GetTileState(), playerDeckManager.GetSelectedCard()[0].GetCardType()))
             { // Planting
@@ -66,6 +67,7 @@ public class PlayerInteractionController : MonoBehaviour
                 highlightedTile.PlantSeed(playerDeckManager.GetSelectedCard()[0]);
                 playerDeckManager.RemoveCardFromDeck(playerDeckManager.GetSelectedCard()[0]);
                 ViewManager.instance.SetOpenView(null);
+                TutorialManager.instance.UpdateTrackedPlantingAction();
             }
             else if (IsHarvesting(highlightedTile, playerDeckManager.GetSelectedCard()))
             {// Harvesting
@@ -73,7 +75,7 @@ public class PlayerInteractionController : MonoBehaviour
                 GenerateCrops(highlightedTile.GetPlacement() as PlacementPlant, playerDeckManager.GetSelectedCard());
                 highlightedTile.HarvestTile();
             }
-            else if (IsBoosting(highlightedTile, playerDeckManager.GetSelectedCard()))
+            else if (playerDeckManager.GetSelectedCard().Length > 0 && IsBoosting(highlightedTile, playerDeckManager.GetSelectedCard()))
             { // Boosting
                 BoostCrop(highlightedTile, playerDeckManager.GetSelectedCard());
             }
@@ -166,6 +168,7 @@ public class PlayerInteractionController : MonoBehaviour
     {
         if (!InputManager.instance.GetTabPress()) { return; }
         if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()) && !PlayerViewState.Shop.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+        if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.ToolShop)) { return; }
 
         ViewManager.instance.ToggleShopView();
     }

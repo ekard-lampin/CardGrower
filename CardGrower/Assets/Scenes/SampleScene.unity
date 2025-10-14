@@ -284,6 +284,8 @@ GameObject:
   - component: {fileID: 642613267}
   - component: {fileID: 642613270}
   - component: {fileID: 642613271}
+  - component: {fileID: 642613273}
+  - component: {fileID: 642613272}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -480,6 +482,9 @@ MonoBehaviour:
   cardSellCount: 9
   deckCardsPerRow: 8
   deckRowCount: 4
+  gameMainVolume: 0
+  gameMusicVolume: 0
+  gameSfxVolume: 0
   mapBaseWidth: 10
   mapOvergrowthLocationVariation: 0.5
   mapOvergrowthMaxHeight: 1
@@ -491,8 +496,8 @@ MonoBehaviour:
   playerMoveSpeed: 2
   playerViewState: 4
   previousPlayerViewState: 0
-  startMenuDisplayObjectLocation: {x: 0.75, y: 0, z: 2}
   playerPassiveMoneyTimerDuration: 60
+  startMenuDisplayObjectLocation: {x: 0.75, y: 0, z: 2}
 --- !u!4 &642613269
 Transform:
   m_ObjectHideFlags: 0
@@ -541,6 +546,200 @@ MonoBehaviour:
     cardQuality: 0
     cardValue: 0
   sellStartIndex: 0
+  dialogueStep:
+    text: 
+    italicized: 0
+  characterIndex: 0
+  characterTimer: 0
+--- !u!114 &642613272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642613266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6771c8f1c7fd79e459b8268a3a217a51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogues:
+  - dialogueId: 1
+    dialogueSteps:
+    - text: Alright! Before we get you farming, let's get you used to controlling
+        that drone of yours.
+      italicized: 0
+    - text: Start by looking around using the MOUSE.
+      italicized: 0
+    - text: You can adjust the drone's look senitivity in the OPTIONS menu by pressing
+        V.
+      italicized: 0
+    - text: Look around for a bit. I think you will find PROTOTYPE Enterprises drones
+        quite easy to handle.
+      italicized: 0
+    - text: I'll be back in a bit when you get the hang of it.
+      italicized: 0
+  - dialogueId: 2
+    dialogueSteps:
+    - text: Looking good, Cardener. Get it? 'LOOKING' good? Ah, nevermind.
+      italicized: 0
+    - text: Let's just move on to the flight controls.
+      italicized: 0
+    - text: You can pilot the drone forwards and backwards with W and S.
+      italicized: 0
+    - text: Side-to-side movement is handled with A and D.
+      italicized: 0
+    - text: The drone ascends with SPACE and descends with C.
+      italicized: 0
+    - text: Take a look at that plot below you and really get a feel for the space.
+      italicized: 0
+    - text: I'll check back in on you in just a bit.
+      italicized: 0
+  - dialogueId: 3
+    dialogueSteps:
+    - text: Very good, Cardener. You are a natural pilot.
+      italicized: 0
+    - text: You may have noticed that your assigned plot is a little overgrown right
+        now.
+      italicized: 0
+    - text: We can fix that.
+      italicized: 0
+    - text: Unfortunately, the card-based nature of this pocket dimension prevents
+        most predictable actions from happening normally.
+      italicized: 0
+    - text: For instance, I cannot just send you a tool to till the ground.
+      italicized: 0
+    - text: Instead, PROTOTYPE Enterprises has developed a nifty little piece of
+        hardware that can manifest a few cards of a certain type.
+      italicized: 0
+    - text: We managed to get the price of this little operation down to be pretty
+        cheap, all things considered.
+      italicized: 0
+    - text: The downside? You cannot specify the exact cards you get.
+      italicized: 0
+    - text: 'Best we could do is narrow down the cards that get generated into three
+        categories: Tools, Seeds, and Boosters.'
+      italicized: 0
+    - text: You send us some of your cash, and we can generate a few cards of the
+        selected type.
+      italicized: 0
+    - text: Try it out now.
+      italicized: 0
+    - text: Press TAB to open the shop and buy a 'Tools' pack.
+      italicized: 0
+  - dialogueId: 4
+    dialogueSteps:
+    - text: Perfect! Lucky you, you got a Hoe! That is a rare tool to see in these
+        parts.
+      italicized: 0
+    - text: Just kidding. That one is on the house.
+      italicized: 0
+    - text: Hm? Oh yeah. I did say you can't choose the card you get.
+      italicized: 0
+    - text: That may not have been entirely true.
+      italicized: 0
+    - text: With a massive amount of energy and a couple of trillion dollars worth
+        of Exotium, you can manifest certain cards.
+      italicized: 0
+    - text: Consider that your new hire gift. We don't do that everyday.
+      italicized: 0
+    - text: Open your deck with F and click on the Hoe. Then click the 'Select' button
+        to activate the Hoe.
+      italicized: 0
+    - text: You will see it pop up at the bottom of your view.
+      italicized: 0
+    - text: Then all you need to do is select an overgrown plot of land and your
+        drone will consume the Hoe to till the ground.
+      italicized: 0
+    - text: Give it a try!
+      italicized: 0
+  - dialogueId: 5
+    dialogueSteps:
+    - text: Now you are starting to look like a real Cardener.
+      italicized: 0
+    - text: Only thing you are missing is some seeds.
+      italicized: 0
+    - text: Let's remedy that. Open up your shop with TAB and buy a 'Seed' pack.
+      italicized: 0
+    - text: See you in a second.
+      italicized: 0
+  - dialogueId: 6
+    dialogueSteps:
+    - text: Time for the big moment!
+      italicized: 0
+    - text: Open your deck with F and click on one of those shiny new seeds. Then
+        click the 'Select' button.
+      italicized: 0
+    - text: You will see it at the bottom of your screen again, just like the Hoe
+        from earlier.
+      italicized: 0
+    - text: Click on the tilled soil while you have your seed card active to plant
+        it.
+      italicized: 0
+    - text: Do the honors, Cardener.
+      italicized: 0
+  - dialogueId: 7
+    dialogueSteps:
+    - text: How does it feel?
+      italicized: 0
+    - text: Helping PROTOTYPE Enterprises solve humanity's hunger crisis?
+      italicized: 0
+    - text: Pretty good, right?
+      italicized: 0
+    - text: Well it gets better.
+      italicized: 0
+    - text: Plants will grow on their own given enough time, of course. But that's
+        so slow.
+      italicized: 0
+    - text: But PROTOTYPE Enterprises has a solution to this, as well!
+      italicized: 0
+    - text: After much diligence and hard work, our dedicated scientists discovered
+        a third type of card in these dimensions.
+      italicized: 0
+    - text: Booster cards!
+      italicized: 0
+    - text: Booster cards can do minor things like giving better odds at higher quality
+        crops to truly impressive things like permanently speeding up the growth
+        of that plant.
+      italicized: 0
+    - text: They're not free, though.
+      italicized: 0
+    - text: Open the shop with TAB and buy a 'Booster' pack.
+      italicized: 0
+    - text: We'll touch base when you do.
+      italicized: 0
+  - dialogueId: 8
+    dialogueSteps:
+    - text: Time for some boosting.
+      italicized: 0
+    - text: While your plant grows, look through your boosters and use some of them
+        on the plant.
+      italicized: 0
+    - text: You know the deal by now. Open your deck with F and click on a booster
+        card. Then click 'Select' to select the booster card.
+      italicized: 0
+    - text: Finally, with the booster card active, click on your plant to apply the
+        booster.
+      italicized: 0
+    - text: We'll chat again when you have applied a booster to your plant.
+      italicized: 0
+  dialogueIndex: 0
+  activeDialogue: 0
+--- !u!114 &642613273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642613266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64384b8b515d09c4ab92da0079e7b4a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialState: 3
+  tutorialMessageShown: 0
+  trackedAction: 0
 --- !u!1 &693222412
 GameObject:
   m_ObjectHideFlags: 0

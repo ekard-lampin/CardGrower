@@ -22,6 +22,9 @@ public class ViewManager : MonoBehaviour
 
         if (openView != null && !openView.name.Equals("ShopViewPrefab")) { sellStartIndex = 0; }
         if (sellStartIndex > 0 && sellStartIndex >= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().GetDeck().Count) { sellStartIndex -= GameManager.instance.GetCardSellCount(); }
+
+        characterIndex = 0;
+        characterTimer = 0;
     }
     public void DestroyOpenView()
     {
@@ -36,6 +39,15 @@ public class ViewManager : MonoBehaviour
 
     [SerializeField]
     private int sellStartIndex = 0;
+
+    [SerializeField]
+    private DialogueStep dialogueStep;
+
+    [SerializeField]
+    private int characterIndex = 0;
+
+    [SerializeField]
+    private float characterTimer = 0;
 
     void Update()
     {
@@ -57,6 +69,24 @@ public class ViewManager : MonoBehaviour
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        if (openView != null && openView.name.Equals("DialoguePrefab"))
+        {
+            if (characterIndex == dialogueStep.GetText().Length) { return; }
+            
+            characterTimer += Time.deltaTime;
+
+            if (characterTimer < 0.01f) { return; }
+            characterTimer = 0;
+            
+            string currentText = openView.transform.Find("Background").Find("Text").gameObject.GetComponent<Text>().text;
+            if (characterIndex == 0 && !dialogueStep.IsItalicized()) { currentText += "\""; }
+            currentText += dialogueStep.GetText()[characterIndex];
+            if (characterIndex == dialogueStep.GetText().Length - 1 && !dialogueStep.IsItalicized()) { currentText += "\""; }
+            openView.transform.Find("Background").Find("Text").gameObject.GetComponent<Text>().text = currentText;
+
+            characterIndex++;
         }
     }
 
@@ -270,6 +300,41 @@ public class ViewManager : MonoBehaviour
             sellStartIndex += GameManager.instance.GetCardSellCount();
             RenderSellCards(sellStartIndex);
         });
+
+        // Tutorial gatekeepers.
+        if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.ToolShop))
+        {
+            shopObject.transform.Find("PackBackground").Find("ToolPackObject").gameObject.SetActive(false);
+            shopObject.transform.Find("PackBackground").Find("ToolPackButtonObject").gameObject.SetActive(false);
+        }
+
+        if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.SeedShop))
+        {
+            shopObject.transform.Find("PackBackground").Find("SeedPackObject").gameObject.SetActive(false);
+            shopObject.transform.Find("PackBackground").Find("SeedPackButtonObject").gameObject.SetActive(false);
+        }
+
+        if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.BoosterShop))
+        {
+            shopObject.transform.Find("PackBackground").Find("BoosterPackObject").gameObject.SetActive(false);
+            shopObject.transform.Find("PackBackground").Find("BoosterPackButtonObject").gameObject.SetActive(false);
+        }
+
+        if (!TutorialState.None.Equals(TutorialManager.instance.GetTutorialState()))
+        {
+            if (!TutorialState.ToolShop.Equals(TutorialManager.instance.GetTutorialState()))
+            {
+                shopObject.transform.Find("PackBackground").Find("ToolPackButtonObject").Find("Button").gameObject.GetComponent<Button>().interactable = false;
+            }
+            if (!TutorialState.SeedShop.Equals(TutorialManager.instance.GetTutorialState()))
+            {
+                shopObject.transform.Find("PackBackground").Find("SeedPackButtonObject").Find("Button").gameObject.GetComponent<Button>().interactable = false;
+            }
+            if (!TutorialState.BoosterShop.Equals(TutorialManager.instance.GetTutorialState()))
+            {
+                shopObject.transform.Find("PackBackground").Find("BoosterPackButtonObject").Find("Button").gameObject.GetComponent<Button>().interactable = false;
+            }
+        }
     }
 
     private void RenderSellCards(int startingIndex)
@@ -356,6 +421,7 @@ public class ViewManager : MonoBehaviour
 
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().AddCardToDeck(packCards[cardIndex]);
         }
+        TutorialManager.instance.UpdateTrackedToolShopAction();
 
         SetOpenView(packScreenObject);
     }
@@ -393,6 +459,7 @@ public class ViewManager : MonoBehaviour
 
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().AddCardToDeck(packCards[cardIndex]);
         }
+        TutorialManager.instance.UpdateTrackedSeedShopAction();
 
         SetOpenView(packScreenObject);
     }
@@ -430,6 +497,7 @@ public class ViewManager : MonoBehaviour
 
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().AddCardToDeck(packCards[cardIndex]);
         }
+        TutorialManager.instance.UpdateTrackedBoosterShopAction();
 
         SetOpenView(packScreenObject);
     }
@@ -546,5 +614,28 @@ public class ViewManager : MonoBehaviour
         });
 
         // Quit button.
+    }
+
+    public void OpenDialogueView(DialogueStep newDialogueStep)
+    {
+        GameManager.instance.SetPlayerViewState(PlayerViewState.Dialogue);
+        
+        GameObject dialogueObject = Instantiate(
+            Resources.Load<GameObject>("Prefabs/Views/DialoguePrefab"),
+            GameObject.FindGameObjectWithTag("Canvas").transform
+        );
+        dialogueObject.name = "DialoguePrefab";
+
+        dialogueObject.transform.Find("Background").Find("Text").gameObject.GetComponent<Text>().text = "";
+        dialogueStep = newDialogueStep;
+
+        if (dialogueStep.IsItalicized()) { dialogueObject.transform.Find("Background").Find("Text").gameObject.GetComponent<Text>().fontStyle = FontStyle.BoldAndItalic; }
+
+        dialogueObject.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            DialogueManager.instance.ProgressDialogue();
+        });
+
+        SetOpenView(dialogueObject);
     }
 }

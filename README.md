@@ -23,3 +23,6 @@
 - Map expansions
 - Decorations
 - Goal
+- Improved card loading system
+- Weather system
+- Multi-harvest plants.

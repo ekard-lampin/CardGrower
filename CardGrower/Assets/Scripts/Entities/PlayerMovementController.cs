@@ -30,6 +30,9 @@ public class PlayerMovementController : MonoBehaviour
     private void HandlePlayerInput()
     {
         if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+        if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.Look)) { return; }
+
+        TutorialManager.instance.UpdateTrackedMovement(movementInput.magnitude);
 
         Vector3 newPosition = transform.position + (transform.forward * movementInput.x + transform.up * movementInput.y + transform.right * movementInput.z) * GameManager.instance.GetPlayerMoveSpeed() * Time.deltaTime;
         // if (!IsNewPositionInBounds(newPosition)) { return; }
@@ -46,6 +49,7 @@ public class PlayerMovementController : MonoBehaviour
 
         Vector2 mouseMovement = InputManager.instance.GetMouseMovementInput();
         mouseMovement.y *= -1;
+        TutorialManager.instance.UpdateTrackedLooking(mouseMovement.normalized.magnitude);
         playerRotation += (mouseMovement * GameManager.instance.GetPlayerLookSensitivity());
         playerRotation.y = Mathf.Clamp(playerRotation.y, -90, 90);
 
@@ -55,6 +59,6 @@ public class PlayerMovementController : MonoBehaviour
 
     private void ReadPlayerInput()
     {
-        movementInput = InputManager.instance.GetMovementInput();
+        movementInput = InputManager.instance.GetMovementInput().normalized;
     }
 }

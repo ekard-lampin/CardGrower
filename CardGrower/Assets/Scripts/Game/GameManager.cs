@@ -446,5 +446,7 @@ public class GameManager : MonoBehaviour
         // Call map generation.
         SetPlayerViewState(PlayerViewState.Game);
         MapManager.instance.CreateBaseMap();
+        TutorialManager.instance.ResetTutorialFlags();
+        TutorialManager.instance.SetTutorialState(TutorialState.Look);
     }
 }

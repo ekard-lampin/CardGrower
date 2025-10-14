@@ -5,5 +5,6 @@ public enum PlayerViewState
     OpenPack,
     Deck,
     StartMenu,
-    Options
+    Options,
+    Dialogue
 }

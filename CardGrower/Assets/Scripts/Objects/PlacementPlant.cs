@@ -49,6 +49,8 @@ public class PlacementPlant : Placement
 
     void Update()
     {
+        if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.Growing)) { return; }
+        
         if (tickTimer > GameManager.instance.GetPlantGrowthTickDuration())
         {
             CheckForPlantGrowth();

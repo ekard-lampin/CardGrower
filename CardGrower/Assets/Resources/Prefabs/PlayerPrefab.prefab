@@ -73,7 +73,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deck: []
   selectedCard:
-    cardId: 0
+  - cardId: 0
+    cardType: 0
+    cardTexture: {fileID: 0}
+    cardDescription: 
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 0
+  - cardId: 0
+    cardType: 0
+    cardTexture: {fileID: 0}
+    cardDescription: 
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 0
+  - cardId: 0
+    cardType: 0
+    cardTexture: {fileID: 0}
+    cardDescription: 
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 0
+  - cardId: 0
+    cardType: 0
+    cardTexture: {fileID: 0}
+    cardDescription: 
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 0
+  - cardId: 0
+    cardType: 0
+    cardTexture: {fileID: 0}
+    cardDescription: 
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 0
+  - cardId: 0
+    cardType: 0
+    cardTexture: {fileID: 0}
+    cardDescription: 
+    cardRarity: 0
+    cardQuality: 0
+    cardValue: 0
+  - cardId: 0
     cardType: 0
     cardTexture: {fileID: 0}
     cardDescription: 
@@ -92,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67fa0092d999ba9449d4c42c20854104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBalance: 30
+  playerBalance: 0
 --- !u!1 &7948747766681478815
 GameObject:
   m_ObjectHideFlags: 0
