@@ -408,6 +408,7 @@ public class GameManager : MonoBehaviour
 
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().RemoveCardFromDeck(card);
         ViewManager.instance.OpenShopView();
+        TutorialManager.instance.UpdateTrackedSellingAction();
     }
 
     public int GetSaleAmount(Card card)

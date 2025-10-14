@@ -38,7 +38,13 @@ public class DialogueManager : MonoBehaviour
 
         ViewManager.instance.OpenDialogueView(GetDialogueByDialogueId(activeDialogue).GetDialogueSteps()[dialogueIndex]);
     }
-    
+
+    public void SkipDialogue()
+    {
+        dialogueIndex = GetDialogueByDialogueId(activeDialogue).GetDialogueSteps().Length - 1;
+        ProgressDialogue();
+    }
+
     public void StartDialogue(DialogueId dialogueId)
     {
         dialogueIndex = 0;

@@ -74,6 +74,7 @@ public class PlayerInteractionController : MonoBehaviour
                 Debug.Log("Harvesting");
                 GenerateCrops(highlightedTile.GetPlacement() as PlacementPlant, playerDeckManager.GetSelectedCard());
                 highlightedTile.HarvestTile();
+                TutorialManager.instance.UpdateTrackedHarvestAction();
             }
             else if (playerDeckManager.GetSelectedCard().Length > 0 && IsBoosting(highlightedTile, playerDeckManager.GetSelectedCard()))
             { // Boosting
@@ -154,6 +155,7 @@ public class PlayerInteractionController : MonoBehaviour
         GetComponent<PlayerDeckManager>().RemoveCardFromDeck(selectedCard[0]);
         GetComponent<PlayerDeckManager>().SetSelectedCard(new Card[0]);
         ViewManager.instance.SetOpenView(null);
+        TutorialManager.instance.UpdateTrackedBoosterUseAction();
     }
 
     private void ProcessPlayerDeckInput()

@@ -73,7 +73,13 @@ public class ViewManager : MonoBehaviour
 
         if (openView != null && openView.name.Equals("DialoguePrefab"))
         {
-            if (characterIndex == dialogueStep.GetText().Length) { return; }
+            if (characterIndex == dialogueStep.GetText().Length) {
+                if (!openView.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().interactable) 
+                {
+                    openView.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().interactable = true;
+                }
+                return;
+            }
             
             characterTimer += Time.deltaTime;
 
@@ -382,6 +388,11 @@ public class ViewManager : MonoBehaviour
             );
             sellButtonObject.name = "CardSellButton";
             sellButtonObject.GetComponent<CardSellButton>().SetCard(playerDeck[cardIndex + startingIndex]);
+            if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.Selling)) { sellButtonObject.transform.Find("Button").gameObject.GetComponent<Button>().interactable = false; }
+            if (TutorialState.Selling.Equals(TutorialManager.instance.GetTutorialState()) && !CardType.Crop.Equals(playerDeck[cardIndex + startingIndex].GetCardType()))
+            {
+                sellButtonObject.transform.Find("Button").gameObject.GetComponent<Button>().interactable = false;
+            }
 
             // Set sell text.
             sellButtonObject.transform.Find("Button").Find("Text").gameObject.GetComponent<Text>().text = "Sell $" + GameManager.instance.GetSaleAmount(playerDeck[cardIndex + startingIndex]);
@@ -634,6 +645,12 @@ public class ViewManager : MonoBehaviour
         dialogueObject.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
             DialogueManager.instance.ProgressDialogue();
+        });
+        dialogueObject.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().interactable = false;
+
+        dialogueObject.transform.Find("Background").Find("SkipButton").gameObject.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            DialogueManager.instance.SkipDialogue();
         });
 
         SetOpenView(dialogueObject);

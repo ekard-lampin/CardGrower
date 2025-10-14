@@ -494,7 +494,7 @@ MonoBehaviour:
   playerHeightMinimum: 3
   playerLooksSensitivity: 0.5
   playerMoveSpeed: 2
-  playerViewState: 4
+  playerViewState: 0
   previousPlayerViewState: 0
   playerPassiveMoneyTimerDuration: 60
   startMenuDisplayObjectLocation: {x: 0.75, y: 0, z: 2}
@@ -722,6 +722,77 @@ MonoBehaviour:
         booster.
       italicized: 0
     - text: We'll chat again when you have applied a booster to your plant.
+      italicized: 0
+  - dialogueId: 9
+    dialogueSteps:
+    - text: And you are off to the proverbial races.
+      italicized: 0
+    - text: Watch your plant grow and use any boosters you want.
+      italicized: 0
+    - text: I will check back in once it is ready to harvest.
+      italicized: 0
+  - dialogueId: 10
+    dialogueSteps:
+    - text: That card right there is what it's all about.
+      italicized: 0
+    - text: Click on the plot with a mature plant to collect its crop.
+      italicized: 0
+    - text: You may have noticed that some of the other Tools you got along with
+        your Hoe can modify your harvest.
+      italicized: 0
+    - text: Feel free to use one of them while harvesting your plant, if you want.
+      italicized: 0
+    - text: Go ahead, Cardener.
+      italicized: 0
+  - dialogueId: 11
+    dialogueSteps:
+    - text: You're on the home stretch now, Cardener.
+      italicized: 0
+    - text: Last step is to send your bounty home to us.
+      italicized: 0
+    - text: PROTOTYPE Enterprises will compensate you for your efforts, of course.
+      italicized: 0
+    - text: Can't retain talent without paying them, right?
+      italicized: 0
+    - text: Open the shop with TAB and look at the bottom of the shop interface.
+      italicized: 0
+    - text: You will see your cards down there with a button allowing you to sell
+        them to us along with our proposed sale price.
+      italicized: 0
+    - text: Go on and sell your first harvest.
+      italicized: 0
+  - dialogueId: 12
+    dialogueSteps:
+    - text: And that's all there is to it, Cardener.
+      italicized: 0
+    - text: I'd say you have officially earned that title now.
+      italicized: 0
+    - text: From here on out, it's all about scale.
+      italicized: 0
+    - text: Buy more tool packs, get more Hoes, till more ground, grow more crops,
+        and sell them to us.
+      italicized: 0
+    - text: Only you can help PROTOTYPE Enterprises solve the food crisis!
+      italicized: 0
+    - text: One last note before I clock out, Cardener.
+      italicized: 0
+    - text: You may have noticed that your money has been slowly increasing while
+        we have been talking.
+      italicized: 0
+    - text: This is your hourly wage.
+      italicized: 0
+    - text: It's peanuts compared to what you can pull down by growing and selling
+        crops.
+      italicized: 0
+    - text: But it can help you out of a pinch if you're not able to afford any seeds
+        by providing you a source of passive income.
+      italicized: 0
+    - text: We know you didn't have a lot of choices, but thank you for choosing
+        to work for PROTOTYPE Enterprises.
+      italicized: 0
+    - text: 'You already know our motto: ''Together, we will save the world!'''
+      italicized: 0
+    - text: Be prosperous and have fun!
       italicized: 0
   dialogueIndex: 0
   activeDialogue: 0

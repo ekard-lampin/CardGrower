@@ -120,6 +120,8 @@ public class PlacementPlant : Placement
             Card cropCard = GameManager.instance.GetCropCardBySeedCardId(plantedSeed.GetCardId());
             SpriteRenderer cropSprite = newCropObject.transform.Find("Mesh").Find("Sprite").gameObject.GetComponent<SpriteRenderer>();
             cropSprite.sprite = Resources.Load<Sprite>("Textures/" + cropCard.GetCardTexture().name);
+
+            TutorialManager.instance.UpdateTrackedGrowingAction();
         }
     }
 

@@ -71,6 +71,34 @@ public class TutorialManager : MonoBehaviour
             trackedAction++;
         }
     }
+    public void UpdateTrackedBoosterUseAction()
+    {
+        if (TutorialState.BoosterDeck.Equals(tutorialState))
+        {
+            trackedAction++;
+        }
+    }
+    public void UpdateTrackedGrowingAction()
+    {
+        if (TutorialState.Growing.Equals(tutorialState))
+        {
+            trackedAction++;
+        }
+    }
+    public void UpdateTrackedHarvestAction()
+    {
+        if (TutorialState.Harvest.Equals(tutorialState))
+        {
+            trackedAction++;
+        }
+    }
+    public void UpdateTrackedSellingAction()
+    {
+        if (TutorialState.Selling.Equals(tutorialState))
+        {
+            trackedAction++;
+        }
+    }
 
     void Start()
     {
@@ -131,7 +159,7 @@ public class TutorialManager : MonoBehaviour
                     tutorialFlags.Add(TutorialState.ToolShop);
                     if (GameObject.FindGameObjectWithTag("Player") != null)
                     {
-                        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().AddMoney(10);
+                        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().AddMoney(GameManager.instance.GetToolPackPrice());
                     }
                 }
 
@@ -165,7 +193,7 @@ public class TutorialManager : MonoBehaviour
                     tutorialFlags.Add(TutorialState.SeedShop);
                     if (GameObject.FindGameObjectWithTag("Player") != null)
                     {
-                        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().AddMoney(20);
+                        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().AddMoney(GameManager.instance.GetSeedPackPrice());
                     }
                 }
 
@@ -199,7 +227,7 @@ public class TutorialManager : MonoBehaviour
                     tutorialFlags.Add(TutorialState.BoosterShop);
                     if (GameObject.FindGameObjectWithTag("Player") != null)
                     {
-                        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().AddMoney(30);
+                        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().AddMoney(GameManager.instance.GetBoosterPackPrice());
                     }
                 }
 
@@ -224,6 +252,63 @@ public class TutorialManager : MonoBehaviour
                     trackedAction = 0;
                     tutorialState = TutorialState.Growing;
                 }
+                break;
+            case TutorialState.Growing:
+                if (!tutorialMessageShown)
+                {
+                    tutorialMessageShown = true;
+                    DialogueManager.instance.StartDialogue(DialogueId.TutorialGrowing);
+                    tutorialFlags.Add(TutorialState.Growing);
+                }
+
+                if (trackedAction > 0)
+                {
+                    tutorialMessageShown = false;
+                    trackedAction = 0;
+                    tutorialState = TutorialState.Harvest;
+                }
+                break;
+            case TutorialState.Harvest:
+                if (!tutorialMessageShown)
+                {
+                    tutorialMessageShown = true;
+                    DialogueManager.instance.StartDialogue(DialogueId.TutorialHarvest);
+                    tutorialFlags.Add(TutorialState.Harvest);
+                }
+
+                if (trackedAction > 0)
+                {
+                    tutorialMessageShown = false;
+                    trackedAction = 0;
+                    tutorialState = TutorialState.Selling;
+                }
+                break;
+            case TutorialState.Selling:
+                if (!tutorialMessageShown)
+                {
+                    tutorialMessageShown = true;
+                    DialogueManager.instance.StartDialogue(DialogueId.TutorialSelling);
+                    tutorialFlags.Add(TutorialState.Selling);
+                }
+
+                if (trackedAction > 0)
+                {
+                    tutorialMessageShown = false;
+                    trackedAction = 0;
+                    tutorialState = TutorialState.Done;
+                }
+                break;
+            case TutorialState.Done:
+                if (!tutorialMessageShown)
+                {
+                    tutorialMessageShown = true;
+                    DialogueManager.instance.StartDialogue(DialogueId.TutorialDone);
+                    tutorialFlags.Add(TutorialState.Done);
+                }
+
+                tutorialMessageShown = false;
+                trackedAction = 0;
+                tutorialState = TutorialState.None;
                 break;
             default:
                 break;

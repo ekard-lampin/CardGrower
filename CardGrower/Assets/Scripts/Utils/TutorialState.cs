@@ -9,5 +9,8 @@ public enum TutorialState
     SeedDeck,
     BoosterShop,
     BoosterDeck,
-    Growing
+    Growing,
+    Harvest,
+    Selling,
+    Done
 }

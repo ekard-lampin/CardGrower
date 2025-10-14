@@ -8,5 +8,9 @@ public enum DialogueId
     TutorialSeed,
     TutorialPlanting,
     TutorialBoosterShop,
-    TutorialBoosting
+    TutorialBoosting,
+    TutorialGrowing,
+    TutorialHarvest,
+    TutorialSelling,
+    TutorialDone
 }
