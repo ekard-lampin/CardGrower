@@ -46,5 +46,8 @@ v0.10.0-menu ===================================================================
 - Added in booster and tool functionality from accidentally deleted v0.10.0-mvp branch.
 
 v0.11.0-tutorial ==================================================================================
-- TODO: Add tutorial at the beginning of the game.
-- TODO: Lock actions behind tutorial flags.
+- Added dialogue window logic.
+- Added tutorial manager and dialogue manager.
+- Added dialogue code infrastructure.
+- Added tutorial system to walk the player through game loop.
+- Added gatekeeper logic to block certain player actions until they have completed certain tutorial stages.
