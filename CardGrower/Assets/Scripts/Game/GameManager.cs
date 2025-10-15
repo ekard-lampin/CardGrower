@@ -232,6 +232,8 @@ public class GameManager : MonoBehaviour
                 Quaternion.identity
             );
             menuDisplayObject.name = "StartMenuDisplayPrefab";
+            Camera.main.transform.position = Vector3.zero;
+            Camera.main.transform.rotation = Quaternion.identity;
         }
         if (PlayerViewState.Game.Equals(GetPlayerViewState())) { MapManager.instance.CreateBaseMap(); }
         if (PlayerViewState.OpeningCutscene.Equals(GetPlayerViewState())) { CutsceneManager.instance.StartOpeningCutscene(); }

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Canvas
   - StartMenuDisplay
+  - FarmTiles
+  - FillerTiles
+  - Trees
   layers:
   - Default
   - TransparentFX

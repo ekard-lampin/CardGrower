@@ -5,5 +5,7 @@ public enum OpeningCutsceneState
     FirstStall,
     FirstDialogue,
     PortalOpen,
-    DroneEntry
+    DroneEntry,
+    SecondStall,
+    SecondDialogue
 }

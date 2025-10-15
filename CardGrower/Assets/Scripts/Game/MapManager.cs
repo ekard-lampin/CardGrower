@@ -73,6 +73,7 @@ public class MapManager : MonoBehaviour
                 newTileObject.name = "Tile_(" + xIndex + ", " + zIndex + ")";
                 Tile newTile = newTileObject.AddComponent<Tile>();
                 newTile.SetTileCoords(new Vector2(xIndex, zIndex));
+                newTileObject.transform.SetParent(GameObject.FindGameObjectWithTag("FarmTiles").transform);
                 farmTiles.Add(new Vector2(xIndex + coordsOffset.x, (zIndex * -1) + coordsOffset.y));
 
                 // Create wall tile if on an edge piece.
@@ -84,6 +85,7 @@ public class MapManager : MonoBehaviour
                         Quaternion.identity
                     );
                     newWallObject.name = "Wall_(" + xIndex + ", " + zIndex + ")";
+                    newWallObject.transform.SetParent(GameObject.FindGameObjectWithTag("FarmTiles").transform);
                     PlacementWall newWall = newWallObject.AddComponent<PlacementWall>();
                     // Top left
                     if (xIndex == 0 && zIndex == 0)
@@ -115,6 +117,7 @@ public class MapManager : MonoBehaviour
                         Quaternion.identity
                     );
                     newWallObject.name = "Wall_(" + xIndex + ", " + zIndex + ")";
+                    newWallObject.transform.SetParent(GameObject.FindGameObjectWithTag("FarmTiles").transform);
                     PlacementWall newWall = newWallObject.AddComponent<PlacementWall>();
                     if (zIndex == 0 || zIndex == GameManager.instance.GetMapBaseWidth() - 1)
                     {
@@ -131,6 +134,7 @@ public class MapManager : MonoBehaviour
                         Quaternion.identity
                     );
                     newOvergrowthObject.name = "Overgrowth_(" + xIndex + ", " + zIndex + ")";
+                    newOvergrowthObject.transform.SetParent(GameObject.FindGameObjectWithTag("FarmTiles").transform);
                     PlacementOvergrowth newOvergrowth = newOvergrowthObject.AddComponent<PlacementOvergrowth>();
                     newTile.SetPlacement(newOvergrowth);
 
@@ -158,7 +162,7 @@ public class MapManager : MonoBehaviour
                 // Skip farm tile spaces.
                 if (farmTiles.Contains(new Vector2(xIndex + fillerOffset.x, (zIndex * -1) + fillerOffset.y))) { continue; }
 
-                if (((xIndex < totalWidth / 4) || (xIndex > totalWidth - (totalWidth / 4))) 
+                if (((xIndex < totalWidth / 4) || (xIndex > totalWidth - (totalWidth / 4)))
                     || ((zIndex < totalWidth / 4) || (zIndex > totalWidth - (totalWidth / 4)))
                 )
                 {
@@ -173,6 +177,7 @@ public class MapManager : MonoBehaviour
                         float scale = Random.Range(1 - GameManager.instance.GetMapTreeScaleVariance(), 1 + GameManager.instance.GetMapTreeScaleVariance());
                         newTreeObject.transform.localScale = new Vector3(1, scale, 1);
                         newTreeObject.transform.localRotation = Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0));
+                        newTreeObject.transform.SetParent(GameObject.FindGameObjectWithTag("Trees").transform);
                     }
                 }
 
@@ -182,6 +187,7 @@ public class MapManager : MonoBehaviour
                     new Vector3(xIndex + fillerOffset.x, 0, (zIndex * -1) + fillerOffset.y),
                     Quaternion.identity
                 );
+                newTileObject.transform.SetParent(GameObject.FindGameObjectWithTag("FillerTiles").transform);
             }
         }
     }

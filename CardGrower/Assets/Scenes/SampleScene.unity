@@ -123,6 +123,36 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &72615629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 72615630}
+  m_Layer: 0
+  m_Name: Trees
+  m_TagString: Trees
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &72615630
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72615629}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &588349538
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,12 +832,83 @@ MonoBehaviour:
   - dialogueId: 13
     dialogueSteps:
     - text: Pocket dimension scan complete.
-      italicized: 0
+      italicized: 1
     - text: Stable farming plot found.
-      italicized: 0
+      italicized: 1
     - text: '''Cardener'' worker without drone detected.'
-      italicized: 0
+      italicized: 1
     - text: Inserting drone at plot coordinates.
+      italicized: 1
+  - dialogueId: 14
+    dialogueSteps:
+    - text: Drone insertion successful.
+      italicized: 1
+    - text: Connecting pilot to drone.
+      italicized: 1
+    - text: ...
+      italicized: 1
+    - text: Connection successful.
+      italicized: 1
+    - text: Connecting onboarding assistant to pilot.
+      italicized: 1
+    - text: ...
+      italicized: 1
+    - text: Connection successful.
+      italicized: 1
+    - text: Commencing onboarding sequence.
+      italicized: 1
+    - text: ...
+      italicized: 1
+    - text: Hello there! Is this thing on?
+      italicized: 0
+    - text: Nice to meet you, Cardener.
+      italicized: 0
+    - text: Welcome to your first day on the job.
+      italicized: 0
+    - text: Here at PROTOTYPE Enterprises, we are committed to solving all of humanity's
+        most pressing issues.
+      italicized: 0
+    - text: As you may be aware, humanity has something of a... food shortage.
+      italicized: 0
+    - text: That's where you come in!
+      italicized: 0
+    - text: In this pocket dimension, there is seemingly infinite fertile ground
+        to farm!
+      italicized: 0
+    - text: The only problem? Almost every non-living object in this dimension can
+        only take the form of a card.
+      italicized: 0
+    - text: And it's difficult to send things in from our side with any kind of scale.
+      italicized: 0
+    - text: That there drone is primarily made of an unimaginably complex and expensive
+        Exotium alloy.
+      italicized: 0
+    - text: As such, it is one of the few things we can actually send here.
+      italicized: 0
+    - text: We have had poor luck with any kind of auto-piloting farming protocols.
+      italicized: 0
+    - text: So we bring in talented pilots like yourself to tend to these card-gardens.
+      italicized: 0
+    - text: We call these pilots Cardeners! Named after the card-gardens they tend
+        to, obviously.
+      italicized: 0
+    - text: Your work here will be crucial in saving humanity from this seemingly
+        insurmountable threat.
+      italicized: 0
+    - text: By making use of PROTOTYPE Enterprises' proprietary exo-reality farming
+        technology, you and this drone will produce hefty bounties of food.
+      italicized: 0
+    - text: And then you can send all that goodness back to us!
+      italicized: 0
+    - text: Those cards react with the fabric of our reality and turn them into wonderful
+        food.
+      italicized: 0
+    - text: But it's a one way trip, unfortunately.
+      italicized: 0
+    - text: So we need drones like the one you are piloting now and wonderful Cardeners
+        like yourself to operate them.
+      italicized: 0
+    - text: Now strap in! You have work to do and I gotta tell you how to do it.
       italicized: 0
   dialogueIndex: 0
   activeDialogue: 0
@@ -841,16 +942,30 @@ MonoBehaviour:
   openingCutsceneState: 0
   cutsceneStateInitialized: 0
   cutsceneActionTimer: 0
-  cameraTrackSpeed: 1
+  cameraTrackSpeed: 2
+  cameraZoomRate: 0
   openingPanDuration: 5
   openingPanCameraStart: {x: -15, y: 1, z: -1}
   openingPanCameraTarget: {x: -1, y: 1, z: -1}
   firstStallDuration: 2
-  portalOpenDuration: 10
+  portalOpenDuration: 5
   portalLocation: {x: -1, y: 10, z: 0}
   portalRotation: {x: 90, y: 0, z: 0}
-  portalRotationRate: 100
+  portalRotationRate: 50
+  portalGrowthDelay: 1
+  portalFocusDelay: 1.5
+  portalZoomDelay: 2
+  droneEntryDuration: 5
+  droneRotation: {x: 0, y: 135, z: 0}
+  droneStartLocation: {x: -1, y: 13, z: 0}
+  droneTargetLocation: {x: -1, y: 7, z: 0}
+  droneGrowthDelay: 2.5
+  droneEntryCameraOffset: {x: 0, y: 0, z: -5}
+  droneBobSpeed: 1
+  droneWobbleSpeed: 4
+  secondStallDuration: 5
   portalObject: {fileID: 0}
+  droneObject: {fileID: 0}
 --- !u!1 &693222412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,6 +1159,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 80, y: 0, z: 0}
+--- !u!1 &800852526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 800852527}
+  m_Layer: 0
+  m_Name: FarmTiles
+  m_TagString: FarmTiles
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &800852527
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800852526}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1161,6 +1306,36 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1 &1363782613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1363782614}
+  m_Layer: 0
+  m_Name: FillerTiles
+  m_TagString: FillerTiles
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1363782614
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363782613}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1867599332
 GameObject:
   m_ObjectHideFlags: 0
