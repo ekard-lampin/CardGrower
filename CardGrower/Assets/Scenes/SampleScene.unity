@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.1733874, g: 0.2167395, b: 0.29880914, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -286,6 +286,7 @@ GameObject:
   - component: {fileID: 642613271}
   - component: {fileID: 642613273}
   - component: {fileID: 642613272}
+  - component: {fileID: 642613274}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -489,12 +490,16 @@ MonoBehaviour:
   mapOvergrowthLocationVariation: 0.5
   mapOvergrowthMaxHeight: 1
   mapOvergrowthScaleVariation: 0.5
+  mapTreeRingOffset: 4
+  mapTreeScaleVariance: 0.5
+  mapFillerRingOffset: 10
+  mapSeed: 10091997
   plantBaseGrowthChancePercentage: 5
   plantGrowthTickDuration: 1
   playerHeightMinimum: 3
   playerLooksSensitivity: 0.5
   playerMoveSpeed: 2
-  playerViewState: 0
+  playerViewState: 7
   previousPlayerViewState: 0
   playerPassiveMoneyTimerDuration: 60
   startMenuDisplayObjectLocation: {x: 0.75, y: 0, z: 2}
@@ -794,6 +799,16 @@ MonoBehaviour:
       italicized: 0
     - text: Be prosperous and have fun!
       italicized: 0
+  - dialogueId: 13
+    dialogueSteps:
+    - text: Pocket dimension scan complete.
+      italicized: 0
+    - text: Stable farming plot found.
+      italicized: 0
+    - text: '''Cardener'' worker without drone detected.'
+      italicized: 0
+    - text: Inserting drone at plot coordinates.
+      italicized: 0
   dialogueIndex: 0
   activeDialogue: 0
 --- !u!114 &642613273
@@ -808,9 +823,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64384b8b515d09c4ab92da0079e7b4a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialState: 3
+  tutorialState: 0
   tutorialMessageShown: 0
   trackedAction: 0
+--- !u!114 &642613274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642613266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d057c98a35189e4195076b4721c58a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openingCutsceneState: 0
+  cutsceneStateInitialized: 0
+  cutsceneActionTimer: 0
+  cameraTrackSpeed: 1
+  openingPanDuration: 5
+  openingPanCameraStart: {x: -15, y: 1, z: -1}
+  openingPanCameraTarget: {x: -1, y: 1, z: -1}
+  firstStallDuration: 2
+  portalOpenDuration: 10
+  portalLocation: {x: -1, y: 10, z: 0}
+  portalRotation: {x: 90, y: 0, z: 0}
+  portalRotationRate: 100
+  portalObject: {fileID: 0}
 --- !u!1 &693222412
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,13 +1037,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.6427876, y: 0, z: 0, w: 0.7660445}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 80, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,7 +1122,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 10, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

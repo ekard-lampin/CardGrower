@@ -12,5 +12,6 @@ public enum DialogueId
     TutorialGrowing,
     TutorialHarvest,
     TutorialSelling,
-    TutorialDone
+    TutorialDone,
+    OpeningCutsceneFirstDialogue
 }

@@ -5,7 +5,10 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    void Awake() { instance = this; }
+    void Awake() {
+        instance = this;
+        Random.InitState(mapSeed);
+    }
 
     [Header("Card Settings")]
     [SerializeField]
@@ -155,6 +158,21 @@ public class GameManager : MonoBehaviour
     public float GetMapOvergrowthScaleVariation() { return mapOvergrowthScaleVariation; }
     public void SetMapOvergrowthScaleVariation(float mapOvergrowthScaleVariation) { this.mapOvergrowthScaleVariation = mapOvergrowthScaleVariation; }
 
+    [SerializeField]
+    private int mapTreeRingOffset;
+    public float GetMapTreeRingOffset() { return (float)mapTreeRingOffset * 2f; }
+
+    [SerializeField]
+    private float mapTreeScaleVariance;
+    public float GetMapTreeScaleVariance() { return mapTreeScaleVariance; }
+
+    [SerializeField]
+    private int mapFillerRingOffset;
+    public float GetMapFillerRingOffset() { return (float)mapFillerRingOffset * 2f; }
+
+    [SerializeField]
+    private int mapSeed;
+
     [Header("Plant Settings")]
     [SerializeField]
     private float plantBaseGrowthChancePercentage;
@@ -199,8 +217,6 @@ public class GameManager : MonoBehaviour
     private Vector3 startMenuDisplayObjectLocation;
     public Vector3 GetStartMenuDisplayObjectLocation() { return startMenuDisplayObjectLocation; }
 
-    private float playerPassiveMoneyTimer = 0;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -218,17 +234,12 @@ public class GameManager : MonoBehaviour
             menuDisplayObject.name = "StartMenuDisplayPrefab";
         }
         if (PlayerViewState.Game.Equals(GetPlayerViewState())) { MapManager.instance.CreateBaseMap(); }
+        if (PlayerViewState.OpeningCutscene.Equals(GetPlayerViewState())) { CutsceneManager.instance.StartOpeningCutscene(); }
     }
 
     void Update()
     {
-        playerPassiveMoneyTimer += Time.deltaTime;
-
-        if (playerPassiveMoneyTimer < GetPlayerPassiveMoneyTimerDuration()) { return; }
-
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoneyManager>().AddMoney(1);
-
-        playerPassiveMoneyTimer = 0;
+        
     }
 
     public Card[] GetCardsForPack(PackType packType)

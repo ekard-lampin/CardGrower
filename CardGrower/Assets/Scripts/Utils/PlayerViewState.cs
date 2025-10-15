@@ -6,5 +6,6 @@ public enum PlayerViewState
     Deck,
     StartMenu,
     Options,
-    Dialogue
+    Dialogue,
+    OpeningCutscene
 }

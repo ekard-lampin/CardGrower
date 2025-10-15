@@ -103,7 +103,7 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         int[] tutorialStates = (int[])System.Enum.GetValues(typeof(TutorialState));
-        for (int stateIndex = (int)tutorialState; stateIndex > 0; stateIndex--)
+        for (int stateIndex = TutorialState.None.Equals(tutorialState) ? tutorialStates.Length - 1 : (int)tutorialState; stateIndex > 0; stateIndex--)
         {
             Debug.Log("Adding " + ((TutorialState)tutorialStates[stateIndex]).ToString() + " to tutorial flags.");
             tutorialFlags.Add((TutorialState)tutorialStates[stateIndex]);

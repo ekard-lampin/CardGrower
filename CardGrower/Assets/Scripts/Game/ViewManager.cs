@@ -60,12 +60,16 @@ public class ViewManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("Canvas").transform.Find("UI").gameObject.SetActive(true);
         }
 
-        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()))
+        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState())
+            && !PlayerViewState.OpeningCutscene.Equals(GameManager.instance.GetPlayerViewState())
+        )
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
-        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()))
+        if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState())
+            || PlayerViewState.OpeningCutscene.Equals(GameManager.instance.GetPlayerViewState())
+        )
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;

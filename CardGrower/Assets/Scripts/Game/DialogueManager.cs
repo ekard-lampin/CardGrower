@@ -31,7 +31,12 @@ public class DialogueManager : MonoBehaviour
         if (dialogueIndex == GetDialogueByDialogueId(activeDialogue).GetDialogueSteps().Length)
         {
             dialogueIndex = 0;
-            GameManager.instance.SetPlayerViewState(PlayerViewState.Game);
+            if (activeDialogue.ToString().ToLower().Contains("tutorial")) { GameManager.instance.SetPlayerViewState(PlayerViewState.Game); }
+            if (!OpeningCutsceneState.None.Equals(CutsceneManager.instance.GetOpeningCutsceneState())) {
+                GameManager.instance.SetPlayerViewState(PlayerViewState.OpeningCutscene);
+                CutsceneManager.instance.UpdateCutsceneDialogue();
+            }
+            activeDialogue = DialogueId.None;
             ViewManager.instance.DestroyOpenView();
             return;
         }
