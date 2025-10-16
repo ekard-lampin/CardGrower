@@ -53,5 +53,6 @@ v0.11.0-tutorial ===============================================================
 - Added gatekeeper logic to block certain player actions until they have completed certain tutorial stages.
 
 v0.12.0-intro-cutscene ============================================================================
-- TODO: Fill out world.
-- TODO: Add intro cutscene.
+- Filled out surroundings during game to make the world feel more lifelike.
+- Filled out start menu to make it feel more lifelike.
+- Added intro cutscene.
