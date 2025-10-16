@@ -156,6 +156,7 @@ public class CutsceneManager : MonoBehaviour
                 // Portal growth.
                 if (cutsceneActionTimer > portalGrowthDelay)
                 {
+                    if (portalObject.transform.localScale == Vector3.zero) { portalObject.transform.Find("Source").gameObject.GetComponent<AudioSource>().Play(); }
                     float growthTimer = Mathf.Clamp(cutsceneActionTimer - portalGrowthDelay, 0, 1);
                     float growthRatio = growthTimer / 1f;
                     portalObject.transform.localScale = Vector3.one * growthRatio;
@@ -216,7 +217,10 @@ public class CutsceneManager : MonoBehaviour
                 DroneMovement();
 
                 // Ship growth.
-                if (cutsceneActionTimer > droneGrowthDelay) { droneObject.transform.localScale = Vector3.one; }
+                if (cutsceneActionTimer > droneGrowthDelay) {
+                    if (droneObject.transform.localScale == Vector3.zero) { droneObject.transform.Find("Source").gameObject.GetComponent<AudioSource>().Play(); }
+                    droneObject.transform.localScale = Vector3.one;
+                }
 
                 if (cutsceneActionTimer < droneEntryDuration) { return; }
 
@@ -229,6 +233,7 @@ public class CutsceneManager : MonoBehaviour
                 if (!cutsceneStateInitialized)
                 {
                     cutsceneStateInitialized = true;
+                    portalObject.transform.Find("Source").gameObject.GetComponent<AudioSource>().Play();
                     Debug.Log("Started: second stall");
                 }
 

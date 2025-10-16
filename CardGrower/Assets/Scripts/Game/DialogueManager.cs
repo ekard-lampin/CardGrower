@@ -55,5 +55,6 @@ public class DialogueManager : MonoBehaviour
         dialogueIndex = 0;
         activeDialogue = dialogueId;
         ViewManager.instance.OpenDialogueView(GetDialogueByDialogueId(activeDialogue).GetDialogueSteps()[dialogueIndex]);
+        // AudioManager.instance.PlayWindowOpen();
     }
 }

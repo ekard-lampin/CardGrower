@@ -26,7 +26,17 @@ public class PlacementPlant : Placement
         }
         return false;
     }
-    public void AddBooster(Card booster) { activeBoosters.Add(booster); }
+    public void AddBooster(Card booster) {
+        activeBoosters.Add(booster);
+        Destroy(
+            Instantiate(
+                Resources.Load<GameObject>("Prefabs/Map/BoosterSfxPrefab"),
+                transform.position,
+                Quaternion.identity
+            ),
+            1
+        );
+    }
     public bool IsBoosterActive(CardId cardId) {
         foreach (Card activeBooster in activeBoosters)
         {

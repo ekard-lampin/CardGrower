@@ -29,21 +29,25 @@ public class MapManager : MonoBehaviour
     private float cloudSpawnTimer = 0;
     private float cloudDelay = 0;
 
+    private float treeRippleCenter = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         cloudDelay = GameManager.instance.GetMapCloudSpawnDelay() * Random.Range(0.5f, 3);
+        treeRippleCenter = (GameManager.instance.GetMapBaseWidth() + GameManager.instance.GetMapTreeRingOffset() + GameManager.instance.GetMapFillerRingOffset()) / 2 * -1;
     }
 
     // Update is called once per frame
     void Update()
     {
         ProcessClouds();
+        ProcessTrees();
     }
 
     private void ProcessClouds()
     {
-        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+        if (PlayerViewState.StartMenu.Equals(GameManager.instance.GetPlayerViewState())) { return; }
 
         cloudSpawnTimer += Time.deltaTime;
 
@@ -86,6 +90,19 @@ public class MapManager : MonoBehaviour
         newCloudObject.transform.localScale = Vector3.one * Random.Range(1f, 3f);
         newCloudObject.transform.Find("Mesh").localRotation = Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0));
         activeClouds.Add(newCloudObject);
+    }
+
+    private void ProcessTrees()
+    {
+        // if (PlayerViewState.StartMenu.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+
+        foreach (Transform treeTransform in GameObject.FindGameObjectWithTag("Trees").transform)
+        {
+            if (treeTransform.gameObject.name.ToLower().Contains("tile")) { continue; }
+            float xLean = GameManager.instance.GetMapTreeRippleMaxLean() - Mathf.PingPong(Time.time * GameManager.instance.GetMapTreeRippleSpeed() + (Mathf.Pow(treeTransform.position.x, 2) + Mathf.Pow(treeTransform.position.z, 3)), GameManager.instance.GetMapTreeRippleMaxLean() * 2);
+            float zLean = GameManager.instance.GetMapTreeRippleMaxLean() - Mathf.PingPong(Time.time * GameManager.instance.GetMapTreeRippleSpeed() + (Mathf.Pow(treeTransform.position.x, 3) + Mathf.Pow(treeTransform.position.z, 2)), GameManager.instance.GetMapTreeRippleMaxLean() * 2);
+            treeTransform.Find("Mesh").rotation = Quaternion.Euler(new Vector3(xLean, treeTransform.Find("Mesh").rotation.eulerAngles.y, zLean));
+        }
     }
 
     public void CreatePlayer()
@@ -218,7 +235,6 @@ public class MapManager : MonoBehaviour
                     || ((zIndex < totalWidth / 4) || (zIndex > totalWidth - (totalWidth / 4)))
                 )
                 {
-                    // if (((xIndex + zIndex) % 3 == 2) || ((xIndex == 0 || xIndex == totalWidth - 1) || (zIndex == 0 || zIndex == totalWidth - 1)))
                     if (Random.Range(0, 7) == 0 || ((xIndex == 0 || xIndex == totalWidth - 1) || (zIndex == 0 || zIndex == totalWidth - 1)))
                     {
                         GameObject newTreeObject = Instantiate(

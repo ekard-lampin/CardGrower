@@ -72,6 +72,25 @@ public class PlayerInteractionController : MonoBehaviour
             else if (IsHarvesting(highlightedTile, playerDeckManager.GetSelectedCard()))
             {// Harvesting
                 Debug.Log("Harvesting");
+                Destroy(
+                    Instantiate(
+                        Resources.Load<GameObject>("Prefabs/Map/HarvestSfxPrefab"),
+                        highlightedTile.gameObject.transform.position,
+                        Quaternion.identity
+                    ),
+                    1
+                );
+                if (playerDeckManager.GetSelectedCard().Length != 0)
+                {
+                    Destroy(
+                        Instantiate(
+                            Resources.Load<GameObject>("Prefabs/Map/BoosterSfxPrefab"),
+                            highlightedTile.gameObject.transform.position,
+                            Quaternion.identity
+                        ),
+                        1
+                    );
+                }
                 GenerateCrops(highlightedTile.GetPlacement() as PlacementPlant, playerDeckManager.GetSelectedCard());
                 highlightedTile.HarvestTile();
                 TutorialManager.instance.UpdateTrackedHarvestAction();

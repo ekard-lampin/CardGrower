@@ -5,10 +5,19 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    void Awake() {
+    void Awake()
+    {
         instance = this;
         Random.InitState(mapSeed);
     }
+
+    [Header("Audio Settings")]
+    [SerializeField]
+    private float audioWildlifeBaseDelay;
+
+    [SerializeField]
+    private float audioWildlifeDelayVariance;
+    public float GetWildlifeAudioDelay() { return audioWildlifeBaseDelay * Random.Range(1f - audioWildlifeDelayVariance, 1f + audioWildlifeDelayVariance); }
 
     [Header("Card Settings")]
     [SerializeField]
@@ -196,6 +205,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int mapCloudCount;
     public int GetMapCloudCount() { return mapCloudCount; }
+
+    [SerializeField]
+    private float mapTreeRippleSpeed;
+    public float GetMapTreeRippleSpeed() { return mapTreeRippleSpeed; }
+
+    [SerializeField]
+    private float mapTreeRippleMaxLean;
+    public float GetMapTreeRippleMaxLean() { return mapTreeRippleMaxLean; }
 
     [Header("Plant Settings")]
     [SerializeField]

@@ -11,6 +11,13 @@ public class PlayerMoneyManager : MonoBehaviour
 
     private float playerPassiveMoneyTimer = 0;
 
+    void Start()
+    {
+        if (TutorialManager.instance.IsTutorialFlagSet(TutorialState.ToolShop)) { AddMoney(GameManager.instance.GetToolPackPrice()); }
+        if (TutorialManager.instance.IsTutorialFlagSet(TutorialState.SeedShop)) { AddMoney(GameManager.instance.GetSeedPackPrice()); }
+        if (TutorialManager.instance.IsTutorialFlagSet(TutorialState.BoosterShop)) { AddMoney(GameManager.instance.GetBoosterPackPrice()); }
+    }
+
     void Update()
     {
         playerPassiveMoneyTimer += Time.deltaTime;

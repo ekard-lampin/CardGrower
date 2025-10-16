@@ -29,6 +29,15 @@ public class Tile : MonoBehaviour
 
         Destroy(placement.gameObject);
         placement = null;
+
+        Destroy(
+            Instantiate(
+                Resources.Load<GameObject>("Prefabs/Map/HoeSfxPrefab"),
+                transform.position,
+                Quaternion.identity
+            ),
+            1
+        );
     }
 
     public void PlantSeed(Card card)
@@ -46,6 +55,15 @@ public class Tile : MonoBehaviour
         placement = newPlant;
 
         tileState = TileState.Planted;
+
+        Destroy(
+            Instantiate(
+                Resources.Load<GameObject>("Prefabs/Map/SeedSfxPrefab"),
+                transform.position,
+                Quaternion.identity
+            ),
+            1
+        );
     }
 
     public void HarvestTile()

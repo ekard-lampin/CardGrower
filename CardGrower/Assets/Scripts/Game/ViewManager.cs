@@ -48,6 +48,7 @@ public class ViewManager : MonoBehaviour
 
     [SerializeField]
     private float characterTimer = 0;
+    public bool IsSpokenTextRendering() { return characterIndex < dialogueStep.GetText().Length && !dialogueStep.IsItalicized(); }
 
     void Update()
     {
@@ -153,6 +154,7 @@ public class ViewManager : MonoBehaviour
 
         deckViewStartIndex -= (GameManager.instance.GetDeckCardsPerRow() * GameManager.instance.GetDeckRowCount());
         RenderCards(deckViewStartIndex);
+        AudioManager.instance.PlayButtonPress();
     }
 
     private void NextDeckPage()
@@ -162,10 +164,13 @@ public class ViewManager : MonoBehaviour
 
         deckViewStartIndex += (GameManager.instance.GetDeckCardsPerRow() * GameManager.instance.GetDeckRowCount());
         RenderCards(deckViewStartIndex);
+        AudioManager.instance.PlayButtonPress();
     }
 
     private void SelectCard()
     {
+        AudioManager.instance.PlayButtonPress();
+        
         if (displayCard == null) { return; }
 
         // Set the player back in game mode with no open view.
@@ -302,6 +307,7 @@ public class ViewManager : MonoBehaviour
             Debug.Log("Rendering previous cards to sell.");
             sellStartIndex -= GameManager.instance.GetCardSellCount();
             RenderSellCards(sellStartIndex);
+            AudioManager.instance.PlayButtonPress();
         });
         nextButton.onClick.AddListener(() =>
         {
@@ -309,6 +315,7 @@ public class ViewManager : MonoBehaviour
             Debug.Log("Rendering next cards to sell.");
             sellStartIndex += GameManager.instance.GetCardSellCount();
             RenderSellCards(sellStartIndex);
+            AudioManager.instance.PlayButtonPress();
         });
 
         // Tutorial gatekeepers.
@@ -437,6 +444,7 @@ public class ViewManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().AddCardToDeck(packCards[cardIndex]);
         }
         TutorialManager.instance.UpdateTrackedToolShopAction();
+        AudioManager.instance.PlayButtonPress();
 
         SetOpenView(packScreenObject);
     }
@@ -475,6 +483,7 @@ public class ViewManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().AddCardToDeck(packCards[cardIndex]);
         }
         TutorialManager.instance.UpdateTrackedSeedShopAction();
+        AudioManager.instance.PlayButtonPress();
 
         SetOpenView(packScreenObject);
     }
@@ -513,12 +522,14 @@ public class ViewManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().AddCardToDeck(packCards[cardIndex]);
         }
         TutorialManager.instance.UpdateTrackedBoosterShopAction();
+        AudioManager.instance.PlayButtonPress();
 
         SetOpenView(packScreenObject);
     }
 
     public void ClickPackCloseButton()
     {
+        AudioManager.instance.PlayButtonPress();
         OpenShopView();
     }
 
@@ -546,11 +557,13 @@ public class ViewManager : MonoBehaviour
 
         menuObject.transform.Find("StartButtonObject").Find("Button").gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
+            AudioManager.instance.PlayButtonPress();
             GameManager.instance.StartButtonClicked();
         });
 
         menuObject.transform.Find("OptionsButtonObject").Find("Button").gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
+            AudioManager.instance.PlayButtonPress();
             OpenOptionsView();
         });
 
@@ -615,6 +628,7 @@ public class ViewManager : MonoBehaviour
         // Back button.
         optionsObject.transform.Find("OptionsSection").Find("Background").Find("ButtonSection").Find("Group").Find("BackButton").gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
+            AudioManager.instance.PlayButtonPress();
             if (PlayerViewState.StartMenu.Equals(GameManager.instance.GetPreviousPlayerViewState()))
             {
                 // Open start menu.
@@ -648,12 +662,14 @@ public class ViewManager : MonoBehaviour
 
         dialogueObject.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
+            AudioManager.instance.PlayButtonPress();
             DialogueManager.instance.ProgressDialogue();
         });
         dialogueObject.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().interactable = false;
 
         dialogueObject.transform.Find("Background").Find("SkipButton").gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
+            AudioManager.instance.PlayButtonPress();
             DialogueManager.instance.SkipDialogue();
         });
 
