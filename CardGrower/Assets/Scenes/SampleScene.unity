@@ -524,12 +524,18 @@ MonoBehaviour:
   mapTreeScaleVariance: 0.5
   mapFillerRingOffset: 10
   mapSeed: 10091997
+  mapCloudSpawnX: 160
+  mapCloudSpawnZBreadth: 80
+  mapCloudSpawnHeight: 40
+  mapCloudSpawnDelay: 7
+  mapCloudSpeed: 3
+  mapCloudCount: 10
   plantBaseGrowthChancePercentage: 5
   plantGrowthTickDuration: 1
   playerHeightMinimum: 3
   playerLooksSensitivity: 0.5
   playerMoveSpeed: 2
-  playerViewState: 4
+  playerViewState: 0
   previousPlayerViewState: 0
   playerPassiveMoneyTimerDuration: 60
   startMenuDisplayObjectLocation: {x: 0.75, y: 0, z: 2}

@@ -173,6 +173,30 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int mapSeed;
 
+    [SerializeField]
+    private float mapCloudSpawnX;
+    public float GetMapCloudSpawnX() { return mapCloudSpawnX; }
+
+    [SerializeField]
+    private float mapCloudSpawnZBreadth;
+    public float GetMapCloudSpawnZBreadth() { return mapCloudSpawnZBreadth; }
+
+    [SerializeField]
+    private float mapCloudSpawnHeight;
+    public float GetMapCloudSpawnHeight() { return mapCloudSpawnHeight; }
+
+    [SerializeField]
+    private float mapCloudSpawnDelay;
+    public float GetMapCloudSpawnDelay() { return mapCloudSpawnDelay; }
+
+    [SerializeField]
+    private float mapCloudSpeed;
+    public float GetMapCloudSpeed() { return mapCloudSpeed; }
+
+    [SerializeField]
+    private int mapCloudCount;
+    public int GetMapCloudCount() { return mapCloudCount; }
+
     [Header("Plant Settings")]
     [SerializeField]
     private float plantBaseGrowthChancePercentage;
@@ -259,7 +283,10 @@ public class GameManager : MonoBehaviour
                 newTreeObject.transform.localRotation = Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0));
             }
         }
-        if (PlayerViewState.Game.Equals(GetPlayerViewState())) { MapManager.instance.CreateBaseMap(); }
+        if (PlayerViewState.Game.Equals(GetPlayerViewState())) {
+            MapManager.instance.CreateBaseMap();
+            MapManager.instance.CreatePlayer();
+        }
         if (PlayerViewState.OpeningCutscene.Equals(GetPlayerViewState())) { CutsceneManager.instance.StartOpeningCutscene(); }
     }
 

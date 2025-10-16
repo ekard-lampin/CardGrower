@@ -24,16 +24,68 @@ public class MapManager : MonoBehaviour
 
     private HashSet<Vector2> farmTiles = new HashSet<Vector2>();
 
+    private List<GameObject> activeClouds = new List<GameObject>();
+    private Queue<GameObject> cloudPool = new Queue<GameObject>();
+    private float cloudSpawnTimer = 0;
+    private float cloudDelay = 0;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        cloudDelay = GameManager.instance.GetMapCloudSpawnDelay() * Random.Range(0.5f, 3);
     }
 
     // Update is called once per frame
     void Update()
     {
+        ProcessClouds();
+    }
 
+    private void ProcessClouds()
+    {
+        if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+
+        cloudSpawnTimer += Time.deltaTime;
+
+        List<GameObject> cloudsToRemove = new List<GameObject>();
+        foreach (GameObject cloudObject in activeClouds)
+        {
+            cloudObject.transform.position += cloudObject.transform.right * -1 * GameManager.instance.GetMapCloudSpeed() * Time.deltaTime;
+            if (cloudObject.transform.position.x < GameManager.instance.GetMapCloudSpawnX() * -1) { cloudsToRemove.Add(cloudObject); }
+        }
+        foreach (GameObject cloudObject in cloudsToRemove)
+        {
+            activeClouds.Remove(cloudObject);
+            cloudObject.SetActive(false);
+            cloudPool.Enqueue(cloudObject);
+        }
+
+        if (cloudSpawnTimer < cloudDelay) { return; }
+        cloudSpawnTimer = 0;
+        cloudDelay = GameManager.instance.GetMapCloudSpawnDelay() * Random.Range(0.75f, 3f);
+
+        GameObject newCloudObject;
+        if (cloudPool.Count != 0)
+        {
+            newCloudObject = cloudPool.Dequeue();
+            newCloudObject.SetActive(true);
+        }
+        else
+        {
+            newCloudObject = Instantiate(
+                Resources.Load<GameObject>("Prefabs/Map/CloudPrefab_" + Random.Range(0, 3)),
+                new Vector3(0, GameManager.instance.GetMapCloudSpawnHeight(), 0),
+                Quaternion.identity
+            );
+        }
+        newCloudObject.transform.position = new Vector3(
+            GameManager.instance.GetMapCloudSpawnX(),
+            GameManager.instance.GetMapCloudSpawnHeight(),
+            Random.Range(GameManager.instance.GetMapCloudSpawnZBreadth() * -1, GameManager.instance.GetMapCloudSpawnZBreadth())
+        );
+        newCloudObject.transform.localScale = Vector3.one * Random.Range(1f, 3f);
+        newCloudObject.transform.Find("Mesh").localRotation = Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0));
+        activeClouds.Add(newCloudObject);
     }
 
     public void CreatePlayer()
@@ -53,7 +105,7 @@ public class MapManager : MonoBehaviour
     }
 
     public void CreateBaseMap()
-    {   
+    {
         Vector2 coordsOffset = new Vector2(
             (float)GameManager.instance.GetMapBaseWidth() / 2f * -1f,
             (float)GameManager.instance.GetMapBaseWidth() / 2f
