@@ -78,7 +78,8 @@ public class CutsceneManager : MonoBehaviour
 
     private void ProcessOpeningCutscene()
     {
-        if (!PlayerViewState.OpeningCutscene.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+        // if (!PlayerViewState.OpeningCutscene.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+        if (OpeningCutsceneState.None.Equals(openingCutsceneState)) { return; }
 
         switch (openingCutsceneState)
         {
@@ -150,11 +151,7 @@ public class CutsceneManager : MonoBehaviour
                 cutsceneActionTimer += Time.deltaTime;
 
                 // Portal rotation.
-                portalObject.transform.rotation = Quaternion.Euler(new Vector3(
-                    portalObject.transform.rotation.eulerAngles.x,
-                    portalObject.transform.rotation.eulerAngles.y + (portalRotationRate * Time.deltaTime),
-                    portalObject.transform.rotation.eulerAngles.z
-                ));
+                PortalRotation();
 
                 // Portal growth.
                 if (cutsceneActionTimer > portalGrowthDelay)
@@ -206,11 +203,7 @@ public class CutsceneManager : MonoBehaviour
                 cutsceneActionTimer += Time.deltaTime;
 
                 // Portal rotation.
-                portalObject.transform.rotation = Quaternion.Euler(new Vector3(
-                    portalObject.transform.rotation.eulerAngles.x,
-                    portalObject.transform.rotation.eulerAngles.y + (portalRotationRate * Time.deltaTime),
-                    portalObject.transform.rotation.eulerAngles.z
-                ));
+                PortalRotation();
 
                 // Ship descension.
                 float descensionRatio = Mathf.SmoothStep(0, 1, Mathf.Clamp(cutsceneActionTimer / droneEntryDuration, 0, 1));
@@ -220,18 +213,7 @@ public class CutsceneManager : MonoBehaviour
                 Camera.main.transform.position = droneObject.transform.position + droneEntryCameraOffset;
 
                 // Ship wobble.
-                bobRatio = 0.5f * Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time * droneBobSpeed, 1));
-                droneObject.transform.Find("Mesh").transform.localPosition = new Vector3(
-                    0,
-                    -0.25f + bobRatio,
-                    0
-                );
-                zWobbleRatio = 10f * Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time * droneWobbleSpeed, 1));
-                droneObject.transform.Find("Mesh").transform.localRotation = Quaternion.Euler(new Vector3(
-                    droneObject.transform.Find("Mesh").transform.localRotation.eulerAngles.x,
-                    droneObject.transform.Find("Mesh").transform.localRotation.eulerAngles.y,
-                    -5f + zWobbleRatio
-                ));
+                DroneMovement();
 
                 // Ship growth.
                 if (cutsceneActionTimer > droneGrowthDelay) { droneObject.transform.localScale = Vector3.one; }
@@ -253,27 +235,12 @@ public class CutsceneManager : MonoBehaviour
                 cutsceneActionTimer += Time.deltaTime;
 
                 // Portal rotation.
-                portalObject.transform.rotation = Quaternion.Euler(new Vector3(
-                    portalObject.transform.rotation.eulerAngles.x,
-                    portalObject.transform.rotation.eulerAngles.y + (portalRotationRate * Time.deltaTime),
-                    portalObject.transform.rotation.eulerAngles.z
-                ));
+                PortalRotation();
                 float portalScale = 1 - Mathf.Clamp(cutsceneActionTimer / 1, 0, 1);
                 portalObject.transform.localScale = Vector3.one * portalScale;
 
                 // Ship wobble.
-                bobRatio = 0.5f * Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time * droneBobSpeed, 1));
-                droneObject.transform.Find("Mesh").transform.localPosition = new Vector3(
-                    0,
-                    -0.25f + bobRatio,
-                    0
-                );
-                zWobbleRatio = 10f * Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time * droneWobbleSpeed, 1));
-                droneObject.transform.Find("Mesh").transform.localRotation = Quaternion.Euler(new Vector3(
-                    droneObject.transform.Find("Mesh").transform.localRotation.eulerAngles.x,
-                    droneObject.transform.Find("Mesh").transform.localRotation.eulerAngles.y,
-                    -5f + zWobbleRatio
-                ));
+                DroneMovement();
 
                 if (cutsceneActionTimer < secondStallDuration) { return; }
 
@@ -292,10 +259,10 @@ public class CutsceneManager : MonoBehaviour
                 }
 
                 // Ship wobble.
-                bobRatio = 0.5f * Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time * droneBobSpeed, 1));
+                bobRatio = 0.2f * Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time * droneBobSpeed, 1));
                 droneObject.transform.Find("Mesh").transform.localPosition = new Vector3(
                     0,
-                    -0.25f + bobRatio,
+                    -0.1f + bobRatio,
                     0
                 );
                 zWobbleRatio = 10f * Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time * droneWobbleSpeed, 1));
@@ -311,14 +278,42 @@ public class CutsceneManager : MonoBehaviour
                 cutsceneStateInitialized = false;
                 openingCutsceneState = OpeningCutsceneState.None;
                 Debug.Log("Completed: second dialogue");
+                Destroy(droneObject);
+                GameManager.instance.StartGame();
                 break;
             default:
                 break;
         }
     }
-    
+
     public void UpdateCutsceneDialogue()
     {
         cutsceneActionTimer++;
+    }
+
+    private void DroneMovement()
+    {
+        // Ship wobble.
+        bobRatio = 0.2f * Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time * droneBobSpeed, 1));
+        droneObject.transform.Find("Mesh").transform.localPosition = new Vector3(
+            0,
+            -0.1f + bobRatio,
+            0
+        );
+        zWobbleRatio = 10f * Mathf.SmoothStep(0, 1, Mathf.PingPong(Time.time * droneWobbleSpeed, 1));
+        droneObject.transform.Find("Mesh").transform.localRotation = Quaternion.Euler(new Vector3(
+            droneObject.transform.Find("Mesh").transform.localRotation.eulerAngles.x,
+            droneObject.transform.Find("Mesh").transform.localRotation.eulerAngles.y,
+            -5f + zWobbleRatio
+        ));
+    }
+    
+    private void PortalRotation()
+    {
+        portalObject.transform.rotation = Quaternion.Euler(new Vector3(
+            portalObject.transform.rotation.eulerAngles.x,
+            portalObject.transform.rotation.eulerAngles.y + (portalRotationRate * Time.deltaTime),
+            portalObject.transform.rotation.eulerAngles.z
+        ));
     }
 }

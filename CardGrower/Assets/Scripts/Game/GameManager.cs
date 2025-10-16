@@ -234,6 +234,30 @@ public class GameManager : MonoBehaviour
             menuDisplayObject.name = "StartMenuDisplayPrefab";
             Camera.main.transform.position = Vector3.zero;
             Camera.main.transform.rotation = Quaternion.identity;
+            for (int lineIndex = -40; lineIndex < 40; lineIndex++)
+            {
+                for (int tileIndex = 0; tileIndex < 20; tileIndex++)
+                {
+                    GameObject newTileObject = Instantiate(
+                        Resources.Load<GameObject>("Prefabs/Map/ExteriorMapTilePrefab"),
+                        new Vector3(lineIndex, -6.5f, 10 + tileIndex),
+                        Quaternion.identity
+                    );
+                    newTileObject.transform.SetParent(GameObject.FindGameObjectWithTag("Trees").transform);
+                }
+            }
+
+            for (int treeIndex = -20; treeIndex < 20; treeIndex++)
+            {
+                GameObject newTreeObject = Instantiate(
+                    Resources.Load<GameObject>("Prefabs/Map/TreePrefab"),
+                    new Vector3(treeIndex, -6.5f, 15 + Random.Range(-5, 5)),
+                    Quaternion.identity
+                );
+                newTreeObject.transform.SetParent(GameObject.FindGameObjectWithTag("Trees").transform);
+                newTreeObject.transform.localScale = new Vector3(1, 1 + (Random.Range(0, GetMapTreeScaleVariance())), 1);
+                newTreeObject.transform.localRotation = Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0));
+            }
         }
         if (PlayerViewState.Game.Equals(GetPlayerViewState())) { MapManager.instance.CreateBaseMap(); }
         if (PlayerViewState.OpeningCutscene.Equals(GetPlayerViewState())) { CutsceneManager.instance.StartOpeningCutscene(); }
@@ -455,11 +479,18 @@ public class GameManager : MonoBehaviour
     {
         // Clean up start menu objects.
         if (GameObject.FindGameObjectWithTag("StartMenuDisplay") != null) { Destroy(GameObject.FindGameObjectWithTag("StartMenuDisplay")); }
+        foreach (Transform child in GameObject.FindGameObjectWithTag("Trees").transform) { Destroy(child.gameObject); }
         ViewManager.instance.DestroyOpenView();
 
-        // Call map generation.
+        // Call first cutscene start.
+        SetPlayerViewState(PlayerViewState.OpeningCutscene);
+        CutsceneManager.instance.StartOpeningCutscene();
+    }
+
+    public void StartGame()
+    {
         SetPlayerViewState(PlayerViewState.Game);
-        MapManager.instance.CreateBaseMap();
+        MapManager.instance.CreatePlayer();
         TutorialManager.instance.ResetTutorialFlags();
         TutorialManager.instance.SetTutorialState(TutorialState.Look);
     }
