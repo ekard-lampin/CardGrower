@@ -56,3 +56,7 @@ v0.12.0-intro-cutscene =========================================================
 - Filled out surroundings during game to make the world feel more lifelike.
 - Filled out start menu to make it feel more lifelike.
 - Added intro cutscene.
+
+v0.13.0-audio =====================================================================================
+- TODO: Add audio sources and clips for game audio.
+- TODO: Add sky box and maybe clouds to add life.
