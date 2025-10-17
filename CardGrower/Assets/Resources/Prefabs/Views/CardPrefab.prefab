@@ -216,6 +216,7 @@ MonoBehaviour:
     cardDescription: 
     cardRarity: 0
     cardQuality: 0
+    cardValue: 0
 --- !u!1 &7987903399474247991
 GameObject:
   m_ObjectHideFlags: 0

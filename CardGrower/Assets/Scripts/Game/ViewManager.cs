@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,8 +51,16 @@ public class ViewManager : MonoBehaviour
     private float characterTimer = 0;
     public bool IsSpokenTextRendering() { return characterIndex < dialogueStep.GetText().Length && !dialogueStep.IsItalicized(); }
 
+    [SerializeField]
+    private PackOpeningState packOpeningState = PackOpeningState.None;
+    private bool packStateInitialized = false;
+    private float packOpeningTimer = 0;
+    private int packOpeningIndex = 0;
+
     void Update()
     {
+        ProcessPackOpening();
+        
         if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()) && GameObject.FindGameObjectWithTag("Canvas").transform.Find("UI").gameObject.activeSelf)
         {
             GameObject.FindGameObjectWithTag("Canvas").transform.Find("UI").gameObject.SetActive(false);
@@ -78,19 +87,20 @@ public class ViewManager : MonoBehaviour
 
         if (openView != null && openView.name.Equals("DialoguePrefab"))
         {
-            if (characterIndex == dialogueStep.GetText().Length) {
-                if (!openView.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().interactable) 
+            if (characterIndex == dialogueStep.GetText().Length)
+            {
+                if (!openView.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().interactable)
                 {
                     openView.transform.Find("Background").Find("ProceedButton").gameObject.GetComponent<Button>().interactable = true;
                 }
                 return;
             }
-            
+
             characterTimer += Time.deltaTime;
 
             if (characterTimer < 0.01f) { return; }
             characterTimer = 0;
-            
+
             string currentText = openView.transform.Find("Background").Find("Text").gameObject.GetComponent<Text>().text;
             if (characterIndex == 0 && !dialogueStep.IsItalicized()) { currentText += "\""; }
             currentText += dialogueStep.GetText()[characterIndex];
@@ -98,6 +108,87 @@ public class ViewManager : MonoBehaviour
             openView.transform.Find("Background").Find("Text").gameObject.GetComponent<Text>().text = currentText;
 
             characterIndex++;
+        }
+    }
+
+    private void ProcessPackOpening()
+    {
+        if (PackOpeningState.None.Equals(packOpeningState)) { return; }
+
+        switch (packOpeningState)
+        {
+            case PackOpeningState.Appearing:
+                if (!packStateInitialized)
+                {
+                    openView.transform.Find("CloseButtonObject").Find("Button").gameObject.GetComponent<Button>().interactable = false;
+                    packStateInitialized = true;
+                    foreach (Transform cardTransform in openView.transform.Find("CardSection")) {
+                        cardTransform.Find("Image_Card").gameObject.GetComponent<RawImage>().texture = Resources.Load<Texture>("Textures/back");
+                        cardTransform.Find("Image_Rarity").gameObject.SetActive(false);
+                    }
+                    Debug.Log("Starting: card appearing.");
+                }
+
+                packOpeningTimer += Time.deltaTime;
+
+                float xPos = ((float)GameManager.instance.GetCardWidth() * ((float)openView.transform.Find("CardSection").childCount - 1f) * -1f) - ((float)GameManager.instance.GetCardSpacing() * ((float)(openView.transform.Find("CardSection").childCount - 1) / 2f));
+                for (int cardIndex = 0; cardIndex < openView.transform.Find("CardSection").childCount; cardIndex++)
+                {
+                    Vector3 targetPos = new Vector3(xPos + (((GameManager.instance.GetCardWidth() * 2) + GameManager.instance.GetCardSpacing()) * cardIndex), 0, 0);
+                    openView.transform.Find("CardSection").Find("Card_" + cardIndex).localPosition = Vector3.Lerp(Vector3.zero, targetPos, Mathf.SmoothStep(0, 1, Mathf.Clamp(packOpeningTimer / GameManager.instance.GetCardAppearDuration(), 0, 1)));
+                }
+
+                if (packOpeningTimer < GameManager.instance.GetCardAppearDuration()) { return; }
+
+                packOpeningState = PackOpeningState.Flipping;
+                packOpeningTimer = 0;
+                packStateInitialized = false;
+                Debug.Log("Completed: card appearing.");
+                break;
+            case PackOpeningState.Flipping:
+                if (!packStateInitialized)
+                {
+                    packStateInitialized = true;
+                    packOpeningIndex = 0;
+                    Debug.Log("Starting: card flipping.");
+                }
+
+                packOpeningTimer += Time.deltaTime;
+
+                // Flip one at a time.
+                float flipRatio = 1 - Mathf.SmoothStep(0, 1, (Mathf.PingPong(packOpeningTimer / (GameManager.instance.GetCardFlipDuration() / 2), 1f)));
+                openView.transform.Find("CardSection").Find("Card_" + packOpeningIndex).localScale = new Vector3(
+                    Mathf.SmoothStep(0, 1, flipRatio),
+                    1,
+                    1
+                );
+
+                if (packOpeningTimer > GameManager.instance.GetCardFlipDuration() / 2
+                    && openView.transform.Find("CardSection").Find("Card_" + packOpeningIndex).Find("Image_Card").gameObject.GetComponent<RawImage>().texture.name.Equals("back")
+                )
+                {
+                    Texture cardTexture = openView.transform.Find("CardSection").Find("Card_" + packOpeningIndex).gameObject.GetComponent<CardComponent>().GetCard().GetCardTexture();
+                    openView.transform.Find("CardSection").Find("Card_" + packOpeningIndex).Find("Image_Card").gameObject.GetComponent<RawImage>().texture = cardTexture;
+                    AudioManager.instance.PlayPullSound((int)openView.transform.Find("CardSection").Find("Card_" + packOpeningIndex).gameObject.GetComponent<CardComponent>().GetCard().GetCardRarity());
+                    openView.transform.Find("CardSection").Find("Card_" + packOpeningIndex).Find("Image_Rarity").gameObject.SetActive(true);
+                }
+
+                float timerProgression = Mathf.Clamp(packOpeningTimer / GameManager.instance.GetCardFlipDuration(), 0, 1);
+                if (timerProgression == 1 && packOpeningIndex < openView.transform.Find("CardSection").childCount - 1) {
+                    packOpeningTimer = 0;
+                    packOpeningIndex++;
+                }
+
+                if (packOpeningTimer < GameManager.instance.GetCardFlipDuration()) { return; }
+
+                packOpeningState = PackOpeningState.None;
+                packOpeningTimer = 0;
+                packStateInitialized = false;
+                openView.transform.Find("CloseButtonObject").Find("Button").gameObject.GetComponent<Button>().interactable = true;
+                Debug.Log("Completed: card flipping.");
+                break;
+            default:
+                break;
         }
     }
 
@@ -430,7 +521,7 @@ public class ViewManager : MonoBehaviour
         {
             GameObject newCardObject = Instantiate(
                 Resources.Load<GameObject>("Prefabs/Views/CardPrefab"),
-                packScreenObject.transform
+                packScreenObject.transform.Find("CardSection")
             );
             newCardObject.transform.localPosition = new Vector3(xPos, 0, 0);
 
@@ -444,7 +535,8 @@ public class ViewManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().AddCardToDeck(packCards[cardIndex]);
         }
         TutorialManager.instance.UpdateTrackedToolShopAction();
-        AudioManager.instance.PlayButtonPress();
+        AudioManager.instance.PlayMoneySound();
+        packOpeningState = PackOpeningState.Appearing;
 
         SetOpenView(packScreenObject);
     }
@@ -469,7 +561,7 @@ public class ViewManager : MonoBehaviour
         {
             GameObject newCardObject = Instantiate(
                 Resources.Load<GameObject>("Prefabs/Views/CardPrefab"),
-                packScreenObject.transform
+                packScreenObject.transform.Find("CardSection")
             );
             newCardObject.transform.localPosition = new Vector3(xPos, 0, 0);
 
@@ -483,7 +575,8 @@ public class ViewManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().AddCardToDeck(packCards[cardIndex]);
         }
         TutorialManager.instance.UpdateTrackedSeedShopAction();
-        AudioManager.instance.PlayButtonPress();
+        AudioManager.instance.PlayMoneySound();
+        packOpeningState = PackOpeningState.Appearing;
 
         SetOpenView(packScreenObject);
     }
@@ -508,7 +601,7 @@ public class ViewManager : MonoBehaviour
         {
             GameObject newCardObject = Instantiate(
                 Resources.Load<GameObject>("Prefabs/Views/CardPrefab"),
-                packScreenObject.transform
+                packScreenObject.transform.Find("CardSection")
             );
             newCardObject.transform.localPosition = new Vector3(xPos, 0, 0);
 
@@ -522,7 +615,8 @@ public class ViewManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().AddCardToDeck(packCards[cardIndex]);
         }
         TutorialManager.instance.UpdateTrackedBoosterShopAction();
-        AudioManager.instance.PlayButtonPress();
+        AudioManager.instance.PlayMoneySound();
+        packOpeningState = PackOpeningState.Appearing;
 
         SetOpenView(packScreenObject);
     }

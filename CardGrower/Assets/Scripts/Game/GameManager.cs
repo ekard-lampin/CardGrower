@@ -114,6 +114,14 @@ public class GameManager : MonoBehaviour
     private int cardSellCount;
     public int GetCardSellCount() { return cardSellCount; }
 
+    [SerializeField]
+    private float cardAppearDuration;
+    public float GetCardAppearDuration() { return cardAppearDuration; }
+
+    [SerializeField]
+    private float cardFlipDuration;
+    public float GetCardFlipDuration() { return cardFlipDuration; }
+
     [Header("Deck Settings")]
     [SerializeField]
     private int deckCardsPerRow;
@@ -490,6 +498,7 @@ public class GameManager : MonoBehaviour
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().RemoveCardFromDeck(card);
         ViewManager.instance.OpenShopView();
         TutorialManager.instance.UpdateTrackedSellingAction();
+        AudioManager.instance.PlayMoneySound();
     }
 
     public int GetSaleAmount(Card card)
