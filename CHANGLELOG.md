@@ -58,5 +58,7 @@ v0.12.0-intro-cutscene =========================================================
 - Added intro cutscene.
 
 v0.13.0-audio =====================================================================================
-- TODO: Add audio sources and clips for game audio.
-- TODO: Add sky box and maybe clouds to add life.
+- Added audio sources and clips for world and player interactions.
+- Added cloud system.
+- Revamped plant objects to be affected by light.
+- Balanced audio and growth times.
