@@ -304,6 +304,8 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
+        previousPlayerViewState = GetPlayerViewState();
+
         if (PlayerViewState.StartMenu.Equals(GetPlayerViewState()))
         {
             ViewManager.instance.OpenStartMenuView();
@@ -591,5 +593,71 @@ public class GameManager : MonoBehaviour
         MapManager.instance.CreatePlayer();
         TutorialManager.instance.ResetTutorialFlags();
         TutorialManager.instance.SetTutorialState(TutorialState.Look);
+    }
+
+    public void SaveGame()
+    {
+        Debug.Log("Saving game.");
+        if (!PlayerViewState.Game.Equals(GetPreviousPlayerViewState())) { return; }
+
+        SaveObject saveObject = new SaveObject();
+        saveObject.SetSeed(mapSeed);
+
+        if (GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+            SavePlayerObject savePlayerObject = new SavePlayerObject();
+            savePlayerObject.SetBalance(playerObject.GetComponent<PlayerMoneyManager>().GetPlayerBalance());
+
+            List<Card> cards = playerObject.GetComponent<PlayerDeckManager>().GetDeck();
+            SaveCardObject[] saveCards = new SaveCardObject[cards.Count];
+            for (int cardIndex = 0; cardIndex < saveCards.Length; cardIndex++)
+            {
+                Card card = cards[cardIndex];
+
+                SaveCardObject saveCard = new SaveCardObject();
+                saveCard.SetCardId(card.GetCardId());
+                saveCard.SetCardType(card.GetCardType());
+                saveCard.SetCardTexture(card.GetCardTexture().name);
+                saveCard.SetCardDescription(card.GetCardDescription());
+                saveCard.SetCardRarity(card.GetCardRarity());
+                saveCard.SetCardQuality(card.GetCardQuality());
+                saveCard.SetCardValue(card.GetCardValue());
+
+                saveCards[cardIndex] = saveCard;
+            }
+            savePlayerObject.SetCards(saveCards);
+
+            saveObject.SetSavePlayerObject(savePlayerObject);
+        }
+
+        List<SaveTile> saveTiles = new List<SaveTile>();
+        foreach (Transform tileTransform in GameObject.FindGameObjectWithTag("FarmTiles").transform)
+        {
+            if (!tileTransform.gameObject.name.ToLower().Contains("tile")) { continue; }
+
+            Tile tile = tileTransform.gameObject.GetComponent<Tile>();
+            if (TileState.Overgrown.Equals(tile.GetTileState())) { continue; }
+
+            SaveTile saveTile = new SaveTile();
+            saveTile.SetXCoord((int)tile.GetTileCoords().x);
+            saveTile.SetZCoord((int)tile.GetTileCoords().y);
+            saveTile.SetTileState(tile.GetTileState());
+
+            if (tile.GetPlacement() != null && tile.GetPlacement() is PlacementPlant)
+            {
+                PlacementPlant plant = tile.GetPlacement() as PlacementPlant;
+                saveTile.SetPlantedSeed(plant.GetPlantedSeed().GetCardId());
+                saveTile.SetPlantGrowthStage(plant.GetGrowthStage());
+            }
+
+            saveTiles.Add(saveTile);
+        }
+        if (saveTiles.Count > 0) { saveObject.SetSaveTiles(saveTiles.ToArray()); }
+
+        string json = JsonUtility.ToJson(saveObject);
+
+        Debug.Log(json);
+        System.IO.File.WriteAllText(Application.persistentDataPath + "/saveData.json", json);
     }
 }

@@ -94,8 +94,6 @@ public class MapManager : MonoBehaviour
 
     private void ProcessTrees()
     {
-        // if (PlayerViewState.StartMenu.Equals(GameManager.instance.GetPlayerViewState())) { return; }
-
         foreach (Transform treeTransform in GameObject.FindGameObjectWithTag("Trees").transform)
         {
             if (treeTransform.gameObject.name.ToLower().Contains("tile")) { continue; }

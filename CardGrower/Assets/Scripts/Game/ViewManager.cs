@@ -747,6 +747,11 @@ public class ViewManager : MonoBehaviour
         });
 
         // Quit button.
+        optionsObject.transform.Find("OptionsSection").Find("Background").Find("ButtonSection").Find("Group").Find("QuitButton").gameObject.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            GameManager.instance.SaveGame();
+            Application.Quit();
+        });
     }
 
     public void OpenDialogueView(DialogueStep newDialogueStep)
