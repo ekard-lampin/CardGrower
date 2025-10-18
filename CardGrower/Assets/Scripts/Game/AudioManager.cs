@@ -1,10 +1,30 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
-    void Awake() { instance = this; }
+    void Awake()
+    {
+        instance = this;
+
+        audioMixer = Resources.Load<AudioMixer>("Audio/Game");
+
+        forestAmbienceSource = transform.Find("ForestAmbience").gameObject.GetComponent<AudioSource>();
+        voiceSource = transform.Find("Voice").gameObject.GetComponent<AudioSource>();
+        buttonSource = transform.Find("Button").gameObject.GetComponent<AudioSource>();
+        windowSource = transform.Find("Window").gameObject.GetComponent<AudioSource>();
+        moneySource = transform.Find("Money").gameObject.GetComponent<AudioSource>();
+        pullSource = transform.Find("Pull").gameObject.GetComponent<AudioSource>();
+        musicSource = transform.Find("Music").gameObject.GetComponent<AudioSource>();
+    }
+
+    private AudioMixer audioMixer;
+    public void SetMainVolume() { audioMixer.SetFloat("MainVolume", -50 + GameManager.instance.GetGameMainVolume() * 60); }
+    public void SetSfxVolume() { audioMixer.SetFloat("SFXVolume", -50 + GameManager.instance.GetGameSfxVolume() * 60); }
+    public void SetMusicVolume() { audioMixer.SetFloat("MusicVolume", -50 + GameManager.instance.GetGameMusicVolume() * 60); }
 
     private AudioSource forestAmbienceSource;
     private AudioSource voiceSource;
@@ -12,6 +32,7 @@ public class AudioManager : MonoBehaviour
     private AudioSource windowSource;
     private AudioSource moneySource;
     private AudioSource pullSource;
+    private AudioSource musicSource;
 
     [SerializeField]
     private AudioClip[] wildlifeAudioClips;
@@ -28,15 +49,20 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private AudioClip[] pullAudioClips;
 
+    [SerializeField]
+    private AudioClip[] musicClips;
+    [SerializeField]
+    private List<AudioClip> playedMusicClips;
+    [SerializeField]
+    private float musicTimer = 0;
+    private AudioClip lastPlayedMusicClip;
+
     void Start()
     {
-        forestAmbienceSource = transform.Find("ForestAmbience").gameObject.GetComponent<AudioSource>();
-        voiceSource = transform.Find("Voice").gameObject.GetComponent<AudioSource>();
-        buttonSource = transform.Find("Button").gameObject.GetComponent<AudioSource>();
-        windowSource = transform.Find("Window").gameObject.GetComponent<AudioSource>();
-        moneySource = transform.Find("Money").gameObject.GetComponent<AudioSource>();
-        pullSource = transform.Find("Pull").gameObject.GetComponent<AudioSource>();
-
+        audioMixer.SetFloat("MainVolume", -50 + GameManager.instance.GetGameMainVolume() * 60);
+        audioMixer.SetFloat("SFXVolume", -50 + GameManager.instance.GetGameSfxVolume() * 60);
+        audioMixer.SetFloat("MusicVolume", -50 + GameManager.instance.GetGameMusicVolume() * 60);
+        
         DirectoryInfo audioDir = new DirectoryInfo("Assets/Resources/Audio");
         FileInfo[] wildlifeFiles = audioDir.GetFiles("ambience_*.wav");
         wildlifeAudioClips = new AudioClip[wildlifeFiles.Length];
@@ -55,6 +81,12 @@ public class AudioManager : MonoBehaviour
         pullAudioClips = new AudioClip[pullFiles.Length];
         for (int fileIndex = 0; fileIndex < pullFiles.Length; fileIndex++) { pullAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/pull_" + fileIndex); }
 
+        FileInfo[] musicFiles = audioDir.GetFiles("music_*.wav");
+        musicClips = new AudioClip[musicFiles.Length];
+        for (int fileIndex = 0; fileIndex < musicFiles.Length; fileIndex++) { musicClips[fileIndex] = Resources.Load<AudioClip>("Audio/" + musicFiles[fileIndex].Name.Replace(".wav", "")); }
+        musicTimer = GameManager.instance.GetGameMusicDelay() - 3;
+        playedMusicClips = new List<AudioClip>();
+
         buttonSource.clip = Resources.Load<AudioClip>("Audio/button");
         buttonSource.loop = false;
 
@@ -68,6 +100,7 @@ public class AudioManager : MonoBehaviour
     {
         ProcessWildlifeAudio();
         ProcessVoiceAudio();
+        ProcessMusic();
     }
 
     private void StartForestAmbience()
@@ -99,6 +132,18 @@ public class AudioManager : MonoBehaviour
         pullSource.clip = pullAudioClips[rarity];
         pullSource.loop = false;
         pullSource.Play();
+    }
+
+    public void PlayMenuMusic()
+    {
+        musicSource.clip = GameManager.instance.GetGameMenuMusic();
+        musicSource.loop = true;
+        musicSource.Play();
+    }
+
+    public void StopMusic()
+    {
+        if (musicSource.isPlaying) { musicSource.Stop(); }
     }
 
     private void ProcessWildlifeAudio()
@@ -140,7 +185,7 @@ public class AudioManager : MonoBehaviour
         newWildlifeAudioObject.transform.Find("Source").gameObject.GetComponent<AudioSource>().Play();
         Destroy(newWildlifeAudioObject, newWildlifeAudioObject.transform.Find("Source").gameObject.GetComponent<AudioSource>().clip.length + 1);
     }
-    
+
     private void ProcessVoiceAudio()
     {
         if (!PlayerViewState.Dialogue.Equals(GameManager.instance.GetPlayerViewState())) { return; }
@@ -154,5 +199,32 @@ public class AudioManager : MonoBehaviour
         voiceSource.clip = voiceAudioClips[Random.Range(0, voiceAudioClips.Length)];
         voiceSource.loop = false;
         voiceSource.Play();
+    }
+    
+    private void ProcessMusic()
+    {
+        if (PlayerViewState.StartMenu.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+        if (!OpeningCutsceneState.None.Equals(CutsceneManager.instance.GetOpeningCutsceneState())) { return; }
+        if (musicSource.isPlaying) { return; }
+
+        musicTimer += Time.deltaTime;
+
+        if (musicTimer < GameManager.instance.GetGameMusicDelay()) { return; }
+        musicTimer = 0;
+
+        List<AudioClip> musicList = new List<AudioClip>();
+        musicList.AddRange(musicClips);
+        foreach (AudioClip playedMusicClip in playedMusicClips) { musicList.Remove(playedMusicClip); }
+        if (lastPlayedMusicClip != null && musicList.Contains(lastPlayedMusicClip)) { musicList.Remove(lastPlayedMusicClip); }
+
+        AudioClip musicClip = musicList[Random.Range(0, musicList.Count)];
+        musicSource.clip = musicClip;
+        musicSource.loop = false;
+        musicSource.Play();
+
+        lastPlayedMusicClip = musicClip;
+        playedMusicClips.Add(musicClip);
+
+        if (playedMusicClips.Count == musicClips.Length) { playedMusicClips.Clear(); }
     }
 }

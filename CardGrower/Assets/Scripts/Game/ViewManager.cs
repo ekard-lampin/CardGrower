@@ -294,6 +294,11 @@ public class ViewManager : MonoBehaviour
         // Get deck area and player deck.
         GameObject deckBackgroundObject = deckViewObject.transform.Find("DeckBackground").gameObject;
         List<Card> playerDeck = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>().GetDeck();
+        List<Card> sortedDeck = new List<Card>();
+        foreach (Card card in playerDeck) { if (CardType.Seed.Equals(card.GetCardType())) { sortedDeck.Add(card); } }
+        foreach (Card card in playerDeck) { if (CardType.Booster.Equals(card.GetCardType())) { sortedDeck.Add(card); } }
+        foreach (Card card in playerDeck) { if (CardType.Tool.Equals(card.GetCardType())) { sortedDeck.Add(card); } }
+        foreach (Card card in playerDeck) { if (CardType.Crop.Equals(card.GetCardType())) { sortedDeck.Add(card); } }
 
         // Clear cards, if any are present.
         List<GameObject> objectsToDestroy = new List<GameObject>();
@@ -312,7 +317,7 @@ public class ViewManager : MonoBehaviour
             for (int columnIndex = 0; columnIndex < GameManager.instance.GetDeckCardsPerRow(); columnIndex++)
             {
                 int cardIndex = ((rowIndex * GameManager.instance.GetDeckCardsPerRow()) + columnIndex) + startIndex;
-                if (cardIndex >= playerDeck.Count) { break; }
+                if (cardIndex >= sortedDeck.Count) { break; }
 
                 GameObject newCardObject = Instantiate(
                     Resources.Load<GameObject>("Prefabs/Views/CardPrefab"),
@@ -327,7 +332,7 @@ public class ViewManager : MonoBehaviour
                 newCardObject.name = "Card_" + cardIndex;
 
                 CardComponent newCard = newCardObject.GetComponent<CardComponent>();
-                newCard.SetCard(playerDeck[cardIndex]);
+                newCard.SetCard(sortedDeck[cardIndex]);
             }
         }
     }
@@ -449,6 +454,11 @@ public class ViewManager : MonoBehaviour
     {
         PlayerDeckManager playerDeckManager = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerDeckManager>();
         List<Card> playerDeck = playerDeckManager.GetDeck();
+        List<Card> sortedDeck = new List<Card>();
+        foreach (Card card in playerDeck) { if (CardType.Crop.Equals(card.GetCardType())) { sortedDeck.Add(card); } }
+        foreach (Card card in playerDeck) { if (CardType.Booster.Equals(card.GetCardType())) { sortedDeck.Add(card); } }
+        foreach (Card card in playerDeck) { if (CardType.Tool.Equals(card.GetCardType())) { sortedDeck.Add(card); } }
+        foreach (Card card in playerDeck) { if (CardType.Seed.Equals(card.GetCardType())) { sortedDeck.Add(card); } }
         GameObject sellSectionObject = GetOpenView().transform.Find("SellSectionBackground").gameObject;
 
         foreach (Transform child in sellSectionObject.transform)
@@ -476,7 +486,7 @@ public class ViewManager : MonoBehaviour
             newCardObject.name = "Card_" + cardIndex;
 
             CardComponent newCard = newCardObject.GetComponent<CardComponent>();
-            newCard.SetCard(playerDeck[cardIndex + startingIndex]);
+            newCard.SetCard(sortedDeck[cardIndex + startingIndex]);
 
             // Create sell button.
             GameObject sellButtonObject = Instantiate(
@@ -489,15 +499,15 @@ public class ViewManager : MonoBehaviour
                 0
             );
             sellButtonObject.name = "CardSellButton";
-            sellButtonObject.GetComponent<CardSellButton>().SetCard(playerDeck[cardIndex + startingIndex]);
+            sellButtonObject.GetComponent<CardSellButton>().SetCard(sortedDeck[cardIndex + startingIndex]);
             if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.Selling)) { sellButtonObject.transform.Find("Button").gameObject.GetComponent<Button>().interactable = false; }
-            if (TutorialState.Selling.Equals(TutorialManager.instance.GetTutorialState()) && !CardType.Crop.Equals(playerDeck[cardIndex + startingIndex].GetCardType()))
+            if (TutorialState.Selling.Equals(TutorialManager.instance.GetTutorialState()) && !CardType.Crop.Equals(sortedDeck[cardIndex + startingIndex].GetCardType()))
             {
                 sellButtonObject.transform.Find("Button").gameObject.GetComponent<Button>().interactable = false;
             }
 
             // Set sell text.
-            sellButtonObject.transform.Find("Button").Find("Text").gameObject.GetComponent<Text>().text = "Sell $" + GameManager.instance.GetSaleAmount(playerDeck[cardIndex + startingIndex]);
+            sellButtonObject.transform.Find("Button").Find("Text").gameObject.GetComponent<Text>().text = "Sell $" + GameManager.instance.GetSaleAmount(sortedDeck[cardIndex + startingIndex]);
         }
     }
 

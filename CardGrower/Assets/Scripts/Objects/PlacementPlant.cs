@@ -57,9 +57,13 @@ public class PlacementPlant : Placement
 
     private float tickTimer = 0;
 
+    [SerializeField]
+    private float timeSaverFactor = 0;
+
     void Update()
     {
         if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.Growing)) { return; }
+        if (PlayerViewState.Dialogue.Equals(GameManager.instance.GetPlayerViewState())) { return; }
         
         if (tickTimer > GameManager.instance.GetPlantGrowthTickDuration())
         {
@@ -81,42 +85,54 @@ public class PlacementPlant : Placement
         {
             RemoveBooster(CardId.Fertilizer);
         }
+        else if (TutorialState.Growing.Equals(TutorialManager.instance.GetTutorialState())) {
+            // Skip grow check.
+        }
         else
         {
-            float roll = Random.Range(0, 100);
+            float roll = Random.Range(0f, GameManager.instance.GetPlantGrowthRollRange());
+            float timeSave = timeSaverFactor;
             switch (plantedSeed.GetCardRarity())
             {
                 case Rarity.Common:
                     // Do nothing
                     break;
                 case Rarity.Uncommon:
-                    roll *= 0.9f;
+                    roll *= 1.1f;
+                    timeSave *= 0.9f;
                     break;
                 case Rarity.Rare:
-                    roll *= 0.75f;
+                    roll *= 1.25f;
+                    timeSave *= 0.75f;
                     break;
                 case Rarity.Legendary:
-                    roll *= 0.5f;
+                    roll *= 1.5f;
+                    timeSave *= 0.5f;
                     break;
                 case Rarity.Mythical:
-                    roll *= 0.25f;
+                    roll *= 1.75f;
+                    timeSave *= 0.25f;
                     break;
                 default:
                     break;
             }
-            if (IsBoosterActive(CardId.WaterBucket) || IsBoosterActive(CardId.GrowthHormone)) { roll *= 1.5f; }
-            if (roll > GameManager.instance.GetPlantBaseGrowthChangePercentage()) { return; }
+            roll -= timeSave;
+            if (IsBoosterActive(CardId.WaterBucket) || IsBoosterActive(CardId.GrowthHormone)) { roll *= 0.5f; }
+            if (roll > GameManager.instance.GetPlantBaseGrowthChangePercentage()) { timeSaverFactor += GameManager.instance.GetPlantTimeSaverFactor(); return; }
             if (IsBoosterActive(CardId.WaterBucket)) { RemoveBooster(CardId.WaterBucket); }
         }
 
-        GameObject meshObject = transform.Find("Mesh").gameObject;
-        SpriteRenderer spriteOne = meshObject.transform.Find("Sprite_0").gameObject.GetComponent<SpriteRenderer>();
-        SpriteRenderer spriteTwo = meshObject.transform.Find("Sprite_1").gameObject.GetComponent<SpriteRenderer>();
-
         growthStage++;
-        Sprite sprite = Resources.Load<Sprite>("Textures/growth-stage-" + growthStage);
-        spriteOne.sprite = sprite;
-        spriteTwo.sprite = sprite;
+        timeSaverFactor = 0;
+
+        Material plantMaterial = Resources.Load<Material>("Materials/growth-stage-" + growthStage);
+        foreach (Transform childMesh in transform.Find("Mesh"))
+        {
+            foreach (Transform meshTransform in childMesh)
+            {
+                meshTransform.gameObject.GetComponent<MeshRenderer>().material = plantMaterial;
+            }
+        }
 
         if (growthStage == 4)
         { // Spawn the crop

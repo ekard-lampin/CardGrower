@@ -132,27 +132,51 @@ public class GameManager : MonoBehaviour
     public int GetDeckRowCount() { return deckRowCount; }
 
     [Header("Game Settings")]
-    private bool gameIsFirstToolBuy = true;
-    public bool IsFirstToolBuy() { return gameIsFirstToolBuy; }
-    public void SetFirstToolBuy(bool isFirstToolBuy) { this.gameIsFirstToolBuy = isFirstToolBuy; }
-
     [SerializeField]
     [Range(0, 1)]
     private float gameMainVolume;
     public float GetGameMainVolume() { return gameMainVolume; }
-    public void SetGameMainVolume(float gameMainVolume) { this.gameMainVolume = gameMainVolume; }
+    public void SetGameMainVolume(float gameMainVolume) 
+    {
+        this.gameMainVolume = gameMainVolume;
+        AudioManager.instance.SetMainVolume();
+    }
 
     [SerializeField]
     [Range(0, 1)]
     private float gameMusicVolume;
     public float GetGameMusicVolume() { return gameMusicVolume; }
-    public void SetGameMusicVolume(float gameMusicVolume) { this.gameMusicVolume = gameMusicVolume; }
+    public void SetGameMusicVolume(float gameMusicVolume)
+    {
+        this.gameMusicVolume = gameMusicVolume;
+        AudioManager.instance.SetMusicVolume();
+    }
 
     [SerializeField]
     [Range(0, 1)]
     private float gameSfxVolume;
     public float GetGameSfxVolume() { return gameSfxVolume; }
-    public void SetGameSfxVolume(float gameSfxVolume) { this.gameSfxVolume = gameSfxVolume; }
+    public void SetGameSfxVolume(float gameSfxVolume)
+    {
+        this.gameSfxVolume = gameSfxVolume;
+        AudioManager.instance.SetSfxVolume();
+    }
+
+    [SerializeField]
+    private float gameMusicDelay;
+    public float GetGameMusicDelay() { return gameMusicDelay; }
+
+    [SerializeField]
+    private AudioClip gameMenuMusicClip;
+    public AudioClip GetGameMenuMusic() { return gameMenuMusicClip; }
+
+    private bool gameIsFirstToolBuy = true;
+    public bool IsFirstToolBuy() { return gameIsFirstToolBuy; }
+    public void SetFirstToolBuy(bool isFirstToolBuy) { this.gameIsFirstToolBuy = isFirstToolBuy; }
+
+    private bool gameIsFirstSeedBuy = true;
+    public bool IsFirstSeedBuy() { return gameIsFirstSeedBuy; }
+    public void SetFirstSeedBuy(bool isFirstSeedBuy) { gameIsFirstSeedBuy = isFirstSeedBuy; }
 
     [Header("Map Settings")]
     [SerializeField]
@@ -224,12 +248,20 @@ public class GameManager : MonoBehaviour
 
     [Header("Plant Settings")]
     [SerializeField]
+    private float plantGrowthRollRange;
+    public float GetPlantGrowthRollRange() { return plantGrowthRollRange; }
+
+    [SerializeField]
     private float plantBaseGrowthChancePercentage;
     public float GetPlantBaseGrowthChangePercentage() { return plantBaseGrowthChancePercentage; }
 
     [SerializeField]
     private float plantGrowthTickDuration;
     public float GetPlantGrowthTickDuration() { return plantGrowthTickDuration; }
+
+    [SerializeField]
+    private float plantTimeSaverFactor;
+    public float GetPlantTimeSaverFactor() { return plantTimeSaverFactor; }
 
     [Header("Player Settings")]
     [SerializeField]
@@ -307,6 +339,8 @@ public class GameManager : MonoBehaviour
                 newTreeObject.transform.localScale = new Vector3(1, 1 + (Random.Range(0, GetMapTreeScaleVariance())), 1);
                 newTreeObject.transform.localRotation = Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0));
             }
+
+            AudioManager.instance.PlayMenuMusic();
         }
         if (PlayerViewState.Game.Equals(GetPlayerViewState())) {
             MapManager.instance.CreateBaseMap();
@@ -348,6 +382,7 @@ public class GameManager : MonoBehaviour
         List<Card> legendaryCards = new List<Card>();
         List<Card> mythicalCards = new List<Card>();
         Card hoeCard = new Card();
+        Card lettuceSeedCard = new Card();
         foreach (Card packCard in packCards)
         {
             if (Rarity.Common.Equals(packCard.GetCardRarity())) { commonCards.Add(packCard); }
@@ -357,6 +392,7 @@ public class GameManager : MonoBehaviour
             if (Rarity.Mythical.Equals(packCard.GetCardRarity())) { mythicalCards.Add(packCard); }
 
             if (CardId.Hoe.Equals(packCard.GetCardId())) { hoeCard = packCard; }
+            if (CardId.LettuceSeed.Equals(packCard.GetCardId())) { lettuceSeedCard = packCard; }
         }
 
         for (int cardIndex = 0; cardIndex < returnCards.Length; cardIndex++)
@@ -364,7 +400,11 @@ public class GameManager : MonoBehaviour
             if (PackType.Tool.Equals(packType) && IsFirstToolBuy())
             {
                 returnCards[cardIndex] = hoeCard.CopyCard();
-                SetFirstToolBuy(false);
+                continue;
+            }
+            if (PackType.Seed.Equals(packType) && IsFirstSeedBuy())
+            {
+                returnCards[cardIndex] = lettuceSeedCard.CopyCard();
                 continue;
             }
 
@@ -395,6 +435,8 @@ public class GameManager : MonoBehaviour
                 returnCards[cardIndex] = mythicalCards[rarityIndex].CopyCard();
             }
         }
+        if (PackType.Tool.Equals(packType) && IsFirstToolBuy()) { SetFirstToolBuy(false); }
+        if (PackType.Seed.Equals(packType) && IsFirstSeedBuy()) { SetFirstSeedBuy(false); }
 
         return returnCards;
     }
@@ -538,6 +580,9 @@ public class GameManager : MonoBehaviour
         // Call first cutscene start.
         SetPlayerViewState(PlayerViewState.OpeningCutscene);
         CutsceneManager.instance.StartOpeningCutscene();
+
+        // Stop menu music.
+        AudioManager.instance.StopMusic();
     }
 
     public void StartGame()
