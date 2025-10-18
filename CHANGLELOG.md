@@ -62,3 +62,7 @@ v0.13.0-audio ==================================================================
 - Added cloud system.
 - Revamped plant objects to be affected by light.
 - Balanced audio and growth times.
+
+v0.14.0-save-and-load =============================================================================
+- TODO: Save data in a json file.
+- TODO: Load file when booting.
