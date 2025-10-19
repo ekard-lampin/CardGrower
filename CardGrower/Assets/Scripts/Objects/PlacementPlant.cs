@@ -17,16 +17,17 @@ public class PlacementPlant : Placement
     private GameObject cropObject;
 
     [SerializeField]
-    private List<Card> activeBoosters = new List<Card>();
-    public bool DoesPlantHaveBooster(Card booster)
+    private List<CardId> activeBoosters = new List<CardId>();
+    public List<CardId> GetActiveBoosters() { return activeBoosters; }
+    public bool DoesPlantHaveBooster(CardId booster)
     {
-        foreach (Card activeBooster in activeBoosters)
+        foreach (CardId activeBooster in activeBoosters)
         {
-            if (activeBooster.GetCardId().Equals(booster.GetCardId())) { return true; }
+            if (activeBooster.Equals(booster)) { return true; }
         }
         return false;
     }
-    public void AddBooster(Card booster) {
+    public void AddBooster(CardId booster) {
         activeBoosters.Add(booster);
         Destroy(
             Instantiate(
@@ -38,9 +39,9 @@ public class PlacementPlant : Placement
         );
     }
     public bool IsBoosterActive(CardId cardId) {
-        foreach (Card activeBooster in activeBoosters)
+        foreach (CardId activeBooster in activeBoosters)
         {
-            if (activeBooster.GetCardId().Equals(cardId)) { return true; }
+            if (activeBooster.Equals(cardId)) { return true; }
         }
         return false;
     }
@@ -49,7 +50,7 @@ public class PlacementPlant : Placement
         int boosterToRemove = -1;
         for (int boosterIndex = 0; boosterIndex < activeBoosters.Count; boosterIndex++)
         {
-            if (activeBoosters[boosterIndex].GetCardId().Equals(cardId)) { boosterToRemove = boosterIndex; }
+            if (activeBoosters[boosterIndex].Equals(cardId)) { boosterToRemove = boosterIndex; }
         }
         if (boosterToRemove == -1) { return; }
         activeBoosters.RemoveAt(boosterToRemove);

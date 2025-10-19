@@ -22,4 +22,8 @@ public class SaveTile
     public int plantGrowthStage;
     public int GetPlantGrowthStage() { return plantGrowthStage; }
     public void SetPlantGrowthStage(int plantGrowthStage) { this.plantGrowthStage = plantGrowthStage; }
+
+    public CardId[] activeBoosters;
+    public CardId[] GetActiveBoosters() { return activeBoosters; }
+    public void SetActiveBoosters(CardId[] activeBoosters) { this.activeBoosters = activeBoosters; }
 }

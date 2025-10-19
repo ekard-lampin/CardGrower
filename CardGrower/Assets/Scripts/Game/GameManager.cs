@@ -649,6 +649,7 @@ public class GameManager : MonoBehaviour
                 PlacementPlant plant = tile.GetPlacement() as PlacementPlant;
                 saveTile.SetPlantedSeed(plant.GetPlantedSeed().GetCardId());
                 saveTile.SetPlantGrowthStage(plant.GetGrowthStage());
+                saveTile.SetActiveBoosters(plant.GetActiveBoosters().ToArray());
             }
 
             saveTiles.Add(saveTile);

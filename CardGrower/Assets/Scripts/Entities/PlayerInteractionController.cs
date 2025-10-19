@@ -156,7 +156,7 @@ public class PlayerInteractionController : MonoBehaviour
     private void BoostCrop(Tile tile, Card[] selectedCard)
     {
         PlacementPlant plant = tile.GetPlacement() as PlacementPlant;
-        if (plant.DoesPlantHaveBooster(selectedCard[0])) { return; }
+        if (plant.DoesPlantHaveBooster(selectedCard[0].GetCardId())) { return; }
 
         // Check for any limitations.
         switch (selectedCard[0].GetCardId())
@@ -170,7 +170,7 @@ public class PlayerInteractionController : MonoBehaviour
                 break;
         }
 
-        plant.AddBooster(selectedCard[0]);
+        plant.AddBooster(selectedCard[0].GetCardId());
         GetComponent<PlayerDeckManager>().RemoveCardFromDeck(selectedCard[0]);
         GetComponent<PlayerDeckManager>().SetSelectedCard(new Card[0]);
         ViewManager.instance.SetOpenView(null);
