@@ -69,4 +69,11 @@ v0.14.0-save-and-load ==========================================================
 - Polished input logic to be more familiar.
 
 v1.0.0-release ====================================================================================
+
+v1.0.1-start-menu-fix =============================================================================
 - Fixed card display on the start menu.
+
+v1.0.2-music-and-money ============================================================================
+- TODO: Fix music not playing.
+- TODO: Fix restart flags being reset.
+- TODO: Fix money being set to $60 on load.
