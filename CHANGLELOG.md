@@ -67,3 +67,5 @@ v0.14.0-save-and-load ==========================================================
 - Added export of player progress to json file.
 - Added import of player progress from json file.
 - Polished input logic to be more familiar.
+
+v1.0.0-release ====================================================================================
