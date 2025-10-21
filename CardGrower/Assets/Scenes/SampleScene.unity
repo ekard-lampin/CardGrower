@@ -928,7 +928,7 @@ MonoBehaviour:
     - text: Start by looking around using the MOUSE.
       italicized: 0
     - text: You can adjust the drone's look senitivity in the OPTIONS menu by pressing
-        V.
+        ESC.
       italicized: 0
     - text: Look around for a bit. I think you will find PROTOTYPE Enterprises drones
         quite easy to handle.

@@ -22,14 +22,10 @@ public class StartMenuAction : MonoBehaviour
         lowerPosition += transform.position;
         upperPosition += transform.position;
 
-        DirectoryInfo dir = new DirectoryInfo("Assets/Resources/Textures");
-        FileInfo[] files = dir.GetFiles("*.png");
-        foreach (FileInfo file in files) {
-            if (file.Name.Contains("card"))
-            {
-                cardSprites.Add(Resources.Load<Sprite>("Textures/" + file.Name.Replace(".png", "")));
-            }
-        }
+        foreach (Card card in GameManager.instance.GetToolCards()) { cardSprites.Add(Resources.Load<Sprite>("Textures/" + card.GetCardTexture().name)); }
+        foreach (Card card in GameManager.instance.GetSeedCards()) { cardSprites.Add(Resources.Load<Sprite>("Textures/" + card.GetCardTexture().name)); }
+        foreach (Card card in GameManager.instance.GetBoosterCards()) { cardSprites.Add(Resources.Load<Sprite>("Textures/" + card.GetCardTexture().name)); }
+        foreach (Card card in GameManager.instance.GetCropCards()) { cardSprites.Add(Resources.Load<Sprite>("Textures/" + card.GetCardTexture().name)); }
     }
 
     void Update()
