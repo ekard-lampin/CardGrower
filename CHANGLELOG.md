@@ -64,5 +64,6 @@ v0.13.0-audio ==================================================================
 - Balanced audio and growth times.
 
 v0.14.0-save-and-load =============================================================================
-- TODO: Save data in a json file.
-- TODO: Load file when booting.
+- Added export of player progress to json file.
+- Added import of player progress from json file.
+- Polished input logic to be more familiar.
