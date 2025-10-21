@@ -12,12 +12,12 @@
 - ~~Planting and growing~~
 - ~~Selling~~
 - ~~Menu~~
-- Tutorial
-- Beginning cutscene
-- Audio
+- ~~Tutorial~~
+- ~~Beginning cutscene~~
+- ~~Audio~~
+- ~~Save and load~~
 
 ### Stretch
-- Save and load
 - Animals
 - Structures
 - Map expansions
@@ -26,6 +26,7 @@
 - Improved card loading system
 - Weather system
 - Multi-harvest plants.
+- Foraging Mode
 
 ## Credits
 - music_0_CalmAmbient

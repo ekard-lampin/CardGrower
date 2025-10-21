@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,8 +10,10 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        if (mapSeed != 0) { Random.InitState(mapSeed); }
+        if (mapSeed == 0) { mapSeed = Random.Range(0, 99999999); }
+        Random.InitState(mapSeed);
         RetrieveSaveFile();
+        GameObject.FindGameObjectWithTag("Canvas").transform.Find("Version").gameObject.GetComponent<Text>().text = "v" + Application.version;
     }
 
     [Header("Audio Settings")]

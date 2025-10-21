@@ -78,3 +78,4 @@ v1.0.2-music-and-money =========================================================
 - TODO: Fix restart flags being reset.
 - TODO: Fix money being set to $60 on load.
 - TODO: Balance pricing.
+- TODO: Update seed load and set.
