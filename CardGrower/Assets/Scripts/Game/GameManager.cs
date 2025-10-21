@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        Random.InitState(mapSeed);
+        if (mapSeed != 0) { Random.InitState(mapSeed); }
         RetrieveSaveFile();
     }
 
@@ -643,6 +643,10 @@ public class GameManager : MonoBehaviour
         MapManager.instance.CreateBaseMap();
         MapManager.instance.CreatePlayer();
         MapManager.instance.LoadSaveData();
+
+        // Clear start up flags.
+        SetFirstToolBuy(false);
+        SetFirstSeedBuy(false);
 
         SetPlayerViewState(PlayerViewState.Game);
     }

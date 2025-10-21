@@ -77,3 +77,4 @@ v1.0.2-music-and-money =========================================================
 - TODO: Fix music not playing.
 - TODO: Fix restart flags being reset.
 - TODO: Fix money being set to $60 on load.
+- TODO: Balance pricing.

@@ -13,9 +13,10 @@ public class PlayerMoneyManager : MonoBehaviour
 
     void Start()
     {
-        if (TutorialManager.instance.IsTutorialFlagSet(TutorialState.ToolShop)) { AddMoney(GameManager.instance.GetToolPackPrice()); }
-        if (TutorialManager.instance.IsTutorialFlagSet(TutorialState.SeedShop)) { AddMoney(GameManager.instance.GetSeedPackPrice()); }
-        if (TutorialManager.instance.IsTutorialFlagSet(TutorialState.BoosterShop)) { AddMoney(GameManager.instance.GetBoosterPackPrice()); }
+        // Debug functions.
+        // if (TutorialManager.instance.IsTutorialFlagSet(TutorialState.ToolShop)) { AddMoney(GameManager.instance.GetToolPackPrice()); }
+        // if (TutorialManager.instance.IsTutorialFlagSet(TutorialState.SeedShop)) { AddMoney(GameManager.instance.GetSeedPackPrice()); }
+        // if (TutorialManager.instance.IsTutorialFlagSet(TutorialState.BoosterShop)) { AddMoney(GameManager.instance.GetBoosterPackPrice()); }
     }
 
     void Update()

@@ -817,7 +817,7 @@ MonoBehaviour:
   gameMusicVolume: 0.8333333
   gameSfxVolume: 0.8333333
   gameMusicDelay: 180
-  gameMenuMusicClip: {fileID: 8300000, guid: 69a25f9b3df781442819ae3706294785, type: 3}
+  gameMenuMusicClip: {fileID: 8300000, guid: 7482c6ee60296384d9aa0eeffa2ceb7e, type: 3}
   mapBaseWidth: 10
   mapOvergrowthLocationVariation: 0.5
   mapOvergrowthMaxHeight: 1
@@ -825,7 +825,7 @@ MonoBehaviour:
   mapTreeRingOffset: 4
   mapTreeScaleVariance: 0.5
   mapFillerRingOffset: 10
-  mapSeed: 10091997
+  mapSeed: 0
   mapCloudSpawnX: 160
   mapCloudSpawnZBreadth: 80
   mapCloudSpawnHeight: 40
