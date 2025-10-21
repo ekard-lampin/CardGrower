@@ -12,6 +12,7 @@ public class PlacementPlant : Placement
     [SerializeField]
     private int growthStage = 0;
     public int GetGrowthStage() { return growthStage; }
+    public void SetGrowthStage(int growthStage) { this.growthStage = growthStage; }
 
     [SerializeField]
     private GameObject cropObject;

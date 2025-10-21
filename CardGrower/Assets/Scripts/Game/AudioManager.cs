@@ -63,27 +63,28 @@ public class AudioManager : MonoBehaviour
         audioMixer.SetFloat("SFXVolume", -50 + GameManager.instance.GetGameSfxVolume() * 60);
         audioMixer.SetFloat("MusicVolume", -50 + GameManager.instance.GetGameMusicVolume() * 60);
         
-        DirectoryInfo audioDir = new DirectoryInfo("Assets/Resources/Audio");
-        FileInfo[] wildlifeFiles = audioDir.GetFiles("ambience_*.wav");
-        wildlifeAudioClips = new AudioClip[wildlifeFiles.Length];
-        for (int fileIndex = 0; fileIndex < wildlifeAudioClips.Length; fileIndex++) { wildlifeAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/" + wildlifeFiles[fileIndex].Name.Replace(".wav", "")); }
+        DirectoryInfo audioDir = new DirectoryInfo(Application.dataPath + "/Resources/Audio");
+        // FileInfo[] wildlifeFiles = audioDir.GetFiles("ambience_*.wav");
+        wildlifeAudioClips = new AudioClip[GameManager.instance.GetAmbienceSoundCount()];
+        // for (int fileIndex = 0; fileIndex < wildlifeAudioClips.Length; fileIndex++) { wildlifeAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/" + wildlifeFiles[fileIndex].Name.Replace(".wav", "")); }
+        for (int fileIndex = 0; fileIndex < wildlifeAudioClips.Length; fileIndex++) { wildlifeAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/ambience_" + fileIndex); }
         wildlifeAudioDelay = GameManager.instance.GetWildlifeAudioDelay();
 
-        FileInfo[] voiceFiles = audioDir.GetFiles("voice_*.wav");
-        voiceAudioClips = new AudioClip[voiceFiles.Length];
-        for (int fileIndex = 0; fileIndex < voiceFiles.Length; fileIndex++) { voiceAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/" + voiceFiles[fileIndex].Name.Replace(".wav", "")); }
+        // FileInfo[] voiceFiles = audioDir.GetFiles("voice_*.wav");
+        voiceAudioClips = new AudioClip[GameManager.instance.GetVoiceSoundCount()];
+        for (int fileIndex = 0; fileIndex < voiceAudioClips.Length; fileIndex++) { voiceAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/voice_" + fileIndex); }
 
-        FileInfo[] moneyFiles = audioDir.GetFiles("money_*.wav");
-        moneyAudioClips = new AudioClip[moneyFiles.Length];
-        for (int fileIndex = 0; fileIndex < moneyFiles.Length; fileIndex++) { moneyAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/" + moneyFiles[fileIndex].Name.Replace(".wav", "")); }
+        // FileInfo[] moneyFiles = audioDir.GetFiles("money_*.wav");
+        moneyAudioClips = new AudioClip[GameManager.instance.GetMoneySoundCount()];
+        for (int fileIndex = 0; fileIndex < moneyAudioClips.Length; fileIndex++) { moneyAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/money_" + fileIndex); }
 
-        FileInfo[] pullFiles = audioDir.GetFiles("pull_*.wav");
-        pullAudioClips = new AudioClip[pullFiles.Length];
-        for (int fileIndex = 0; fileIndex < pullFiles.Length; fileIndex++) { pullAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/pull_" + fileIndex); }
+        // FileInfo[] pullFiles = audioDir.GetFiles("pull_*.wav");
+        pullAudioClips = new AudioClip[GameManager.instance.GetPullSoundCount()];
+        for (int fileIndex = 0; fileIndex < pullAudioClips.Length; fileIndex++) { pullAudioClips[fileIndex] = Resources.Load<AudioClip>("Audio/pull_" + fileIndex); }
 
-        FileInfo[] musicFiles = audioDir.GetFiles("music_*.wav");
-        musicClips = new AudioClip[musicFiles.Length];
-        for (int fileIndex = 0; fileIndex < musicFiles.Length; fileIndex++) { musicClips[fileIndex] = Resources.Load<AudioClip>("Audio/" + musicFiles[fileIndex].Name.Replace(".wav", "")); }
+        // FileInfo[] musicFiles = audioDir.GetFiles("music_*.wav");
+        musicClips = new AudioClip[GameManager.instance.GetMusicCount()];
+        for (int fileIndex = 0; fileIndex < musicClips.Length; fileIndex++) { musicClips[fileIndex] = Resources.Load<AudioClip>("Audio/music_" + fileIndex); }
         musicTimer = GameManager.instance.GetGameMusicDelay() - 3;
         playedMusicClips = new List<AudioClip>();
 

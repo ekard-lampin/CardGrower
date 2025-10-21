@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,6 +10,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         Random.InitState(mapSeed);
+        RetrieveSaveFile();
     }
 
     [Header("Audio Settings")]
@@ -18,6 +20,26 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float audioWildlifeDelayVariance;
     public float GetWildlifeAudioDelay() { return audioWildlifeBaseDelay * Random.Range(1f - audioWildlifeDelayVariance, 1f + audioWildlifeDelayVariance); }
+
+    [SerializeField]
+    private int audioAmbienceSoundCount;
+    public int GetAmbienceSoundCount() { return audioAmbienceSoundCount; }
+
+    [SerializeField]
+    private int audioVoiceSoundCount;
+    public int GetVoiceSoundCount() { return audioVoiceSoundCount; }
+
+    [SerializeField]
+    private int audioMoneySoundCount;
+    public int GetMoneySoundCount() { return audioMoneySoundCount; }
+
+    [SerializeField]
+    private int audioPullSoundCount;
+    public int GetPullSoundCount() { return audioPullSoundCount; }
+
+    [SerializeField]
+    private int audioMusicCount;
+    public int GetMusicCount() { return audioMusicCount; }
 
     [Header("Card Settings")]
     [SerializeField]
@@ -67,6 +89,16 @@ public class GameManager : MonoBehaviour
             if (cropCard.GetCardId().Equals(targetCard)) { return cropCard; }
         }
         return cropCards[0];
+    }
+    public Card GetCardById(CardId cardId)
+    {
+        Card[] returnCard = new Card[0];
+
+        foreach (Card card in toolCards) { if (cardId.Equals(card.GetCardId())) { returnCard = new Card[] { card }; } }
+        foreach (Card card in seedCards) { if (cardId.Equals(card.GetCardId())) { returnCard = new Card[] { card }; } }
+        foreach (Card card in boosterCards) { if (cardId.Equals(card.GetCardId())) { returnCard = new Card[] { card }; } }
+
+        return returnCard[0];
     }
 
     [SerializeField]
@@ -297,6 +329,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Vector3 startMenuDisplayObjectLocation;
     public Vector3 GetStartMenuDisplayObjectLocation() { return startMenuDisplayObjectLocation; }
+
+    [SerializeField]
+    private SaveObject[] loadedSaveObject = new SaveObject[0];
+    public SaveObject GetSaveObject() { return loadedSaveObject[0]; }
+    public bool IsSaveFileLoaded() { return loadedSaveObject.Length > 0; }
 
     // Start is called before the first frame update
     void Start()
@@ -574,6 +611,9 @@ public class GameManager : MonoBehaviour
 
     public void StartButtonClicked()
     {
+        // Clear save data.
+        loadedSaveObject = new SaveObject[0];
+        
         // Clean up start menu objects.
         if (GameObject.FindGameObjectWithTag("StartMenuDisplay") != null) { Destroy(GameObject.FindGameObjectWithTag("StartMenuDisplay")); }
         foreach (Transform child in GameObject.FindGameObjectWithTag("Trees").transform) { Destroy(child.gameObject); }
@@ -585,6 +625,26 @@ public class GameManager : MonoBehaviour
 
         // Stop menu music.
         AudioManager.instance.StopMusic();
+    }
+
+    public void LoadButtonClicked()
+    {
+        // Clean up start menu objects.
+        if (GameObject.FindGameObjectWithTag("StartMenuDisplay") != null) { Destroy(GameObject.FindGameObjectWithTag("StartMenuDisplay")); }
+        foreach (Transform child in GameObject.FindGameObjectWithTag("Trees").transform) { Destroy(child.gameObject); }
+        ViewManager.instance.DestroyOpenView();
+
+        // Stop menu music.
+        AudioManager.instance.StopMusic();
+
+        // Call map creation.
+        mapSeed = loadedSaveObject[0].GetSeed();
+        Random.InitState(mapSeed);
+        MapManager.instance.CreateBaseMap();
+        MapManager.instance.CreatePlayer();
+        MapManager.instance.LoadSaveData();
+
+        SetPlayerViewState(PlayerViewState.Game);
     }
 
     public void StartGame()
@@ -599,6 +659,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Saving game.");
         if (!PlayerViewState.Game.Equals(GetPreviousPlayerViewState())) { return; }
+        if (!TutorialState.None.Equals(TutorialManager.instance.GetTutorialState())) { return; }
 
         SaveObject saveObject = new SaveObject();
         saveObject.SetSeed(mapSeed);
@@ -659,6 +720,18 @@ public class GameManager : MonoBehaviour
         string json = JsonUtility.ToJson(saveObject);
 
         Debug.Log(json);
-        System.IO.File.WriteAllText(Application.persistentDataPath + "/saveData.json", json);
+        File.WriteAllText(Application.persistentDataPath + "/saveData.json", json);
+    }
+
+    private void RetrieveSaveFile()
+    {
+        DirectoryInfo saveDirectory = new DirectoryInfo(Application.persistentDataPath);
+        FileInfo[] saveFileInfo = saveDirectory.GetFiles("saveData.json");
+
+        if (saveFileInfo.Length == 0) { return; }
+
+        string saveFileRaw = File.ReadAllText(Application.persistentDataPath + "/saveData.json");
+        SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveFileRaw);
+        loadedSaveObject = new SaveObject[] { saveObject };
     }
 }

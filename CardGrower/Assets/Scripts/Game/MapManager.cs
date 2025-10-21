@@ -121,6 +121,17 @@ public class MapManager : MonoBehaviour
 
     public void CreateBaseMap()
     {
+        Dictionary<Vector2, SaveTile> saveTiles = new Dictionary<Vector2, SaveTile>();
+        if (GameManager.instance.IsSaveFileLoaded()) {
+            SaveObject saveObject = GameManager.instance.GetSaveObject();
+
+            foreach (SaveTile saveTile in saveObject.GetSaveTiles())
+            {
+                Vector2 saveTileCoords = new Vector2(saveTile.GetXCoord(), saveTile.GetZCoord());
+                saveTiles.Add(saveTileCoords, saveTile);
+            }
+        }
+        
         Vector2 coordsOffset = new Vector2(
             (float)GameManager.instance.GetMapBaseWidth() / 2f * -1f,
             (float)GameManager.instance.GetMapBaseWidth() / 2f
@@ -139,7 +150,8 @@ public class MapManager : MonoBehaviour
                 );
                 newTileObject.name = "Tile_(" + xIndex + ", " + zIndex + ")";
                 Tile newTile = newTileObject.AddComponent<Tile>();
-                newTile.SetTileCoords(new Vector2(xIndex, zIndex));
+                Vector2 tileCoords = new Vector2(xIndex, zIndex);
+                newTile.SetTileCoords(tileCoords);
                 newTileObject.transform.SetParent(GameObject.FindGameObjectWithTag("FarmTiles").transform);
                 farmTiles.Add(new Vector2(xIndex + coordsOffset.x, (zIndex * -1) + coordsOffset.y));
 
@@ -215,6 +227,21 @@ public class MapManager : MonoBehaviour
 
                     float rotationVariation = Random.Range(-360, 360);
                     newOvergrowthObject.transform.rotation = Quaternion.Euler(0, rotationVariation, 0);
+
+                    // If save tile is found at this location, spin up the save tile configs.
+                    if (saveTiles.ContainsKey(tileCoords))
+                    {
+                        SaveTile saveTile = saveTiles[tileCoords];
+
+                        // newTile.SetTileState(saveTile.GetTileState());
+                        newTile.TillTile();
+                        if (!CardId.None.Equals(saveTile.GetPlantedSeed()))
+                        {
+                            newTile.PlantSeed(GameManager.instance.GetCardById(saveTile.GetPlantedSeed()));
+                            (newTile.GetPlacement() as PlacementPlant).SetGrowthStage(saveTile.GetPlantGrowthStage());
+                            foreach (CardId cardId in saveTile.GetActiveBoosters()) { (newTile.GetPlacement() as PlacementPlant).AddBooster(cardId); }
+                        }
+                    }
                 }
             }
         }
@@ -255,6 +282,28 @@ public class MapManager : MonoBehaviour
                 );
                 newTileObject.transform.SetParent(GameObject.FindGameObjectWithTag("FillerTiles").transform);
             }
+        }
+    }
+
+    public void LoadSaveData()
+    {
+        SaveObject saveObject = GameManager.instance.GetSaveObject();
+
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        SavePlayerObject savePlayerObject = saveObject.GetSavePlayerObject();
+        playerObject.GetComponent<PlayerMoneyManager>().AddMoney(savePlayerObject.GetBalance());
+        foreach (SaveCardObject saveCardObject in savePlayerObject.GetCards())
+        {
+            Card card = new Card();
+            card.SetCardId(saveCardObject.GetCardId());
+            card.SetCardType(saveCardObject.GetCardType());
+            card.SetCardTexture(Resources.Load<Texture>("Textures/" + saveCardObject.GetCardTexture()));
+            card.SetCardDescription(saveCardObject.GetCardDescription());
+            card.SetCardRarity(saveCardObject.GetCardRarity());
+            card.SetCardQuality(saveCardObject.GetCardQuality());
+            card.SetCardValue(saveCardObject.GetCardValue());
+
+            playerObject.GetComponent<PlayerDeckManager>().AddCardToDeck(card);
         }
     }
 }

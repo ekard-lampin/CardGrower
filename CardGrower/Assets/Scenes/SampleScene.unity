@@ -641,6 +641,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioWildlifeBaseDelay: 5
   audioWildlifeDelayVariance: 0.5
+  audioAmbienceSoundCount: 25
+  audioVoiceSoundCount: 4
+  audioMoneySoundCount: 4
+  audioPullSoundCount: 5
+  audioMusicCount: 7
   toolCards:
   - cardId: 15
     cardType: 0
@@ -836,10 +841,11 @@ MonoBehaviour:
   playerHeightMinimum: 3
   playerLooksSensitivity: 0.5
   playerMoveSpeed: 2
-  playerViewState: 0
+  playerViewState: 4
   previousPlayerViewState: 0
   playerPassiveMoneyTimerDuration: 60
   startMenuDisplayObjectLocation: {x: 0.75, y: 0, z: 2}
+  loadedSaveObject: []
 --- !u!4 &642613269
 Transform:
   m_ObjectHideFlags: 0

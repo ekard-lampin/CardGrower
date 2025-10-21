@@ -181,6 +181,7 @@ public class PlayerInteractionController : MonoBehaviour
     {
         if (!InputManager.instance.GetFPress()) { return; }
         if (!PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState()) && !PlayerViewState.Deck.Equals(GameManager.instance.GetPlayerViewState())) { return; }
+        if (!TutorialManager.instance.IsTutorialFlagSet(TutorialState.ToolDeck)) { return; }
 
         ViewManager.instance.ToggleDeckView();
     }
@@ -196,7 +197,7 @@ public class PlayerInteractionController : MonoBehaviour
 
     private void ProcessPlayerOptionsInput()
     {
-        if (!InputManager.instance.GetVPress()) { return; }
+        if (!InputManager.instance.GetOptionsInput()) { return; }
 
         if (PlayerViewState.Game.Equals(GameManager.instance.GetPlayerViewState())) { ViewManager.instance.OpenOptionsView(); }
         else if (PlayerViewState.Options.Equals(GameManager.instance.GetPlayerViewState()))

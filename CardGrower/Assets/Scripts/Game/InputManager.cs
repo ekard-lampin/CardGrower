@@ -43,5 +43,8 @@ public class InputManager : MonoBehaviour
 
     public bool GetTabPress() { return Keyboard.current.tabKey.wasPressedThisFrame; }
 
-    public bool GetVPress() { return Keyboard.current.vKey.wasPressedThisFrame; }
+    public bool GetOptionsInput() {
+        if (Application.isEditor) { return Keyboard.current.vKey.wasPressedThisFrame; }
+        else { return Keyboard.current.escapeKey.wasPressedThisFrame; }
+    }
 }

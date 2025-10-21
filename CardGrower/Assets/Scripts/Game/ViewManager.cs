@@ -659,16 +659,33 @@ public class ViewManager : MonoBehaviour
         );
         menuObject.name = "StartMenuPrefab";
 
+        // New game
         menuObject.transform.Find("StartButtonObject").Find("Button").gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
             AudioManager.instance.PlayButtonPress();
             GameManager.instance.StartButtonClicked();
         });
 
+        // Load game
+        menuObject.transform.Find("LoadButtonObject").Find("Button").gameObject.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            // Load game
+            AudioManager.instance.PlayButtonPress();
+            GameManager.instance.LoadButtonClicked();
+        });
+        if (!GameManager.instance.IsSaveFileLoaded()) { menuObject.transform.Find("LoadButtonObject").Find("Button").gameObject.GetComponent<Button>().interactable = false; }
+        
+        // Options
         menuObject.transform.Find("OptionsButtonObject").Find("Button").gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
             AudioManager.instance.PlayButtonPress();
             OpenOptionsView();
+        });
+
+        // Quit
+        menuObject.transform.Find("QuitButtonObject").Find("Button").gameObject.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            Application.Quit();
         });
 
         SetOpenView(menuObject);

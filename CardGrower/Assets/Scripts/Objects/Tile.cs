@@ -27,7 +27,7 @@ public class Tile : MonoBehaviour
         tileState = TileState.Farmland;
         transform.Find("Mesh").GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/Farmland");
 
-        Destroy(placement.gameObject);
+        if (placement != null) { Destroy(placement.gameObject); }
         placement = null;
 
         Destroy(
