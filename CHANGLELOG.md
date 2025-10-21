@@ -74,8 +74,8 @@ v1.0.1-start-menu-fix ==========================================================
 - Fixed card display on the start menu.
 
 v1.0.2-music-and-money ============================================================================
-- TODO: Fix music not playing.
-- TODO: Fix restart flags being reset.
-- TODO: Fix money being set to $60 on load.
-- TODO: Balance pricing.
-- TODO: Update seed load and set.
+- Fixed bug that prevented music from playing.
+- Fixed bug where tutorial flags were reset each time on load.
+- Fixed bug where pack purchase price was added to player balance on load.
+- Lowered pack pricing.
+- Fixed issue where map seed was not set when starting a new game.
