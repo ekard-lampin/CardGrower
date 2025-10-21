@@ -69,4 +69,4 @@ v0.14.0-save-and-load ==========================================================
 - Polished input logic to be more familiar.
 
 v1.0.0-release ====================================================================================
-- TODO: Fix card on the start screen.
+- Fixed card display on the start menu.
